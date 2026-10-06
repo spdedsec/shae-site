@@ -29,7 +29,7 @@ const loopBenchmarks = [
 >
   <div class="bench-header">
     <div class="container">
-      <span class="badge badge-amber">No-BS Telemetry</span>
+      <span class="badge badge-red">No-BS Telemetry</span>
       <h1>Brutally Honest Benchmarks</h1>
       <p>We are not going to claim our v0.2 tree-walker beats C++. Here is what is actually true.</p>
     </div>
@@ -49,7 +49,7 @@ const loopBenchmarks = [
       <!-- Startup Grid -->
       <section class="bench-section">
         <div class="sec-head">
-          <span class="badge badge-green">Startup Latency</span>
+          <span class="badge badge-red">Startup Latency</span>
           <h2>Cold Process Launch Time</h2>
           <p>Time from terminal command execution to printed output (CLI responsiveness).</p>
         </div>
@@ -77,7 +77,7 @@ const loopBenchmarks = [
       <!-- Memory Grid -->
       <section class="bench-section">
         <div class="sec-head">
-          <span class="badge badge-cyan">RAM Usage</span>
+          <span class="badge">RAM Usage</span>
           <h2>Resident Set Size (Base Footprint)</h2>
           <p>Memory consumed by an idle process before user code allocations.</p>
         </div>
@@ -105,7 +105,7 @@ const loopBenchmarks = [
       <!-- Loop Performance -->
       <section class="bench-section">
         <div class="sec-head">
-          <span class="badge badge-pink">Raw Compute</span>
+          <span class="badge">Raw Compute</span>
           <h2>200,000 Iteration Loop Test</h2>
           <p>Iterating 200k arithmetic operations inside a single loop.</p>
         </div>
@@ -138,15 +138,17 @@ const loopBenchmarks = [
 <style>
   .bench-header {
     padding: 4rem 0 2rem;
-    background: linear-gradient(180deg, rgba(255, 183, 3, 0.04) 0%, transparent 100%);
+    background: var(--bg-surface);
     border-bottom: 1px solid var(--border-dim);
     text-align: center;
   }
 
   .bench-header h1 {
     font-size: clamp(2rem, 4vw, 3rem);
-    color: #fff;
+    color: var(--text-main);
     margin: 0.75rem 0 0.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 
   .bench-header p {
@@ -159,30 +161,39 @@ const loopBenchmarks = [
   }
 
   .bench-banner {
-    background: #0f131d;
-    border-color: rgba(255, 183, 3, 0.3);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
     margin-bottom: 3.5rem;
-    padding: 2rem;
+    padding: 2.5rem;
+    border-radius: var(--card-radius);
+    box-shadow: var(--elevated-shadow);
   }
 
   .banner-badge {
-    font-size: 0.7rem;
+    font-size: 0.74rem;
     font-weight: 800;
-    color: var(--neon-amber);
-    letter-spacing: 0.08em;
+    color: var(--accent-primary);
+    background: var(--accent-badge-bg);
+    border: 1px solid var(--accent-badge-border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    letter-spacing: 0.04em;
+    display: inline-block;
     margin-bottom: 0.75rem;
   }
 
   .bench-banner h2 {
-    color: #fff;
-    font-size: 1.5rem;
+    color: var(--text-main);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     margin-bottom: 0.75rem;
   }
 
   .bench-banner p {
     color: var(--text-muted);
     line-height: 1.7;
-    font-size: 0.95rem;
+    font-size: 0.96rem;
   }
 
   .bench-section {
@@ -195,13 +206,15 @@ const loopBenchmarks = [
 
   .sec-head h2 {
     font-size: 1.6rem;
-    color: #fff;
+    color: var(--text-main);
+    font-weight: 800;
+    letter-spacing: -0.02em;
     margin: 0.4rem 0 0.25rem;
   }
 
   .sec-head p {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   .bench-bars-card {
@@ -215,7 +228,7 @@ const loopBenchmarks = [
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
   }
 
   .runtime-name {
@@ -224,44 +237,46 @@ const loopBenchmarks = [
   }
 
   .winner-text {
-    color: var(--neon-green);
+    color: var(--accent-primary);
+    font-weight: 700;
   }
 
   .bar-stat {
     font-family: var(--font-mono);
     color: var(--text-muted);
+    font-size: 0.85rem;
   }
 
   .bar-track {
-    height: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+    height: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 9999px;
     overflow: hidden;
   }
 
   .bar-fill {
     height: 100%;
-    border-radius: 4px;
+    border-radius: 9999px;
     transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .bar-green {
-    background: var(--neon-green);
-    box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+    background: var(--accent-primary);
   }
 
   .bar-cyan {
-    background: var(--neon-cyan);
-    box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    background: var(--text-main);
   }
 
   .bar-dim {
-    background: #2b3348;
+    background: var(--border-bright);
   }
 
   .loop-table-card {
     padding: 0;
     overflow: hidden;
+    border-radius: var(--card-radius);
   }
 
   .bench-table {
@@ -271,7 +286,7 @@ const loopBenchmarks = [
   }
 
   .bench-table th {
-    background: #0d1017;
+    background: var(--bg-card-subtle);
     padding: 1rem 1.25rem;
     text-align: left;
     color: var(--text-muted);
@@ -291,14 +306,15 @@ const loopBenchmarks = [
 
   .time-tag {
     font-family: var(--font-mono);
-    color: var(--neon-amber);
-    background: rgba(255, 183, 3, 0.08);
+    color: var(--accent-primary);
+    background: var(--accent-badge-bg);
     padding: 0.2rem 0.5rem;
-    border-radius: 3px;
+    border-radius: 4px;
+    font-weight: 600;
   }
 
   .context-cell {
     color: var(--text-muted);
-    font-size: 0.82rem;
+    font-size: 0.85rem;
   }
 </style>

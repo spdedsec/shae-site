@@ -22,19 +22,19 @@ print("Listening on http://localhost:8080")`
     filename: 'concurrency.shae',
     code: `// Real OS threads with Task handles. No async/await colored functions.
 let worker = spawn(fn() {
-    print("Crunching background computation...")
+    print("Crunching computation in background thread...")
     return 42 * 1337
 })
 
-// Do other stuff here while worker computes...
+// Do other work here while worker computes...
 let result = worker.join()
 print("Worker delivered: {result}")`
   },
   {
     id: 'pipeline',
-    label: 'Pipelines & Data',
+    label: 'Data Pipelines',
     filename: 'pipeline.shae',
-    code: `// Elixir-style pipe operator. Chain cleanly without pyramid of doom.
+    code: `// Elixir-style pipe operator. Chain transformations without callbacks.
 let scores = [12, 45, 88, 92, 105, 33, 76]
 
 let top_normalized = scores
@@ -42,7 +42,7 @@ let top_normalized = scores
     |> map(fn(x) { x / 10 })
     |> sort()
 
-print("Top normalized scores: {top_normalized}")`
+print("Normalized scores: {top_normalized}")`
   },
   {
     id: 'matching',
@@ -69,17 +69,17 @@ fn inspect(s) {
 
 <Layout
   title="Shae — A programming language that just does its job"
-  description="A programming language. It runs, it does stuff, it leaves you alone. Zero ceremony, built-in servers, effortless concurrency."
+  description="A programming language. It runs, it does stuff, it leaves you alone. Simple, fast as fuck, zero ceremony."
 >
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container hero-container">
       <div class="hero-badge-row">
-        <span class="badge badge-green">
-          <span class="dot"></span> v0.2.0 Active
+        <span class="badge badge-red">
+          <span class="dot"></span> Shae v0.2.0
         </span>
-        <span class="badge badge-cyan">AST Reference Engine</span>
-        <span class="badge badge-amber">Zero Ceremony</span>
+        <span class="badge">Pure Rust Engine</span>
+        <span class="badge">Zero Ceremony</span>
       </div>
 
       <h1 class="hero-title">
@@ -90,17 +90,16 @@ fn inspect(s) {
 
       <p class="hero-subtitle">
         No ceremony. No drama. No compiler lectures about lifetimes.
-        Write your code, ship a binary, and go touch grass.
+        Write your code, ship a binary, and move on with your life.
       </p>
 
       <div class="hero-actions">
         <a href="/tour" class="btn btn-primary">
           <span>Take the 5-Min Tour</span>
-          <span class="arrow">→</span>
+          <span>→</span>
         </a>
         <a href="/repl" class="btn btn-secondary">
-          <span>Try Web REPL</span>
-          <span class="bracket">[&gt;_]</span>
+          <span>Launch Web REPL</span>
         </a>
       </div>
 
@@ -125,12 +124,12 @@ fn inspect(s) {
   <section class="showcase-section">
     <div class="container">
       <div class="section-header">
-        <span class="badge badge-cyan">Syntax in Action</span>
+        <span class="badge badge-red">Syntax</span>
         <h2>Code that doesn't waste your afternoon</h2>
-        <p>No semicolons. No parentheses around conditions. Batteries included.</p>
+        <p>No semicolons. No parentheses around conditions. Everything built-in.</p>
       </div>
 
-      <div class="code-terminal-card">
+      <div class="terminal-window">
         <div class="terminal-nav">
           <div class="tab-buttons" role="tablist">
             {codeExamples.map((item, idx) => (
@@ -138,13 +137,12 @@ fn inspect(s) {
                 class:list={['code-tab-btn', { active: idx === 0 }]}
                 data-tab-target={item.id}
               >
-                <span class="file-icon">λ</span>
                 <span>{item.label}</span>
               </button>
             ))}
           </div>
           <div class="terminal-right-tag">
-            <span class="lang-tag">shae // v0.2.0</span>
+            <span>shae // v0.2.0</span>
           </div>
         </div>
 
@@ -166,85 +164,88 @@ fn inspect(s) {
     </div>
   </section>
 
-  <!-- The Nonchalant Manifesto (Comparison Matrix) -->
+  <!-- The "No Bullshit" Reality Section -->
   <section class="manifesto-section">
     <div class="container">
       <div class="section-header">
-        <span class="badge badge-amber">The Unapologetic Comparison</span>
+        <span class="badge badge-red">The Real Reality</span>
         <h2>Why build another language?</h2>
         <p>Because modern programming has gotten unnecessarily complicated.</p>
       </div>
 
       <div class="comparison-grid">
-        <div class="compare-card">
+        <div class="compare-card card">
           <div class="compare-header">
             <h3>Python</h3>
-            <span class="verdict-tag tag-warn">GIL & Dependency Hell</span>
+            <span class="verdict-tag">GIL &amp; Venv Hell</span>
           </div>
           <p class="compare-text">
-            Friendly and simple, until you need true concurrency and hit the Global Interpreter Lock, or your team loses two days debugging broken <code>pip</code> virtual environments.
+            Simple syntax, until you need real threads and hit the GIL, or your team loses two days debugging broken virtual environments.
           </p>
         </div>
 
-        <div class="compare-card">
+        <div class="compare-card card">
           <div class="compare-header">
             <h3>JavaScript</h3>
-            <span class="verdict-tag tag-warn">Type Coercion & Tooling Fatigue</span>
+            <span class="verdict-tag">Tooling Fatigue</span>
           </div>
           <p class="compare-text">
-            Runs everywhere, but <code>[] + {}</code> evaluates to <code>"[object Object]"</code>, and you need 400MB of <code>node_modules</code> and 6 config files just to bundle a greeting.
+            Runs everywhere, but <code>[] + {}</code> evaluates to <code>"[object Object]"</code>, and you need 400MB of <code>node_modules</code> just to print a date.
           </p>
         </div>
 
-        <div class="compare-card">
+        <div class="compare-card card">
           <div class="compare-header">
             <h3>Rust</h3>
-            <span class="verdict-tag tag-warn">Borrow Checker Marathon</span>
+            <span class="verdict-tag">Borrow Marathon</span>
           </div>
           <p class="compare-text">
-            Unbeatable speed and memory safety, but trying to build a quick script turns into a 3-hour philosophical debate with the compiler about lifetime annotations.
+            Unbeatable speed, but writing a simple prototype turns into an intellectual marathon with compiler lifetime errors.
           </p>
         </div>
 
-        <div class="compare-card">
+        <div class="compare-card card">
           <div class="compare-header">
             <h3>Go</h3>
-            <span class="verdict-tag tag-warn">Boilerplate Fatigue</span>
+            <span class="verdict-tag">Boilerplate Fatigue</span>
           </div>
           <p class="compare-text">
-            Clean concurrent goroutines, but half of your codebase is manually retyping <code>if err != nil</code> on every second line of code.
+            Clean concurrency, but half of every codebase is repetitive typing of <code>if err != nil</code> on every second line.
           </p>
         </div>
       </div>
 
-      <!-- The Shae Alternative -->
+      <!-- The Shae Spotlight -->
       <div class="shae-spotlight-card">
-        <div class="spotlight-badge">THE SHAE WAY</div>
-        <h3>The sweet spot between speed, sanity, and zero drama</h3>
+        <div class="spotlight-header">
+          <span class="spotlight-badge">THE SHAE WAY</span>
+          <h3>The sweet spot between speed, sanity, and zero drama</h3>
+        </div>
+
         <div class="spotlight-features">
           <div class="s-feat">
-            <span class="s-icon">🌐</span>
+            <div class="s-num">01</div>
             <div>
               <strong>Built-in Web Server</strong>
               <p>Spin up concurrent HTTP endpoints in 5 lines without touching a package manager.</p>
             </div>
           </div>
           <div class="s-feat">
-            <span class="s-icon">⚡</span>
+            <div class="s-num">02</div>
             <div>
               <strong>Thread Concurrency with Handles</strong>
-              <p>Spawn OS threads with <code>spawn()</code> and join them with <code>.join()</code> when you're ready.</p>
+              <p>Spawn genuine OS threads with <code>spawn()</code> and join them with <code>.join()</code> when you're ready.</p>
             </div>
           </div>
           <div class="s-feat">
-            <span class="s-icon">🛡️</span>
+            <div class="s-num">03</div>
             <div>
               <strong>Graceful Crash Prevention</strong>
               <p>Real <code>try/catch</code> blocks and readable stack traces. Servers don't crash on unhandled routes.</p>
             </div>
           </div>
           <div class="s-feat">
-            <span class="s-icon">💡</span>
+            <div class="s-num">04</div>
             <div>
               <strong>Human Linter with Typo Hints</strong>
               <p>Typo a variable? <code>shae check</code> tells you: <em>"💡 Hint: Did you mean counter?"</em></p>
@@ -255,24 +256,23 @@ fn inspect(s) {
     </div>
   </section>
 
-  <!-- CLI Banner -->
+  <!-- Single Binary Toolchain -->
   <section class="cli-section">
     <div class="container">
-      <div class="cli-box">
+      <div class="cli-box card">
         <div class="cli-content">
-          <span class="badge badge-green">Single Binary Toolchain</span>
+          <span class="badge badge-red">Single Binary Toolchain</span>
           <h2>Everything you need. Zero plugins.</h2>
-          <p>Linter, REPL, test runner, project generator, and jokes built into one fast Rust binary.</p>
+          <p>Linter, REPL, test runner, project generator, and formatting built into one fast Rust binary.</p>
           <div class="cli-cmds">
             <code>shae               # Start interactive REPL</code>
-            <code>shae check app.shae # Static linter & scope analysis</code>
+            <code>shae check app.shae # Static linter &amp; typo hints</code>
             <code>shae test           # Run tests (*_test.shae)</code>
             <code>shae new my_app     # Scaffold fresh project</code>
-            <code>shae --joke         # Print a programming joke</code>
           </div>
         </div>
         <div class="cli-action">
-          <a href="/docs" class="btn btn-primary">Read the CLI Docs →</a>
+          <a href="/docs" class="btn btn-dark">Read the CLI Docs →</a>
         </div>
       </div>
     </div>
@@ -280,23 +280,23 @@ fn inspect(s) {
 </Layout>
 
 <style>
-  /* Hero Styles */
+  /* Hero */
   .hero-section {
-    padding: 5.5rem 0 3.5rem;
+    padding: 6rem 0 4rem;
     position: relative;
+    text-align: center;
   }
 
   .hero-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
   }
 
   .hero-badge-row {
     display: flex;
     gap: 0.6rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -305,30 +305,28 @@ fn inspect(s) {
     display: inline-block;
     width: 6px;
     height: 6px;
-    background: var(--neon-green);
+    background: var(--accent-primary);
     border-radius: 50%;
-    box-shadow: 0 0 6px var(--neon-green);
   }
 
   .hero-title {
-    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    font-size: clamp(2.6rem, 6.5vw, 4.6rem);
     font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.03em;
+    line-height: 1.12;
+    letter-spacing: -0.04em;
     margin-bottom: 1.5rem;
-    color: #fff;
+    color: var(--text-main);
   }
 
   .highlight-text {
-    color: var(--neon-green);
-    text-shadow: 0 0 24px rgba(0, 255, 136, 0.25);
+    color: var(--accent-primary);
   }
 
   .hero-subtitle {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--text-muted);
-    max-width: 680px;
-    line-height: 1.7;
+    max-width: 640px;
+    line-height: 1.6;
     margin-bottom: 2.5rem;
   }
 
@@ -340,26 +338,22 @@ fn inspect(s) {
     justify-content: center;
   }
 
-  .arrow, .bracket {
-    font-weight: bold;
-    color: inherit;
-  }
-
   .install-box {
     display: flex;
     align-items: center;
-    background: #090c13;
-    border: 1px solid var(--border-bright);
-    border-radius: 6px;
-    padding: 0.4rem 0.6rem 0.4rem 1rem;
-    max-width: 540px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 9999px;
+    padding: 0.45rem 0.6rem 0.45rem 1.2rem;
+    max-width: 520px;
     width: 100%;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--card-shadow);
   }
 
   .install-prompt {
-    color: var(--neon-green);
+    color: var(--accent-primary);
     font-weight: 700;
+    font-family: var(--font-mono);
     margin-right: 0.75rem;
   }
 
@@ -374,24 +368,23 @@ fn inspect(s) {
   }
 
   .copy-btn {
-    background: var(--bg-surface);
-    color: var(--text-muted);
-    border: 1px solid var(--border-bright);
-    padding: 0.45rem 0.8rem;
-    border-radius: 4px;
+    background: var(--text-main);
+    color: var(--bg-base);
+    border: none;
+    padding: 0.45rem 0.9rem;
+    border-radius: 9999px;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: opacity 0.15s ease;
   }
 
   .copy-btn:hover {
-    color: var(--neon-cyan);
-    border-color: var(--neon-cyan);
+    opacity: 0.85;
   }
 
-  /* Showcase Section */
+  /* Showcase */
   .showcase-section {
     padding: 4rem 0;
   }
@@ -404,30 +397,22 @@ fn inspect(s) {
   .section-header h2 {
     font-size: 2.2rem;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     margin: 0.75rem 0 0.5rem;
-    color: #fff;
+    color: var(--text-main);
   }
 
   .section-header p {
     color: var(--text-muted);
-    font-size: 1rem;
-  }
-
-  .code-terminal-card {
-    background: #090b11;
-    border: 1px solid var(--border-bright);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    font-size: 1.05rem;
   }
 
   .terminal-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #0d1017;
-    border-bottom: 1px solid var(--border-dim);
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 0 1rem;
     overflow-x: auto;
   }
@@ -440,36 +425,34 @@ fn inspect(s) {
   .code-tab-btn {
     background: transparent;
     border: none;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.6);
     padding: 0.85rem 1.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 500;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
     border-bottom: 2px solid transparent;
     transition: all 0.15s ease;
   }
 
   .code-tab-btn:hover {
-    color: var(--text-main);
+    color: #fff;
   }
 
   .code-tab-btn.active {
-    color: var(--neon-green);
-    border-bottom-color: var(--neon-green);
-    background: rgba(0, 255, 136, 0.04);
+    color: #fff;
+    border-bottom-color: var(--accent-primary);
+    font-weight: 600;
   }
 
   .terminal-right-tag {
+    font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--text-dim);
+    color: rgba(255, 255, 255, 0.4);
   }
 
   .terminal-editor-body {
-    padding: 1.5rem;
-    background: #07090e;
+    padding: 1.75rem;
   }
 
   .code-panel {
@@ -484,30 +467,32 @@ fn inspect(s) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .filename {
-    font-size: 0.75rem;
-    color: var(--neon-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
   }
 
   .panel-copy-btn {
     background: transparent;
-    border: 1px solid var(--border-dim);
-    color: var(--text-dim);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
     cursor: pointer;
+    transition: all 0.15s ease;
   }
 
   .panel-copy-btn:hover {
-    color: var(--text-main);
-    border-color: var(--border-bright);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.35);
   }
 
   .code-panel pre {
@@ -519,26 +504,25 @@ fn inspect(s) {
     font-family: var(--font-mono);
     font-size: 0.92rem;
     line-height: 1.7;
-    color: #e2e8f0;
+    color: #f1f5f9;
   }
 
-  /* Manifesto Section */
+  /* Comparison Matrix */
   .manifesto-section {
     padding: 4.5rem 0;
   }
 
   .comparison-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2.5rem;
   }
 
   .compare-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-dim);
-    border-radius: 6px;
-    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .compare-header {
@@ -549,88 +533,92 @@ fn inspect(s) {
   }
 
   .compare-header h3 {
-    font-size: 1.15rem;
-    color: #fff;
+    font-size: 1.2rem;
+    color: var(--text-main);
   }
 
   .verdict-tag {
-    font-size: 0.68rem;
-    padding: 0.15rem 0.45rem;
-    border-radius: 3px;
-    text-transform: uppercase;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
     font-weight: 600;
-  }
-
-  .tag-warn {
-    background: rgba(255, 183, 3, 0.1);
-    color: var(--neon-amber);
-    border: 1px solid rgba(255, 183, 3, 0.25);
+    background: var(--bg-card-subtle);
+    color: var(--text-muted);
+    border: 1px solid var(--border-dim);
   }
 
   .compare-text {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.6;
   }
 
   .compare-text code {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.1rem 0.3rem;
-    border-radius: 3px;
-    color: var(--neon-cyan);
+    background: var(--bg-surface);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--accent-primary);
   }
 
+  /* Shae Spotlight */
   .shae-spotlight-card {
-    background: linear-gradient(180deg, #0f1422 0%, #0a0d16 100%);
-    border: 1px solid rgba(0, 255, 136, 0.35);
-    border-radius: 8px;
-    padding: 2.5rem;
-    box-shadow: 0 12px 32px rgba(0, 255, 136, 0.06);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: var(--card-radius);
+    padding: 3rem;
+    box-shadow: var(--elevated-shadow);
   }
 
   .spotlight-badge {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: #040806;
-    background: var(--neon-green);
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    background: var(--accent-badge-bg);
+    border: 1px solid var(--accent-badge-border);
     padding: 0.2rem 0.6rem;
-    border-radius: 3px;
-    letter-spacing: 0.08em;
+    border-radius: 9999px;
+    letter-spacing: 0.04em;
+    display: inline-block;
     margin-bottom: 1rem;
   }
 
   .shae-spotlight-card h3 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
+    margin-bottom: 2.5rem;
   }
 
   .spotlight-features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.8rem;
+    gap: 2rem;
   }
 
   .s-feat {
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
-  .s-icon {
-    font-size: 1.6rem;
+  .s-num {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-primary);
   }
 
   .s-feat strong {
     display: block;
-    font-size: 0.95rem;
-    color: #fff;
-    margin-bottom: 0.3rem;
+    font-size: 1rem;
+    color: var(--text-main);
+    margin-bottom: 0.35rem;
   }
 
   .s-feat p {
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     color: var(--text-muted);
     line-height: 1.5;
   }
@@ -641,21 +629,18 @@ fn inspect(s) {
   }
 
   .cli-box {
-    background: #090c13;
-    border: 1px solid var(--border-bright);
-    border-radius: 8px;
-    padding: 2.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+    gap: 2.5rem;
+    padding: 3rem;
   }
 
   .cli-content h2 {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-weight: 800;
-    color: #fff;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
     margin: 0.75rem 0 0.5rem;
   }
 
@@ -667,28 +652,30 @@ fn inspect(s) {
   .cli-cmds {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.45rem;
   }
 
   .cli-cmds code {
     font-size: 0.85rem;
-    color: var(--neon-cyan);
-    background: rgba(0, 240, 255, 0.04);
-    border-left: 2px solid var(--neon-cyan);
-    padding: 0.3rem 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--text-main);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
   }
 
   @media (max-width: 768px) {
     .cli-box {
       flex-direction: column;
       align-items: flex-start;
+      padding: 2rem;
     }
   }
 </style>
 
 <script>
   function setupHomePage() {
-    // Copy install button logic
     const copyBtn = document.getElementById('copy-install-btn');
     const input = document.getElementById('install-cmd') as HTMLInputElement;
 
@@ -696,14 +683,13 @@ fn inspect(s) {
       copyBtn.onclick = async () => {
         await navigator.clipboard.writeText(input.value);
         const original = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<span style="color:var(--neon-green)">COPIED!</span>';
+        copyBtn.innerHTML = '<span>COPIED!</span>';
         setTimeout(() => {
           copyBtn.innerHTML = original;
         }, 1800);
       };
     }
 
-    // Code tabs switching
     const tabBtns = document.querySelectorAll<HTMLButtonElement>('.code-tab-btn');
     tabBtns.forEach((btn) => {
       btn.onclick = () => {
@@ -722,7 +708,6 @@ fn inspect(s) {
       };
     });
 
-    // Panel copy buttons
     document.querySelectorAll<HTMLButtonElement>('.panel-copy-btn').forEach((btn) => {
       btn.onclick = async () => {
         const code = btn.dataset.code;

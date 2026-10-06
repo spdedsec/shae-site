@@ -11,13 +11,13 @@ interface Props {
 }
 
 const {
-  title = "Shae — A programming language that just does its job",
+  title = "Shae — Fast, Simple, Real",
   description = "A programming language. It runs, it does stuff, it leaves you alone. Zero ceremony, built-in servers, effortless concurrency."
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,16 +28,31 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <title>{title}</title>
+    
+    <!-- Instant Zero-FOUC Theme Init -->
+    <script is:inline>
+      (function() {
+        const savedTheme = localStorage.getItem('shae-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      })();
+    </script>
     <ClientRouter />
   </head>
   <body>
-    <div class="scanlines-overlay" transition:persist></div>
     <Navigation />
     <main class="page-content">
       <slot />
     </main>
     <Footer />
     <SoundEffects />
+
+    <script>
+      // Preserve theme across Astro View Transitions swaps
+      document.addEventListener('astro:after-swap', () => {
+        const savedTheme = localStorage.getItem('shae-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      });
+    </script>
   </body>
 </html>
 

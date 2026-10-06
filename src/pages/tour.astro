@@ -112,7 +112,7 @@ print("Service continues running without interruption.")`
 >
   <div class="tour-header">
     <div class="container">
-      <span class="badge badge-green">Language Tour</span>
+      <span class="badge badge-red">Language Tour</span>
       <h1>Everything you need to know in 5 minutes</h1>
       <p>Shae is deliberately designed to be learned over a single coffee break.</p>
     </div>
@@ -176,15 +176,17 @@ print("Service continues running without interruption.")`
 <style>
   .tour-header {
     padding: 4rem 0 2rem;
-    background: linear-gradient(180deg, rgba(0, 255, 136, 0.04) 0%, transparent 100%);
+    background: var(--bg-surface);
     border-bottom: 1px solid var(--border-dim);
     text-align: center;
   }
 
   .tour-header h1 {
     font-size: clamp(2rem, 4vw, 3rem);
-    color: #fff;
+    color: var(--text-main);
     margin: 0.75rem 0 0.5rem;
+    letter-spacing: -0.03em;
+    font-weight: 800;
   }
 
   .tour-header p {
@@ -228,24 +230,24 @@ print("Service continues running without interruption.")`
     text-decoration: none;
     font-size: 0.85rem;
     padding: 0.4rem 0.6rem;
-    border-radius: 4px;
+    border-radius: 9999px;
     transition: all 0.15s ease;
   }
 
   .toc-link:hover {
-    color: var(--neon-green);
-    background: rgba(0, 255, 136, 0.05);
+    color: var(--accent-primary);
+    background: var(--accent-badge-bg);
   }
 
   .sidebar-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-dim);
     padding: 1.25rem;
-    border-radius: 6px;
+    border-radius: var(--card-radius);
   }
 
   .sidebar-card h4 {
-    color: #fff;
+    color: var(--text-main);
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
   }
@@ -282,36 +284,39 @@ print("Service continues running without interruption.")`
 
   .card-header h2 {
     font-size: 1.35rem;
-    color: #fff;
+    color: var(--text-main);
+    font-weight: 700;
   }
 
   .step-num {
     font-size: 0.8rem;
-    color: var(--neon-cyan);
+    color: var(--accent-primary);
     font-weight: 700;
+    font-family: var(--font-mono);
   }
 
   .tour-desc {
     color: var(--text-muted);
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 1.25rem;
   }
 
   .terminal-body pre code {
-    color: #e2e8f0;
+    color: #f1f5f9;
   }
 
   .tour-next {
     text-align: center;
     padding: 2.5rem;
-    background: #0d111a;
+    background: var(--bg-surface);
   }
 
   .tour-next h3 {
-    color: #fff;
+    color: var(--text-main);
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
+    font-weight: 700;
   }
 
   .tour-next p {

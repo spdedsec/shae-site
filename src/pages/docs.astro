@@ -144,7 +144,7 @@ const cliCommands = [
 >
   <div class="docs-header">
     <div class="container">
-      <span class="badge badge-cyan">Complete Manual</span>
+      <span class="badge badge-red">Complete Manual</span>
       <h1>Standard Library & CLI Reference</h1>
       <p>Everything is built into the binary. Zero npm installs. Zero cargo dependencies.</p>
     </div>
@@ -155,7 +155,7 @@ const cliCommands = [
       <!-- CLI Section -->
       <section class="docs-section">
         <div class="section-title-row">
-          <span class="badge badge-green">CLI Toolchain</span>
+          <span class="badge badge-red">CLI Toolchain</span>
           <h2>Command Line Interface</h2>
         </div>
 
@@ -183,7 +183,7 @@ const cliCommands = [
       {builtins.map((category) => (
         <section class="docs-section">
           <div class="section-title-row">
-            <span class="badge badge-amber">{category.category}</span>
+            <span class="badge">{category.category}</span>
             <h2>{category.category}</h2>
           </div>
 
@@ -210,15 +210,17 @@ const cliCommands = [
 <style>
   .docs-header {
     padding: 4rem 0 2rem;
-    background: linear-gradient(180deg, rgba(0, 240, 255, 0.04) 0%, transparent 100%);
+    background: var(--bg-surface);
     border-bottom: 1px solid var(--border-dim);
     text-align: center;
   }
 
   .docs-header h1 {
     font-size: clamp(2rem, 4vw, 3rem);
-    color: #fff;
+    color: var(--text-main);
     margin: 0.75rem 0 0.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 
   .docs-header p {
@@ -240,16 +242,19 @@ const cliCommands = [
 
   .section-title-row h2 {
     font-size: 1.7rem;
-    color: #fff;
+    color: var(--text-main);
     margin-top: 0.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
   }
 
   /* CLI Table */
   .cli-table-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-bright);
-    border-radius: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: var(--card-radius);
     overflow: hidden;
+    box-shadow: var(--card-shadow);
   }
 
   .cli-table {
@@ -259,7 +264,7 @@ const cliCommands = [
   }
 
   .cli-table th {
-    background: #0f121a;
+    background: var(--bg-card-subtle);
     padding: 0.85rem 1.25rem;
     text-align: left;
     color: var(--text-muted);
@@ -278,11 +283,12 @@ const cliCommands = [
   }
 
   .cli-table code {
-    color: var(--neon-cyan);
-    background: rgba(0, 240, 255, 0.06);
+    color: var(--accent-primary);
+    background: var(--accent-badge-bg);
     padding: 0.2rem 0.5rem;
-    border-radius: 3px;
+    border-radius: 4px;
     font-family: var(--font-mono);
+    font-size: 0.84rem;
   }
 
   /* Builtin Cards Grid */
@@ -309,16 +315,17 @@ const cliCommands = [
 
   .func-name {
     font-size: 1.1rem;
-    color: var(--neon-green);
+    color: var(--text-main);
     font-family: var(--font-mono);
+    font-weight: 700;
   }
 
   .returns-badge {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     color: var(--text-dim);
-    background: rgba(255, 255, 255, 0.04);
-    padding: 0.15rem 0.45rem;
-    border-radius: 3px;
+    background: var(--bg-surface);
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
     border: 1px solid var(--border-dim);
   }
 
@@ -330,16 +337,16 @@ const cliCommands = [
   }
 
   .func-code-box {
-    background: #080a0f;
-    border: 1px solid var(--border-dim);
-    border-radius: 4px;
-    padding: 0.9rem;
+    background: var(--bg-code);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 1rem;
     overflow-x: auto;
   }
 
   .func-code-box pre code {
     font-size: 0.82rem;
-    color: #cbd5e1;
+    color: #f1f5f9;
     font-family: var(--font-mono);
     line-height: 1.6;
   }
