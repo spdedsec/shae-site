@@ -1,0 +1,741 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const codeExamples = [
+  {
+    id: 'server',
+    label: 'HTTP Server',
+    filename: 'server.shae',
+    code: `// Spin up a concurrent web server in 5 lines. No npm. No cargo.
+serve(8080, fn(req) {
+    if req.path == "/api/status" {
+        return { status: 200, body: json({ status: "alive", uptime: 420 }) }
+    }
+    return { status: 404, body: "Not found" }
+})
+
+print("Listening on http://localhost:8080")`
+  },
+  {
+    id: 'concurrency',
+    label: 'Tasks & Threads',
+    filename: 'concurrency.shae',
+    code: `// Real OS threads with Task handles. No async/await colored functions.
+let worker = spawn(fn() {
+    print("Crunching background computation...")
+    return 42 * 1337
+})
+
+// Do other stuff here while worker computes...
+let result = worker.join()
+print("Worker delivered: {result}")`
+  },
+  {
+    id: 'pipeline',
+    label: 'Pipelines & Data',
+    filename: 'pipeline.shae',
+    code: `// Elixir-style pipe operator. Chain cleanly without pyramid of doom.
+let scores = [12, 45, 88, 92, 105, 33, 76]
+
+let top_normalized = scores
+    |> filter(fn(x) { x >= 50 })
+    |> map(fn(x) { x / 10 })
+    |> sort()
+
+print("Top normalized scores: {top_normalized}")`
+  },
+  {
+    id: 'matching',
+    label: 'Pattern Matching',
+    filename: 'match.shae',
+    code: `// Expressive data shapes and pattern matching.
+enum Status {
+    Pending,
+    Active(user),
+    Failed(reason)
+}
+
+fn inspect(s) {
+    match s {
+        Status.Pending => "Waiting for authorization",
+        Status.Active(u) => "User {u} is currently online",
+        Status.Failed(err) => "Encountered error: {err}",
+        _ => "Unknown state"
+    }
+}`
+  }
+];
+---
+
+<Layout
+  title="Shae — A programming language that just does its job"
+  description="A programming language. It runs, it does stuff, it leaves you alone. Zero ceremony, built-in servers, effortless concurrency."
+>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="hero-badge-row">
+        <span class="badge badge-green">
+          <span class="dot"></span> v0.2.0 Active
+        </span>
+        <span class="badge badge-cyan">AST Reference Engine</span>
+        <span class="badge badge-amber">Zero Ceremony</span>
+      </div>
+
+      <h1 class="hero-title">
+        A programming language.<br />
+        <span class="highlight-text">It runs, it does stuff,</span><br />
+        it leaves you alone.
+      </h1>
+
+      <p class="hero-subtitle">
+        No ceremony. No drama. No compiler lectures about lifetimes.
+        Write your code, ship a binary, and go touch grass.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/tour" class="btn btn-primary">
+          <span>Take the 5-Min Tour</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="/repl" class="btn btn-secondary">
+          <span>Try Web REPL</span>
+          <span class="bracket">[&gt;_]</span>
+        </a>
+      </div>
+
+      <!-- Quick Install Box -->
+      <div class="install-box">
+        <div class="install-prompt">$</div>
+        <input
+          type="text"
+          readonly
+          value="curl -sSL https://shae.run/install.sh | bash"
+          class="install-input"
+          id="install-cmd"
+        />
+        <button class="copy-btn" id="copy-install-btn" title="Copy to clipboard">
+          <span class="copy-label">COPY</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Code Tabs Showcase -->
+  <section class="showcase-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-cyan">Syntax in Action</span>
+        <h2>Code that doesn't waste your afternoon</h2>
+        <p>No semicolons. No parentheses around conditions. Batteries included.</p>
+      </div>
+
+      <div class="code-terminal-card">
+        <div class="terminal-nav">
+          <div class="tab-buttons" role="tablist">
+            {codeExamples.map((item, idx) => (
+              <button
+                class:list={['code-tab-btn', { active: idx === 0 }]}
+                data-tab-target={item.id}
+              >
+                <span class="file-icon">λ</span>
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+          <div class="terminal-right-tag">
+            <span class="lang-tag">shae // v0.2.0</span>
+          </div>
+        </div>
+
+        <div class="terminal-editor-body">
+          {codeExamples.map((item, idx) => (
+            <div
+              id={`tab-content-${item.id}`}
+              class:list={['code-panel', { active: idx === 0 }]}
+            >
+              <div class="panel-meta">
+                <span class="filename">{item.filename}</span>
+                <button class="panel-copy-btn" data-code={item.code}>Copy</button>
+              </div>
+              <pre><code>{item.code}</code></pre>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Nonchalant Manifesto (Comparison Matrix) -->
+  <section class="manifesto-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-amber">The Unapologetic Comparison</span>
+        <h2>Why build another language?</h2>
+        <p>Because modern programming has gotten unnecessarily complicated.</p>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="compare-card">
+          <div class="compare-header">
+            <h3>Python</h3>
+            <span class="verdict-tag tag-warn">GIL & Dependency Hell</span>
+          </div>
+          <p class="compare-text">
+            Friendly and simple, until you need true concurrency and hit the Global Interpreter Lock, or your team loses two days debugging broken <code>pip</code> virtual environments.
+          </p>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-header">
+            <h3>JavaScript</h3>
+            <span class="verdict-tag tag-warn">Type Coercion & Tooling Fatigue</span>
+          </div>
+          <p class="compare-text">
+            Runs everywhere, but <code>[] + {}</code> evaluates to <code>"[object Object]"</code>, and you need 400MB of <code>node_modules</code> and 6 config files just to bundle a greeting.
+          </p>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-header">
+            <h3>Rust</h3>
+            <span class="verdict-tag tag-warn">Borrow Checker Marathon</span>
+          </div>
+          <p class="compare-text">
+            Unbeatable speed and memory safety, but trying to build a quick script turns into a 3-hour philosophical debate with the compiler about lifetime annotations.
+          </p>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-header">
+            <h3>Go</h3>
+            <span class="verdict-tag tag-warn">Boilerplate Fatigue</span>
+          </div>
+          <p class="compare-text">
+            Clean concurrent goroutines, but half of your codebase is manually retyping <code>if err != nil</code> on every second line of code.
+          </p>
+        </div>
+      </div>
+
+      <!-- The Shae Alternative -->
+      <div class="shae-spotlight-card">
+        <div class="spotlight-badge">THE SHAE WAY</div>
+        <h3>The sweet spot between speed, sanity, and zero drama</h3>
+        <div class="spotlight-features">
+          <div class="s-feat">
+            <span class="s-icon">🌐</span>
+            <div>
+              <strong>Built-in Web Server</strong>
+              <p>Spin up concurrent HTTP endpoints in 5 lines without touching a package manager.</p>
+            </div>
+          </div>
+          <div class="s-feat">
+            <span class="s-icon">⚡</span>
+            <div>
+              <strong>Thread Concurrency with Handles</strong>
+              <p>Spawn OS threads with <code>spawn()</code> and join them with <code>.join()</code> when you're ready.</p>
+            </div>
+          </div>
+          <div class="s-feat">
+            <span class="s-icon">🛡️</span>
+            <div>
+              <strong>Graceful Crash Prevention</strong>
+              <p>Real <code>try/catch</code> blocks and readable stack traces. Servers don't crash on unhandled routes.</p>
+            </div>
+          </div>
+          <div class="s-feat">
+            <span class="s-icon">💡</span>
+            <div>
+              <strong>Human Linter with Typo Hints</strong>
+              <p>Typo a variable? <code>shae check</code> tells you: <em>"💡 Hint: Did you mean counter?"</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLI Banner -->
+  <section class="cli-section">
+    <div class="container">
+      <div class="cli-box">
+        <div class="cli-content">
+          <span class="badge badge-green">Single Binary Toolchain</span>
+          <h2>Everything you need. Zero plugins.</h2>
+          <p>Linter, REPL, test runner, project generator, and jokes built into one fast Rust binary.</p>
+          <div class="cli-cmds">
+            <code>shae               # Start interactive REPL</code>
+            <code>shae check app.shae # Static linter & scope analysis</code>
+            <code>shae test           # Run tests (*_test.shae)</code>
+            <code>shae new my_app     # Scaffold fresh project</code>
+            <code>shae --joke         # Print a programming joke</code>
+          </div>
+        </div>
+        <div class="cli-action">
+          <a href="/docs" class="btn btn-primary">Read the CLI Docs →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Styles */
+  .hero-section {
+    padding: 5.5rem 0 3.5rem;
+    position: relative;
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--neon-green);
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    color: #fff;
+  }
+
+  .highlight-text {
+    color: var(--neon-green);
+    text-shadow: 0 0 24px rgba(0, 255, 136, 0.25);
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .arrow, .bracket {
+    font-weight: bold;
+    color: inherit;
+  }
+
+  .install-box {
+    display: flex;
+    align-items: center;
+    background: #090c13;
+    border: 1px solid var(--border-bright);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem 0.4rem 1rem;
+    max-width: 540px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .install-prompt {
+    color: var(--neon-green);
+    font-weight: 700;
+    margin-right: 0.75rem;
+  }
+
+  .install-input {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    width: 100%;
+    outline: none;
+  }
+
+  .copy-btn {
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border-bright);
+    padding: 0.45rem 0.8rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .copy-btn:hover {
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+  }
+
+  /* Showcase Section */
+  .showcase-section {
+    padding: 4rem 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0.75rem 0 0.5rem;
+    color: #fff;
+  }
+
+  .section-header p {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+
+  .code-terminal-card {
+    background: #090b11;
+    border: 1px solid var(--border-bright);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .terminal-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0d1017;
+    border-bottom: 1px solid var(--border-dim);
+    padding: 0 1rem;
+    overflow-x: auto;
+  }
+
+  .tab-buttons {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .code-tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.85rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s ease;
+  }
+
+  .code-tab-btn:hover {
+    color: var(--text-main);
+  }
+
+  .code-tab-btn.active {
+    color: var(--neon-green);
+    border-bottom-color: var(--neon-green);
+    background: rgba(0, 255, 136, 0.04);
+  }
+
+  .terminal-right-tag {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .terminal-editor-body {
+    padding: 1.5rem;
+    background: #07090e;
+  }
+
+  .code-panel {
+    display: none;
+  }
+
+  .code-panel.active {
+    display: block;
+  }
+
+  .panel-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .filename {
+    font-size: 0.75rem;
+    color: var(--neon-cyan);
+  }
+
+  .panel-copy-btn {
+    background: transparent;
+    border: 1px solid var(--border-dim);
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .panel-copy-btn:hover {
+    color: var(--text-main);
+    border-color: var(--border-bright);
+  }
+
+  .code-panel pre {
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: #e2e8f0;
+  }
+
+  /* Manifesto Section */
+  .manifesto-section {
+    padding: 4.5rem 0;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .compare-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+
+  .compare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .compare-header h3 {
+    font-size: 1.15rem;
+    color: #fff;
+  }
+
+  .verdict-tag {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .tag-warn {
+    background: rgba(255, 183, 3, 0.1);
+    color: var(--neon-amber);
+    border: 1px solid rgba(255, 183, 3, 0.25);
+  }
+
+  .compare-text {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .compare-text code {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    color: var(--neon-cyan);
+  }
+
+  .shae-spotlight-card {
+    background: linear-gradient(180deg, #0f1422 0%, #0a0d16 100%);
+    border: 1px solid rgba(0, 255, 136, 0.35);
+    border-radius: 8px;
+    padding: 2.5rem;
+    box-shadow: 0 12px 32px rgba(0, 255, 136, 0.06);
+  }
+
+  .spotlight-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #040806;
+    background: var(--neon-green);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .shae-spotlight-card h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2rem;
+  }
+
+  .spotlight-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.8rem;
+  }
+
+  .s-feat {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .s-icon {
+    font-size: 1.6rem;
+  }
+
+  .s-feat strong {
+    display: block;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+
+  .s-feat p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* CLI Section */
+  .cli-section {
+    padding: 2rem 0 5rem;
+  }
+
+  .cli-box {
+    background: #090c13;
+    border: 1px solid var(--border-bright);
+    border-radius: 8px;
+    padding: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cli-content h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .cli-content p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .cli-cmds {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .cli-cmds code {
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    background: rgba(0, 240, 255, 0.04);
+    border-left: 2px solid var(--neon-cyan);
+    padding: 0.3rem 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .cli-box {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<script>
+  function setupHomePage() {
+    // Copy install button logic
+    const copyBtn = document.getElementById('copy-install-btn');
+    const input = document.getElementById('install-cmd') as HTMLInputElement;
+
+    if (copyBtn && input) {
+      copyBtn.onclick = async () => {
+        await navigator.clipboard.writeText(input.value);
+        const original = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span style="color:var(--neon-green)">COPIED!</span>';
+        setTimeout(() => {
+          copyBtn.innerHTML = original;
+        }, 1800);
+      };
+    }
+
+    // Code tabs switching
+    const tabBtns = document.querySelectorAll<HTMLButtonElement>('.code-tab-btn');
+    tabBtns.forEach((btn) => {
+      btn.onclick = () => {
+        tabBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const targetId = btn.dataset.tabTarget;
+        document.querySelectorAll('.code-panel').forEach((panel) => {
+          panel.classList.remove('active');
+        });
+
+        const targetPanel = document.getElementById(`tab-content-${targetId}`);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+        }
+      };
+    });
+
+    // Panel copy buttons
+    document.querySelectorAll<HTMLButtonElement>('.panel-copy-btn').forEach((btn) => {
+      btn.onclick = async () => {
+        const code = btn.dataset.code;
+        if (code) {
+          await navigator.clipboard.writeText(code);
+          btn.innerText = 'Copied!';
+          setTimeout(() => {
+            btn.innerText = 'Copy';
+          }, 1500);
+        }
+      };
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupHomePage);
+</script>

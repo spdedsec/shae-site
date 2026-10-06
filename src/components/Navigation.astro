@@ -1,0 +1,254 @@
+---
+const pathname = Astro.url.pathname;
+const cleanPath = pathname.replace(/\/$/, '') || '/';
+
+const navItems = [
+  { label: 'Overview', href: '/' },
+  { label: '5-Min Tour', href: '/tour' },
+  { label: 'Docs & Builtins', href: '/docs' },
+  { label: 'Benchmarks', href: '/benchmarks' },
+  { label: 'Web REPL', href: '/repl' },
+];
+---
+
+<header class="site-header" transition:name="main-header" transition:persist>
+  <div class="container header-inner">
+    <div class="logo-area">
+      <a href="/" class="brand-link">
+        <span class="logo-bracket">[</span>
+        <span class="logo-text">shae</span>
+        <span class="logo-bracket">]</span>
+        <span class="logo-dot"></span>
+      </a>
+      <span class="tagline-pill">deal with it</span>
+    </div>
+
+    <nav class="nav-links">
+      {navItems.map((item) => {
+        const isActive = cleanPath === item.href.replace(/\/$/, '') || (item.href !== '/' && cleanPath.startsWith(item.href));
+        return (
+          <a
+            href={item.href}
+            class:list={['nav-item', { active: isActive }]}
+          >
+            {item.label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <div class="header-actions">
+      <button id="toggle-scanlines-btn" class="util-btn" title="Toggle CRT Scanline Overlay">
+        <span class="icon">▤</span>
+        <span class="label">CRT</span>
+      </button>
+
+      <button id="toggle-audio-btn" class="util-btn" title="Toggle Mechanical Audio">
+        <span class="icon">🔊</span>
+        <span class="label">FX</span>
+      </button>
+
+      <a
+        href="https://github.com/spdedsec/shae"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-btn"
+      >
+        <span class="gh-icon">⌥</span>
+        <span>GitHub</span>
+        <span class="v-tag">v0.2.0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8, 9, 13, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 1.5rem;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .brand-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+  }
+
+  .logo-bracket {
+    color: var(--neon-cyan);
+    font-weight: 400;
+  }
+
+  .logo-text {
+    color: #fff;
+    padding: 0 1px;
+  }
+
+  .logo-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    margin-left: 4px;
+    box-shadow: 0 0 8px var(--neon-green);
+  }
+
+  .tagline-pill {
+    font-size: 0.7rem;
+    color: var(--neon-amber);
+    background: rgba(255, 183, 3, 0.08);
+    border: 1px solid rgba(255, 183, 3, 0.25);
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    text-transform: lowercase;
+    font-family: var(--font-mono);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-item {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+  }
+
+  .nav-item:hover {
+    color: var(--text-main);
+    background: var(--bg-surface);
+    border-color: var(--border-bright);
+  }
+
+  .nav-item.active {
+    color: var(--neon-green);
+    background: rgba(0, 255, 136, 0.06);
+    border-color: rgba(0, 255, 136, 0.3);
+    font-weight: 600;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .util-btn {
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
+    padding: 0.35rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.15s ease;
+  }
+
+  .util-btn:hover {
+    color: var(--text-main);
+    border-color: var(--border-bright);
+  }
+
+  .github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-bright);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .github-btn:hover {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+  }
+
+  .v-tag {
+    font-size: 0.65rem;
+    background: rgba(0, 255, 136, 0.15);
+    color: var(--neon-green);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    padding: 0.1rem 0.35rem;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 860px) {
+    .nav-links {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function setupNavControls() {
+    const scanlineBtn = document.getElementById('toggle-scanlines-btn');
+    const audioBtn = document.getElementById('toggle-audio-btn');
+    const overlay = document.querySelector('.scanlines-overlay') as HTMLElement;
+
+    if (scanlineBtn && overlay) {
+      scanlineBtn.onclick = () => {
+        const isHidden = overlay.style.display === 'none';
+        overlay.style.display = isHidden ? 'block' : 'none';
+        localStorage.setItem('shae-scanlines', isHidden ? 'true' : 'false');
+      };
+      if (localStorage.getItem('shae-scanlines') === 'false') {
+        overlay.style.display = 'none';
+      }
+    }
+
+    if (audioBtn) {
+      audioBtn.onclick = () => {
+        window.dispatchEvent(new CustomEvent('toggle-audio'));
+        const muted = localStorage.getItem('shae-audio-muted') === 'true';
+        audioBtn.style.opacity = muted ? '0.4' : '1.0';
+      };
+      if (localStorage.getItem('shae-audio-muted') === 'true') {
+        audioBtn.style.opacity = '0.4';
+      }
+    }
+  }
+
+  document.addEventListener('astro:page-load', setupNavControls);
+</script>

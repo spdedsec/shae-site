@@ -1,0 +1,330 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const tourSections = [
+  {
+    title: '1. Zero Ceremony Syntax',
+    desc: 'No semicolons. No mandatory parentheses around if or while conditions. Functions are first-class citizens.',
+    code: `// Functions and variables are concise and clean
+let author = "Ada"
+let year = 1843
+
+fn describe(name, yr) {
+    if yr < 1900 {
+        return "{name} was a pioneer from {yr}."
+    }
+    return "{name} lives in the modern era."
+}
+
+print(describe(author, year))`
+  },
+  {
+    title: '2. Formalized Numbers & Truthiness',
+    desc: 'All numbers are 64-bit floats (IEEE-754) with whole-number index safety. Truthiness follows pragmatic rules: 0, "", [], {}, null, and false are falsy.',
+    code: `// Safe indexing prevents accidental float indexing errors
+let items = ["zero", "one", "two"]
+
+// items[1.5] -> ❌ Evaluator Error: Array index must be an integer
+
+// Python-style pragmatic truthiness
+if [] {
+    print("Never reaches here")
+} else {
+    print("Empty array is falsy!") // Prints this
+}`
+  },
+  {
+    title: '3. Strict vs Safe Property Access',
+    desc: 'Catch typos immediately with strict dot access, or safely traverse optional data with the safe navigation operator and null-coalescing.',
+    code: `let user = { name: "Alice", address: null }
+
+// 1. Strict access errors on missing fields to catch typos:
+// print(user.telephne) -> ❌ Error: Property 'telephne' not found
+
+// 2. Safe navigation returns null instead of crashing:
+let city = user?.address?.city // null (safe!)
+
+// 3. Null coalescing provides instant fallback:
+let nickname = user.nick ?? "Anon"
+print("Welcome, {nickname}!")`
+  },
+  {
+    title: '4. Elixir-Style Pipelines',
+    desc: 'Chain transformations naturally without nested function calls or temporary variables.',
+    code: `fn double(x) { x * 2 }
+fn square(x) { x * x }
+fn inspect(val) { print("Result: {val}") }
+
+// Feeds the left expression as the first argument to the right:
+5 |> double |> square |> inspect
+// Output: Result: 100`
+  },
+  {
+    title: '5. Pattern Matching & Enums',
+    desc: 'Full algebraic data types with Rust-inspired pattern matching.',
+    code: `enum WebResponse {
+    Ok(data),
+    NotFound,
+    Unauthorized(reason)
+}
+
+fn handle(res) {
+    match res {
+        WebResponse.Ok(payload) => "Loaded {payload}",
+        WebResponse.NotFound => "Resource not found",
+        WebResponse.Unauthorized(why) => "Forbidden: {why}",
+        _ => "Unhandled condition"
+    }
+}
+
+print(handle(WebResponse.Unauthorized("Expired JWT")))`
+  },
+  {
+    title: '6. Thread Tasks with Handles',
+    desc: 'Spawn genuine OS threads with spawn(). Receive a Task handle you can join() whenever you choose, with automatic thread error propagation.',
+    code: `let bg_task = spawn(fn() {
+    print("Background worker starting...")
+    return 1000 + 337
+})
+
+// Do other work while thread runs...
+let val = bg_task.join()
+print("Joined task result: {val}") // 1337`
+  },
+  {
+    title: '7. Crash Prevention & Try/Catch',
+    desc: 'Prevent runaway exceptions from tearing down your service. Catch errors and inspect formatted stack traces.',
+    code: `try {
+    let raw = read_file("missing_config.json")
+    print(raw)
+} catch (err) {
+    print("Caught safely: {err}")
+}
+
+print("Service continues running without interruption.")`
+  }
+];
+---
+
+<Layout
+  title="5-Minute Tour — Shae Programming Language"
+  description="Master the entire syntax and runtime model of Shae in 5 minutes. No boilerplate, no drama."
+>
+  <div class="tour-header">
+    <div class="container">
+      <span class="badge badge-green">Language Tour</span>
+      <h1>Everything you need to know in 5 minutes</h1>
+      <p>Shae is deliberately designed to be learned over a single coffee break.</p>
+    </div>
+  </div>
+
+  <div class="tour-body">
+    <div class="container tour-grid">
+      <div class="tour-sidebar" transition:persist>
+        <div class="sidebar-sticky">
+          <span class="sidebar-label">JUMP TO SECTION</span>
+          <nav class="tour-toc">
+            {tourSections.map((sec, idx) => (
+              <a href={`#sec-${idx}`} class="toc-link">
+                {sec.title}
+              </a>
+            ))}
+          </nav>
+
+          <div class="sidebar-card">
+            <h4>Ready to experiment?</h4>
+            <p>Run these examples directly in your terminal or in the browser.</p>
+            <a href="/repl" class="btn btn-primary btn-sm">Launch Web REPL</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-content">
+        {tourSections.map((sec, idx) => (
+          <section id={`sec-${idx}`} class="tour-card card">
+            <div class="card-header">
+              <h2>{sec.title}</h2>
+              <span class="step-num">#{idx + 1}</span>
+            </div>
+            <p class="tour-desc">{sec.desc}</p>
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">example_{idx + 1}.shae</span>
+              </div>
+              <div class="terminal-body">
+                <pre><code>{sec.code}</code></pre>
+              </div>
+            </div>
+          </section>
+        ))}
+
+        <div class="tour-next card">
+          <h3>Next: Explore the Standard Library</h3>
+          <p>Read about HTTP server routing, file I/O, assertions, and command execution.</p>
+          <a href="/docs" class="btn btn-secondary">Go to Docs & Builtins →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tour-header {
+    padding: 4rem 0 2rem;
+    background: linear-gradient(180deg, rgba(0, 255, 136, 0.04) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border-dim);
+    text-align: center;
+  }
+
+  .tour-header h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #fff;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .tour-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+
+  .tour-body {
+    padding: 3rem 0 6rem;
+  }
+
+  .tour-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 3rem;
+  }
+
+  .sidebar-sticky {
+    position: sticky;
+    top: 90px;
+  }
+
+  .sidebar-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .tour-toc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .toc-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+  }
+
+  .toc-link:hover {
+    color: var(--neon-green);
+    background: rgba(0, 255, 136, 0.05);
+  }
+
+  .sidebar-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    padding: 1.25rem;
+    border-radius: 6px;
+  }
+
+  .sidebar-card h4 {
+    color: #fff;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-card p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+    width: 100%;
+  }
+
+  .tour-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .tour-card {
+    scroll-margin-top: 90px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.35rem;
+    color: #fff;
+  }
+
+  .step-num {
+    font-size: 0.8rem;
+    color: var(--neon-cyan);
+    font-weight: 700;
+  }
+
+  .tour-desc {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .terminal-body pre code {
+    color: #e2e8f0;
+  }
+
+  .tour-next {
+    text-align: center;
+    padding: 2.5rem;
+    background: #0d111a;
+  }
+
+  .tour-next h3 {
+    color: #fff;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tour-next p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .tour-grid {
+      grid-template-columns: 1fr;
+    }
+    .tour-sidebar {
+      display: none;
+    }
+  }
+</style>

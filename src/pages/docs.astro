@@ -1,0 +1,346 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const builtins = [
+  {
+    category: 'Network & Web',
+    items: [
+      {
+        name: 'serve(port, handler)',
+        returns: 'null (blocks) or background',
+        desc: 'Starts a concurrent HTTP server on specified port. Each incoming connection is handed to a dedicated worker thread.',
+        example: `serve(3000, fn(req) {
+    // req = { method: "GET", path: "/items", query: "page=1", headers: {...}, body: "" }
+    return {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+        body: json({ success: true, count: 5 })
+    }
+})`
+      },
+      {
+        name: 'fetch(url, [options])',
+        returns: 'String (response body)',
+        desc: 'Performs an HTTP GET request and returns the response body as text.',
+        example: `let data = fetch("https://api.github.com/zen")
+print("Zen: {data}")`
+      }
+    ]
+  },
+  {
+    category: 'Concurrency & Threads',
+    items: [
+      {
+        name: 'spawn(func)',
+        returns: 'Task handle',
+        desc: 'Spawns an independent OS thread sharing the global environment. Returns a Task object.',
+        example: `let task = spawn(fn() {
+    return 100 + 200
+})`
+      },
+      {
+        name: 'join(task) / task.join()',
+        returns: 'Any',
+        desc: 'Blocks until the target task finishes and returns its evaluated return value. Propagates panics if the task encountered a runtime error.',
+        example: `let result = task.join()
+print("Computed: {result}")`
+      }
+    ]
+  },
+  {
+    category: 'Serialization & JSON',
+    items: [
+      {
+        name: 'json(val)',
+        returns: 'String',
+        desc: 'Serializes any Shae value (maps, arrays, primitives) into a valid JSON string with preserved order.',
+        example: `let s = json({ user: "alice", admin: false })
+// => '{"user":"alice","admin":false}'`
+      },
+      {
+        name: 'json_parse(str)',
+        returns: 'Map / Array',
+        desc: 'Parses a JSON string into native Shae data structures.',
+        example: `let obj = json_parse('{"id": 101, "role": "editor"}')
+print(obj.role) // "editor"`
+      }
+    ]
+  },
+  {
+    category: 'File System & OS',
+    items: [
+      {
+        name: 'read_file(path)',
+        returns: 'String',
+        desc: 'Reads an entire UTF-8 file into memory. Throws if file is missing.',
+        example: `let content = read_file("config.json")`
+      },
+      {
+        name: 'write_file(path, content)',
+        returns: 'null',
+        desc: 'Overwrites target file with new string contents.',
+        example: `write_file("output.log", "Initiated\\n")`
+      },
+      {
+        name: 'append_file(path, content)',
+        returns: 'null',
+        desc: 'Appends text to the end of a file.',
+        example: `append_file("output.log", "Step 2 done\\n")`
+      },
+      {
+        name: 'delete_file(path)',
+        returns: 'null',
+        desc: 'Deletes file from the file system.',
+        example: `delete_file("temp.cache")`
+      },
+      {
+        name: 'env(key)',
+        returns: 'String / null',
+        desc: 'Retrieves an environment variable.',
+        example: `let port = env("PORT") ?? "8080"`
+      },
+      {
+        name: 'exec(command)',
+        returns: 'String',
+        desc: 'Runs a shell command and returns standard output.',
+        example: `let commit = exec("git rev-parse --short HEAD")`
+      }
+    ]
+  },
+  {
+    category: 'Assertions & Testing',
+    items: [
+      {
+        name: 'assert(condition, [msg])',
+        returns: 'null',
+        desc: 'Asserts that condition is truthy. Throws assertion failure error if falsy.',
+        example: `assert(user.age >= 18, "Must be adult")`
+      },
+      {
+        name: 'assert_eq(actual, expected)',
+        returns: 'null',
+        desc: 'Asserts that actual == expected. Displays both operands on failure.',
+        example: `assert_eq(fib(6), 8)`
+      }
+    ]
+  }
+];
+
+const cliCommands = [
+  { cmd: 'shae', desc: 'Starts the interactive REPL with live evaluation.' },
+  { cmd: 'shae <file.shae>', desc: 'Executes a Shae source file.' },
+  { cmd: 'shae check <file.shae>', desc: 'Runs static AST analysis, scope tracking, and typo suggestion hints.' },
+  { cmd: 'shae test [path]', desc: 'Discovers and runs test files (*_test.shae) using built-in assertions.' },
+  { cmd: 'shae new <project_name>', desc: 'Scaffolds a new Shae application with a sample project structure.' },
+  { cmd: 'shae fmt <file.shae>', desc: 'Automated code formatter.' },
+  { cmd: 'shae --joke', desc: 'Prints a dry programming joke.' },
+  { cmd: 'shae --tip', desc: 'Displays a quick Shae pro tip.' }
+];
+---
+
+<Layout
+  title="Docs & Builtin Reference — Shae"
+  description="Comprehensive reference for all standard built-ins, HTTP server signatures, thread task handles, and CLI commands."
+>
+  <div class="docs-header">
+    <div class="container">
+      <span class="badge badge-cyan">Complete Manual</span>
+      <h1>Standard Library & CLI Reference</h1>
+      <p>Everything is built into the binary. Zero npm installs. Zero cargo dependencies.</p>
+    </div>
+  </div>
+
+  <div class="docs-body">
+    <div class="container">
+      <!-- CLI Section -->
+      <section class="docs-section">
+        <div class="section-title-row">
+          <span class="badge badge-green">CLI Toolchain</span>
+          <h2>Command Line Interface</h2>
+        </div>
+
+        <div class="cli-table-card">
+          <table class="cli-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cliCommands.map((c) => (
+                <tr>
+                  <td><code>{c.cmd}</code></td>
+                  <td>{c.desc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Built-ins by Category -->
+      {builtins.map((category) => (
+        <section class="docs-section">
+          <div class="section-title-row">
+            <span class="badge badge-amber">{category.category}</span>
+            <h2>{category.category}</h2>
+          </div>
+
+          <div class="builtin-cards-grid">
+            {category.items.map((item) => (
+              <div class="builtin-card card">
+                <div class="builtin-header">
+                  <h3 class="func-name">{item.name}</h3>
+                  <span class="returns-badge">Returns: {item.returns}</span>
+                </div>
+                <p class="func-desc">{item.desc}</p>
+                <div class="func-code-box">
+                  <pre><code>{item.example}</code></pre>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .docs-header {
+    padding: 4rem 0 2rem;
+    background: linear-gradient(180deg, rgba(0, 240, 255, 0.04) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border-dim);
+    text-align: center;
+  }
+
+  .docs-header h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #fff;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .docs-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+
+  .docs-body {
+    padding: 3rem 0 6rem;
+  }
+
+  .docs-section {
+    margin-bottom: 4rem;
+  }
+
+  .section-title-row {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title-row h2 {
+    font-size: 1.7rem;
+    color: #fff;
+    margin-top: 0.5rem;
+  }
+
+  /* CLI Table */
+  .cli-table-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .cli-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  .cli-table th {
+    background: #0f121a;
+    padding: 0.85rem 1.25rem;
+    text-align: left;
+    color: var(--text-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .cli-table td {
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--border-dim);
+    color: var(--text-main);
+  }
+
+  .cli-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .cli-table code {
+    color: var(--neon-cyan);
+    background: rgba(0, 240, 255, 0.06);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+  }
+
+  /* Builtin Cards Grid */
+  .builtin-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .builtin-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .builtin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .func-name {
+    font-size: 1.1rem;
+    color: var(--neon-green);
+    font-family: var(--font-mono);
+  }
+
+  .returns-badge {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-dim);
+  }
+
+  .func-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .func-code-box {
+    background: #080a0f;
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
+    padding: 0.9rem;
+    overflow-x: auto;
+  }
+
+  .func-code-box pre code {
+    font-size: 0.82rem;
+    color: #cbd5e1;
+    font-family: var(--font-mono);
+    line-height: 1.6;
+  }
+</style>

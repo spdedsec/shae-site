@@ -1,0 +1,176 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer" transition:name="main-footer" transition:persist>
+  <div class="container footer-inner">
+    <div class="footer-left">
+      <div class="footer-brand">
+        <span class="logo">[shae]</span>
+        <span class="version">v0.2.0</span>
+      </div>
+      <p class="footer-tagline">
+        A programming language. It runs, it does stuff, it leaves you alone.
+      </p>
+      <div class="footer-specs">
+        <span>Rust 2024</span>
+        <span>•</span>
+        <span>AST Tree-Walker Reference</span>
+        <span>•</span>
+        <span>MIT License</span>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <div class="nav-col">
+        <h4>Language</h4>
+        <a href="/tour">5-Min Tour</a>
+        <a href="/docs">Standard Library</a>
+        <a href="/benchmarks">Cold Benchmarks</a>
+        <a href="/repl">Browser REPL</a>
+      </div>
+
+      <div class="nav-col">
+        <h4>Ecosystem</h4>
+        <a href="https://github.com/spdedsec/shae" target="_blank" rel="noopener">GitHub Repository</a>
+        <a href="https://github.com/spdedsec/shae/blob/main/ROADMAP.md" target="_blank" rel="noopener">Roadmap</a>
+        <a href="https://github.com/spdedsec/shae/blob/main/LANGUAGE.md" target="_blank" rel="noopener">Spec & Formal Semantics</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container bottom-inner">
+      <span>Built for engineers with better things to do than argue with compilers.</span>
+      <span class="status-indicator">
+        <span class="pulse-dot"></span> CI Passing // 27/27 Tests
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    background: #06070a;
+    border-top: 1px solid var(--border-dim);
+    padding-top: 3.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 3rem;
+    padding-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-left {
+    max-width: 440px;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-brand .logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+  }
+
+  .footer-brand .version {
+    font-size: 0.75rem;
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--neon-green);
+    border: 1px solid rgba(0, 255, 136, 0.25);
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  .footer-tagline {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .footer-specs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 3.5rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-col h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+  }
+
+  .nav-col a {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
+    transition: color 0.15s ease;
+  }
+
+  .nav-col a:hover {
+    color: var(--neon-green);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border-dim);
+    padding: 1.25rem 0;
+    background: #040507;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .bottom-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--neon-green);
+    font-weight: 600;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    box-shadow: 0 0 8px var(--neon-green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+</style>

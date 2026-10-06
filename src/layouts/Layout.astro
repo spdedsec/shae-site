@@ -1,0 +1,52 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import SoundEffects from '../components/SoundEffects.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Shae — A programming language that just does its job",
+  description = "A programming language. It runs, it does stuff, it leaves you alone. Zero ceremony, built-in servers, effortless concurrency."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <div class="scanlines-overlay" transition:persist></div>
+    <Navigation />
+    <main class="page-content">
+      <slot />
+    </main>
+    <Footer />
+    <SoundEffects />
+  </body>
+</html>
+
+<style>
+  .page-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+</style>
