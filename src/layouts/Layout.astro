@@ -32,8 +32,16 @@ const {
     <!-- Instant Zero-FOUC Theme Init -->
     <script is:inline>
       (function() {
-        const savedTheme = localStorage.getItem('shae-theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        try {
+          let savedTheme = localStorage.getItem('shae-theme');
+          if (savedTheme === 'oled') savedTheme = 'vantablack';
+          if (!savedTheme || !['light', 'dark', 'vantablack'].includes(savedTheme)) {
+            savedTheme = 'light';
+          }
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (_) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
       })();
     </script>
     <ClientRouter />
@@ -47,10 +55,27 @@ const {
     <SoundEffects />
 
     <script>
-      // Preserve theme across Astro View Transitions swaps
+      // Seamlessly sync theme before DOM swap to avoid View Transitions flash
+      document.addEventListener('astro:before-swap', (ev: any) => {
+        let savedTheme = localStorage.getItem('shae-theme') || 'light';
+        if (savedTheme === 'oled') savedTheme = 'vantablack';
+        if (!['light', 'dark', 'vantablack'].includes(savedTheme)) savedTheme = 'light';
+        if (ev.newDocument) {
+          ev.newDocument.documentElement.setAttribute('data-theme', savedTheme);
+        }
+      });
+
+      // Confirm theme persistence after swap and sync UI controls
       document.addEventListener('astro:after-swap', () => {
-        const savedTheme = localStorage.getItem('shae-theme') || 'light';
+        let savedTheme = localStorage.getItem('shae-theme') || 'light';
+        if (savedTheme === 'oled') savedTheme = 'vantablack';
+        if (!['light', 'dark', 'vantablack'].includes(savedTheme)) savedTheme = 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
+
+        const switcher = document.getElementById('theme-switcher') as HTMLSelectElement | null;
+        if (switcher && switcher.value !== savedTheme) {
+          switcher.value = savedTheme;
+        }
       });
     </script>
   </body>

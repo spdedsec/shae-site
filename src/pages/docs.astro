@@ -1,353 +1,1000 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const builtins = [
+// 16 Chapters from the authoritative 42-page PDF book (docs/guide/ch01..ch16.tex)
+const guideChapters = [
   {
-    category: 'Network & Web',
-    items: [
+    num: 1,
+    title: 'The Magic of Computers and Why Shae Exists',
+    part: 'Foundations & Concepts',
+    desc: 'From sand to silicon: CPU instructions, clock cycles, operating systems, and the design imperative behind Shae.'
+  },
+  {
+    num: 2,
+    title: 'The Journey of Code: From Human Text to Silicon Execution',
+    part: 'Foundations & Concepts',
+    desc: 'Tracing a source file through lexing, Pratt parsing, AST construction, bytecode emission, and machine execution.'
+  },
+  {
+    num: 3,
+    title: 'The First Words: Variables, Memory Boxes, and Scope',
+    part: 'Foundations & Concepts',
+    desc: 'Stack frames, registers, lexical closures, upvalue capturing, and variable mutability semantics.'
+  },
+  {
+    num: 4,
+    title: 'The Building Blocks: The Complete Type System',
+    part: 'Language Syntax',
+    desc: 'Int(i64), Float(f64), Radix literals (0x, 0b, 0o), strings, UTF-8 grapheme clusters, arrays, and maps.'
+  },
+  {
+    num: 5,
+    title: 'Making Decisions: Control Flow and Pattern Matching',
+    part: 'Language Syntax',
+    desc: 'Branch prediction, expression-oriented if/else, loops, pattern matching with arm guards, and range patterns.'
+  },
+  {
+    num: 6,
+    title: 'Actions and Recipes: Functions, Closures, and Pipelines',
+    part: 'Language Syntax',
+    desc: 'First-class functions, anonymous closures, call frames, implicit returns, and the |> pipeline operator.'
+  },
+  {
+    num: 7,
+    title: 'When Things Go Wrong: Predictable Error Handling',
+    part: 'Language Syntax',
+    desc: 'Structured try/catch/throw exceptions, virtual stack preservation, panic unwinding, and graceful recovery.'
+  },
+  {
+    num: 8,
+    title: 'Inside the Engine Room: Virtual Machine Architecture & Bytecodes',
+    part: 'Virtual Machine & Systems',
+    desc: 'Dual-engine architecture: stack bytecode VM, dispatch loop, opcodes, call frames, and mark-and-sweep GC.'
+  },
+  {
+    num: 9,
+    title: 'Concurrency: Fibers, Coroutines, and Channels',
+    part: 'Virtual Machine & Systems',
+    desc: 'Lightweight cooperative fibers, std:async coroutines, task combinators (all, race), and CSP channels.'
+  },
+  {
+    num: 10,
+    title: 'The Actor Model & Distributed Clustering (std:actor & std:actor:cluster)',
+    part: 'Virtual Machine & Systems',
+    desc: 'Erlang-style lightweight thread actors, FIFO mailboxes, supervision trees, TLS/mTLS cluster mesh, and hot-code reloading.'
+  },
+  {
+    num: 11,
+    title: 'Raw Systems Programming & Zero-Copy Memory (std:buffer)',
+    part: 'Advanced Systems',
+    desc: 'Contiguous ByteBuffer, shared Arc slicing without allocations, endian numeric I/O, and struct pack/unpack.'
+  },
+  {
+    num: 12,
+    title: 'Direct LLVM SSA Compilation & Native Machine Code (shae llvm)',
+    part: 'Advanced Systems',
+    desc: 'Direct LLVM 18 SSA IR generation, mem2reg promotion, C ABI interop, and Clang -O2 native compilation.'
+  },
+  {
+    num: 13,
+    title: 'The Holy Grail: The Self-Hosting Compiler Pipeline',
+    part: 'Advanced Systems',
+    desc: 'The 14-module pure-Shae compiler suite in lib/compiler/, self-parsing, self-codegen, and Stage 2 bit-for-bit identity.'
+  },
+  {
+    num: 14,
+    title: 'The Developer Tooling Ecosystem',
+    part: 'Toolchain & Ecosystem',
+    desc: 'The CLI suite: shae fmt, shae check linter, shae test runner, shae bench telemetry, and shae doc generator.'
+  },
+  {
+    num: 15,
+    title: 'Cross-Platform Distribution & The Universal Installer',
+    part: 'Toolchain & Ecosystem',
+    desc: 'Precompiled binary matrix for Linux, macOS, and Windows, install.sh mechanics, and VS Code LSP extension.'
+  },
+  {
+    num: 16,
+    title: 'Complete Syntax Grammar & Vocabulary Glossary',
+    part: 'Reference & Index',
+    desc: 'Exhaustive EBNF grammar specification, opcode dictionary, standard library index, and engineering glossary.'
+  }
+];
+
+// Complete CLI Toolchain
+const cliToolchain = [
+  { cmd: 'shae <file.shae>', args: '', desc: 'Executes a Shae source file through the high-performance stack Bytecode VM.' },
+  { cmd: 'shae run <file.shae>', args: '', desc: 'Explicit invocation of the bytecode execution engine.' },
+  { cmd: 'shae', args: '', desc: 'Launches the interactive VM REPL with persistent globals, multiline input, and :disasm.' },
+  { cmd: 'shae check <file.shae>', args: '', desc: 'Runs static analysis: reports unread variables, dead code after returns, and typo suggestions.' },
+  { cmd: 'shae fmt <file.shae>', args: '[--check]', desc: 'Canonical 4-space AST code formatter. --check verifies formatting without writing.' },
+  { cmd: 'shae compile <file.shae>', args: '-o <out.shaec>', desc: 'AOT compiles source into serialized bytecode with \\x7fSHAE magic header.' },
+  { cmd: 'shae disasm <file.shaec>', args: '', desc: 'Disassembles bytecode into human-readable opcodes, constants, and upvalue capture tables.' },
+  { cmd: 'shae llvm <file.shae>', args: '[-c] [-o bin] [-r]', desc: 'Emits direct LLVM 18 SSA IR. -c compiles to standalone binary via Clang -O2; -r runs immediately.' },
+  { cmd: 'shae test [path]', args: '[-f pattern]', desc: 'Discovers and executes test files (*_test.shae) with built-in assertion diagnostics.' },
+  { cmd: 'shae bench [filter]', args: '[-i iters]', desc: 'Executes language microbenchmark suite with ops/sec throughput and average latency reports.' },
+  { cmd: 'shae doc [path]', args: '[--serve --port 8080]', desc: 'Extracts /// and //! comments into static HTML, Markdown, or serves live documentation server.' },
+  { cmd: 'shae lsp', args: '', desc: 'Runs the Language Server Protocol daemon for VS Code, providing live diagnostics and completions.' },
+  { cmd: 'shae pkg <cmd>', args: 'init|add|install|pack', desc: 'Deterministic package manager managing dependencies via shae.toml and shae.lock.' },
+  { cmd: 'shae wasm <file.shae>', args: '[--run]', desc: 'Pure-Shae WebAssembly binary (.wasm) compiler and built-in WasmRunner interpreter.' }
+];
+
+// Standard Library Modules
+const stdlibModules = [
+  {
+    id: 'std-buffer',
+    name: 'std:buffer',
+    tag: 'Chunk 29',
+    badge: 'Zero-Copy Memory',
+    summary: 'High-throughput contiguous byte buffers with zero-copy slicing, endian binary I/O, and C-struct packing.',
+    signatures: [
       {
-        name: 'serve(port, handler)',
-        returns: 'null (blocks) or background',
-        desc: 'Starts a concurrent HTTP server on specified port. Each incoming connection is handed to a dedicated worker thread.',
-        example: `serve(3000, fn(req) {
-    // req = { method: "GET", path: "/items", query: "page=1", headers: {...}, body: "" }
-    return {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-        body: json({ success: true, count: 5 })
+        sig: 'ByteBuffer.new(size: Int) -> ByteBuffer',
+        desc: 'Allocates a raw contiguous byte buffer initialized to zero.',
+        example: 'let buf = ByteBuffer.new(1024)'
+      },
+      {
+        sig: 'buf.slice(start: Int, end: Int) -> ByteBuffer',
+        desc: 'Creates a child slice referencing the identical Arc<RwLock<Vec<u8>>> memory without heap allocation.',
+        example: 'let sub = buf.slice(8, 24) // Mutating sub mutates buf in-place'
+      },
+      {
+        sig: 'buf.read_u32_le(offset: Int) / buf.write_u32_le(offset, val) -> Int',
+        desc: 'Reads or writes a 32-bit unsigned integer in Little-Endian byte order. Also supports u8..u64, i8..i64, f32, f64 in _le and _be.',
+        example: 'buf.write_u32_le(0, 0xDEADBEEF)\nlet val = buf.read_u32_le(0)'
+      },
+      {
+        sig: 'pack(fmt: String, ...values) -> ByteBuffer',
+        desc: 'Packs values into a binary buffer according to format string (<I2h4s = LE 32-bit int, two 16-bit ints, 4-char string).',
+        example: 'let packet = pack("<I2h4s", 1001, 20, -5, "SHAE")'
+      },
+      {
+        sig: 'unpack(fmt: String, buf: ByteBuffer, [offset]) -> Array',
+        desc: 'Unpacks raw binary buffer into an array of typed Shae values according to format specifier.',
+        example: 'let [id, x, y, tag] = unpack("<I2h4s", packet)'
+      }
+    ]
+  },
+  {
+    id: 'std-actor',
+    name: 'std:actor & std:actor:cluster',
+    tag: 'Chunks 14, 19, 21, 30',
+    badge: 'Distributed Actors & Mesh',
+    summary: 'Lightweight thread actors, FIFO mailboxes, supervision trees, TLS/mTLS cluster mesh, and hot-code reloading.',
+    signatures: [
+      {
+        sig: 'spawn_actor(handler: Function, [initial_state]) -> ActorHandle',
+        desc: 'Spawns an independent actor thread with an unbounded FIFO message mailbox and zero-idle CPU consumption.',
+        example: 'let counter = spawn_actor(fn(state, msg) { state + msg }, 0)'
+      },
+      {
+        sig: 'actor.send(msg: Any) -> nil',
+        desc: 'Asynchronously enqueues a message into the actor mailbox (fire-and-forget).',
+        example: 'counter.send(5)'
+      },
+      {
+        sig: 'actor.ask(msg: Any, [timeout_ms: Int]) -> Any',
+        desc: 'Sends a message and synchronously awaits reply with an automatic correlation ID and timeout protection.',
+        example: 'let total = counter.ask("get_state", 1000)'
+      },
+      {
+        sig: 'actor.reload(new_handler: Function, [migration_fn]) -> nil',
+        desc: 'Hot-swaps actor handler function at runtime while preserving active thread execution, state, and queued messages (Chunk 30).',
+        example: 'actor.reload(new_handler, fn(state) { { count: state.total } })'
+      },
+      {
+        sig: 'ClusterNode.new(config: Map) -> ClusterNode',
+        desc: 'Initializes a distributed cluster node with Rustls 0.23 mutual TLS (mTLS) encryption, cookie auth, and TCP framing.',
+        example: 'let node = ClusterNode.new({ name: "alpha", bind: "0.0.0.0:9001", tls_cert: "cert.pem", tls_key: "key.pem" })'
+      },
+      {
+        sig: 'node.actor(remote_uri: String) -> RemoteActorHandle',
+        desc: 'Returns a handle to an actor hosted on a remote cluster node. Supports ask and send over length-delimited TLS framing.',
+        example: 'let worker = node.actor("calc@10.0.0.2:9001")\nlet res = await worker.ask({ op: "sum", data: [1, 2, 3] })'
+      }
+    ]
+  },
+  {
+    id: 'std-async',
+    name: 'std:async',
+    tag: 'Chunk 22',
+    badge: 'Native Coroutines',
+    summary: 'First-class asynchronous coroutines with cooperative scheduling and parallel combinators.',
+    signatures: [
+      {
+        sig: 'async.spawn(func: Function) -> Task',
+        desc: 'Spawns a cooperative non-blocking asynchronous task returning an awaitable handle.',
+        example: 'let task = async.spawn(fn() { fetch("https://api.example.com/data") })'
+      },
+      {
+        sig: 'await task -> Any',
+        desc: 'Suspends coroutine execution until task resolves, returning value or throwing on error.',
+        example: 'let result = await task'
+      },
+      {
+        sig: 'async.all(tasks: Array) -> Array',
+        desc: 'Runs an array of tasks concurrently, resolving when all succeed.',
+        example: 'let [user, posts] = await async.all([taskUser, taskPosts])'
+      },
+      {
+        sig: 'async.race(tasks: Array) -> Any',
+        desc: 'Returns value of first task to resolve, cancelling or ignoring remaining tasks.',
+        example: 'let fastResult = await async.race([primaryTask, backupTask])'
+      },
+      {
+        sig: 'async.sleep(ms: Int) -> nil',
+        desc: 'Non-blocking cooperative sleep yielding thread to other coroutines.',
+        example: 'await async.sleep(250)'
+      }
+    ]
+  },
+  {
+    id: 'std-crypto',
+    name: 'std:crypto',
+    tag: 'Chunks 8 & 26',
+    badge: 'Authenticated Ciphers',
+    summary: 'Industrial authenticated encryption (AES-256-GCM, ChaCha20-Poly1305), HKDF, PBKDF2, SHA-2/3, and HMAC.',
+    signatures: [
+      {
+        sig: 'crypto.sha256(data: String | ByteBuffer) -> String',
+        desc: 'Computes SHA-256 cryptographic digest returning lowercase hex string.',
+        example: 'let hash = crypto.sha256("payload")'
+      },
+      {
+        sig: 'crypto.hmac_sha256(key: String, data: String) -> String',
+        desc: 'Computes Hash-based Message Authentication Code with SHA-256.',
+        example: 'let mac = crypto.hmac_sha256("secret_key", "message")'
+      },
+      {
+        sig: 'crypto.aes_gcm_encrypt(key, nonce, plaintext, [aad]) -> ByteBuffer',
+        desc: 'Authenticated symmetric encryption using AES-256-GCM with 128-bit authentication tag.',
+        example: 'let ciphertext = crypto.aes_gcm_encrypt(key, nonce, "sensitive payload")'
+      },
+      {
+        sig: 'crypto.chacha20_poly1305_encrypt(key, nonce, plaintext, [aad]) -> ByteBuffer',
+        desc: 'High-speed industrial AEAD cipher combining ChaCha20 stream cipher with Poly1305 authenticator.',
+        example: 'let ct = crypto.chacha20_poly1305_encrypt(key, nonce, raw_data)'
+      },
+      {
+        sig: 'crypto.hkdf(salt, ikm, info, length) -> ByteBuffer',
+        desc: 'HMAC-based Extract-and-Expand Key Derivation Function (RFC 5869).',
+        example: 'let subkey = crypto.hkdf(salt, master_key, "encryption", 32)'
+      }
+    ]
+  },
+  {
+    id: 'std-http',
+    name: 'std:http & Web',
+    tag: 'Chunk 7',
+    badge: 'Built-in Servers',
+    summary: 'High-throughput non-blocking multi-threaded HTTP/HTTPS server and built-in HTTP client.',
+    signatures: [
+      {
+        sig: 'serve(port: Int, handler: Function) -> nil',
+        desc: 'Starts concurrent HTTP server on specified port. Connections are distributed across worker threads.',
+        example: `serve(8080, fn(req) {
+    if req.path == "/status" {
+        return { status: 200, headers: { "Content-Type": "application/json" }, body: json({ ok: true }) }
     }
+    return { status: 404, body: "Not found" }
 })`
       },
       {
-        name: 'fetch(url, [options])',
-        returns: 'String (response body)',
-        desc: 'Performs an HTTP GET request and returns the response body as text.',
-        example: `let data = fetch("https://api.github.com/zen")
-print("Zen: {data}")`
+        sig: 'serve_tls(port: Int, cert: String, key: String, handler: Function) -> nil',
+        desc: 'Rustls-backed HTTPS server supporting ALPN HTTP/1.1 with zero OpenSSL dependencies.',
+        example: 'serve_tls(8443, "cert.pem", "key.pem", fn(req) { { status: 200, body: "Secure" } })'
+      },
+      {
+        sig: 'fetch(url: String, [options: Map]) -> String',
+        desc: 'Executes HTTP client request, returning response body as string.',
+        example: 'let body = fetch("https://api.github.com/zen")'
       }
     ]
   },
   {
-    category: 'Concurrency & Threads',
-    items: [
+    id: 'std-sqlite',
+    name: 'std:sqlite',
+    tag: 'Chunk 6',
+    badge: 'Embedded Database',
+    summary: 'Zero-dependency embedded SQL database with transactions and prepared parameter bindings.',
+    signatures: [
       {
-        name: 'spawn(func)',
-        returns: 'Task handle',
-        desc: 'Spawns an independent OS thread sharing the global environment. Returns a Task object.',
-        example: `let task = spawn(fn() {
-    return 100 + 200
-})`
+        sig: 'sqlite.open(path: String) -> Database',
+        desc: 'Opens an on-disk or in-memory (:memory:) SQLite database.',
+        example: 'let db = sqlite.open("app.db")'
       },
       {
-        name: 'join(task) / task.join()',
-        returns: 'Any',
-        desc: 'Blocks until the target task finishes and returns its evaluated return value. Propagates panics if the task encountered a runtime error.',
-        example: `let result = task.join()
-print("Computed: {result}")`
-      }
-    ]
-  },
-  {
-    category: 'Serialization & JSON',
-    items: [
-      {
-        name: 'json(val)',
-        returns: 'String',
-        desc: 'Serializes any Shae value (maps, arrays, primitives) into a valid JSON string with preserved order.',
-        example: `let s = json({ user: "alice", admin: false })
-// => '{"user":"alice","admin":false}'`
+        sig: 'db.execute(sql: String, [params: Array]) -> Int',
+        desc: 'Executes DDL or DML statement with parameterized bindings, returning rows affected.',
+        example: 'db.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)")'
       },
       {
-        name: 'json_parse(str)',
-        returns: 'Map / Array',
-        desc: 'Parses a JSON string into native Shae data structures.',
-        example: `let obj = json_parse('{"id": 101, "role": "editor"}')
-print(obj.role) // "editor"`
-      }
-    ]
-  },
-  {
-    category: 'File System & OS',
-    items: [
-      {
-        name: 'read_file(path)',
-        returns: 'String',
-        desc: 'Reads an entire UTF-8 file into memory. Throws if file is missing.',
-        example: `let content = read_file("config.json")`
-      },
-      {
-        name: 'write_file(path, content)',
-        returns: 'null',
-        desc: 'Overwrites target file with new string contents.',
-        example: `write_file("output.log", "Initiated\\n")`
-      },
-      {
-        name: 'append_file(path, content)',
-        returns: 'null',
-        desc: 'Appends text to the end of a file.',
-        example: `append_file("output.log", "Step 2 done\\n")`
-      },
-      {
-        name: 'delete_file(path)',
-        returns: 'null',
-        desc: 'Deletes file from the file system.',
-        example: `delete_file("temp.cache")`
-      },
-      {
-        name: 'env(key)',
-        returns: 'String / null',
-        desc: 'Retrieves an environment variable.',
-        example: `let port = env("PORT") ?? "8080"`
-      },
-      {
-        name: 'exec(command)',
-        returns: 'String',
-        desc: 'Runs a shell command and returns standard output.',
-        example: `let commit = exec("git rev-parse --short HEAD")`
-      }
-    ]
-  },
-  {
-    category: 'Assertions & Testing',
-    items: [
-      {
-        name: 'assert(condition, [msg])',
-        returns: 'null',
-        desc: 'Asserts that condition is truthy. Throws assertion failure error if falsy.',
-        example: `assert(user.age >= 18, "Must be adult")`
-      },
-      {
-        name: 'assert_eq(actual, expected)',
-        returns: 'null',
-        desc: 'Asserts that actual == expected. Displays both operands on failure.',
-        example: `assert_eq(fib(6), 8)`
+        sig: 'db.query(sql: String, [params: Array]) -> Array<Map>',
+        desc: 'Executes SQL SELECT statement returning array of row maps.',
+        example: 'let rows = db.query("SELECT * FROM users WHERE id = ?", [42])'
       }
     ]
   }
 ];
 
-const cliCommands = [
-  { cmd: 'shae', desc: 'Starts the interactive REPL with live evaluation.' },
-  { cmd: 'shae <file.shae>', desc: 'Executes a Shae source file.' },
-  { cmd: 'shae check <file.shae>', desc: 'Runs static AST analysis, scope tracking, and typo suggestion hints.' },
-  { cmd: 'shae test [path]', desc: 'Discovers and runs test files (*_test.shae) using built-in assertions.' },
-  { cmd: 'shae new <project_name>', desc: 'Scaffolds a new Shae application with a sample project structure.' },
-  { cmd: 'shae fmt <file.shae>', desc: 'Automated code formatter.' },
-  { cmd: 'shae --joke', desc: 'Prints a dry programming joke.' },
-  { cmd: 'shae --tip', desc: 'Displays a quick Shae pro tip.' }
+const syntaxPrimitives = [
+  {
+    name: 'Integers & Radix Literals',
+    desc: '64-bit signed integers with decimal, hex, binary, octal, and digit separator notation.',
+    code: `let dec = 42
+let hex = 0xFF        // 255
+let bin = 0b1010_0110 // 166
+let oct = 0o755       // 493
+let large = 1_000_000 // Underscore separators`
+  },
+  {
+    name: 'Pattern Matching & Arm Guards',
+    desc: 'Exhaustive pattern matching supporting integer ranges, variant extraction, and conditional guards.',
+    code: `match event {
+    { type: "login", user } if user.is_admin => "Admin session: {user.name}",
+    { type: "login", user } => "Standard session: {user.name}",
+    { code: 400..=499 } => "Client error",
+    _ => "Unhandled"
+}`
+  },
+  {
+    name: 'Destructuring & Rest Bindings',
+    desc: 'Extracting nested values from arrays and maps with rest bindings (..rest).',
+    code: `let [first, second, ..tail] = [10, 20, 30, 40, 50]
+print("First: {first}, tail length: {tail.length}")
+
+let { host, port, ..opts } = { host: "127.0.0.1", port: 8080, timeout: 5000 }
+print("Connecting to {host}:{port}")`
+  },
+  {
+    name: 'Functional Pipelines (|>)',
+    desc: 'Elixir-style data forward pipe passing the evaluated left operand as the first argument.',
+    code: `let processed = [5, 12, 8, 130, 44]
+    |> filter(fn(x) { x >= 10 })
+    |> map(fn(x) { x * 2 })
+    |> sort()
+    |> reverse()`
+  },
+  {
+    name: 'Predictable Error Handling',
+    desc: 'Structured try/catch/throw with full call-stack frame retention and typed errors.',
+    code: `try {
+    let raw = read_file("missing_file.json")
+    let data = json_parse(raw)
+} catch err {
+    print("Handled file error: {err}")
+}`
+  }
 ];
 ---
 
 <Layout
-  title="Docs & Builtin Reference — Shae"
-  description="Comprehensive reference for all standard built-ins, HTTP server signatures, thread task handles, and CLI commands."
+  title="Documentation & 42-Page Complete Guide — Shae"
+  description="The comprehensive Shae programming language reference, standard library specifications, and 42-page publication master guide."
 >
-  <div class="docs-header">
-    <div class="container">
-      <span class="badge badge-red">Complete Manual</span>
-      <h1>Standard Library & CLI Reference</h1>
-      <p>Everything is built into the binary. Zero npm installs. Zero cargo dependencies.</p>
+  <!-- Page Header -->
+  <header class="docs-hero">
+    <div class="container docs-hero-inner">
+      <div class="animate-fade-up">
+        <span class="badge badge-red">Language Reference &amp; Publication Guide</span>
+        <h1 class="docs-title">The Shae Language Reference</h1>
+        <p class="docs-subtitle">
+          Complete syntax specification, CLI toolchain, standard library primitives, and the official 42-page 
+          publication book. Designed under The Dual-Lens Philosophy: pedagogical clarity paired with silicon-level systems depth.
+        </p>
+      </div>
+
+      <!-- Quick Section Anchor Bar -->
+      <nav class="quick-nav animate-fade-up delay-100" aria-label="Documentation Jump Links">
+        <a href="#pdf-guide" class="quick-link active">📖 42-Page PDF Guide</a>
+        <a href="#cli-reference" class="quick-link">⚡ CLI Toolchain</a>
+        <a href="#syntax-primitives" class="quick-link">🔤 Syntax &amp; Primitives</a>
+        <a href="#stdlib-reference" class="quick-link">📦 Standard Library</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="docs-body">
-    <div class="container">
-      <!-- CLI Section -->
-      <section class="docs-section">
-        <div class="section-title-row">
-          <span class="badge badge-red">CLI Toolchain</span>
-          <h2>Command Line Interface</h2>
+  <div class="container docs-main-layout">
+    <!-- SECTION 1: PROMINENT 42-PAGE PDF PUBLICATION GUIDE CARD -->
+    <section id="pdf-guide" class="doc-section scroll-target">
+      <div class="pdf-card card glass-card">
+        <div class="pdf-card-header">
+          <div class="pdf-meta-left">
+            <div class="badge-cluster">
+              <span class="badge badge-red">Official Publication Book</span>
+              <span class="badge">42 Pages • 496 KB</span>
+              <span class="badge">The Dual-Lens Philosophy</span>
+            </div>
+            <h2 class="pdf-book-title">The Shae Programming Language: From Sand to Supercomputers</h2>
+            <p class="pdf-book-authors">
+              By Shae Core Engineering Team &bull; Release v0.4.0 &bull; Verified LaTeX Typeset Edition
+            </p>
+          </div>
+          <div class="pdf-action-cluster">
+            <a
+              href="/shae_the_complete_guide.pdf"
+              download="shae_the_complete_guide.pdf"
+              class="btn btn-primary btn-download"
+            >
+              <span class="dl-icon">📥</span>
+              <span>Download 42-Page PDF (496 KB)</span>
+            </a>
+            <a
+              href="https://github.com/spdedsec/shae/tree/main/docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-secondary"
+            >
+              <span>View LaTeX Sources (GitHub) ↗</span>
+            </a>
+          </div>
         </div>
 
-        <div class="cli-table-card">
-          <table class="cli-table">
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>Behavior</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cliCommands.map((c) => (
-                <tr>
-                  <td><code>{c.cmd}</code></td>
-                  <td>{c.desc}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div class="pdf-synopsis">
+          <p>
+            <strong>The Dual-Lens Philosophy:</strong> Every chapter presents concepts through two synchronized perspectives:
+            first an intuitive, visual metaphor (ELI5) that builds conceptual intuition, followed immediately by the deep 
+            systems reality—CPU registers, cache lines, virtual stack frames, Bytecode opcodes, LLVM SSA form, and zero-copy memory buffers.
+          </p>
         </div>
-      </section>
 
-      <!-- Built-ins by Category -->
-      {builtins.map((category) => (
-        <section class="docs-section">
-          <div class="section-title-row">
-            <span class="badge">{category.category}</span>
-            <h2>{category.category}</h2>
+        <!-- 16-Chapter Index Grid -->
+        <div class="chapter-index-area">
+          <div class="chapter-index-heading">
+            <h3>Complete Table of Contents (Chapters 1–16)</h3>
+            <span class="chapter-count">16 Chapters &bull; 42 Pages</span>
           </div>
 
-          <div class="builtin-cards-grid">
-            {category.items.map((item) => (
-              <div class="builtin-card card">
-                <div class="builtin-header">
-                  <h3 class="func-name">{item.name}</h3>
-                  <span class="returns-badge">Returns: {item.returns}</span>
-                </div>
-                <p class="func-desc">{item.desc}</p>
-                <div class="func-code-box">
-                  <pre><code>{item.example}</code></pre>
+          <div class="chapters-grid">
+            {guideChapters.map((ch) => (
+              <div class="chapter-item">
+                <div class="chapter-num-badge">Ch {ch.num}</div>
+                <div class="chapter-info">
+                  <div class="chapter-title">{ch.title}</div>
+                  <div class="chapter-part">{ch.part}</div>
+                  <div class="chapter-desc">{ch.desc}</div>
                 </div>
               </div>
             ))}
           </div>
-        </section>
-      ))}
-    </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: CLI TOOLCHAIN REFERENCE -->
+    <section id="cli-reference" class="doc-section scroll-target">
+      <span id="bench" class="anchor-alias"></span>
+      <div class="section-title-block">
+        <span class="badge badge-red">Command Line Toolchain</span>
+        <h2>Unified CLI Commands (<code>shae</code>)</h2>
+        <p>The single static binary contains the execution runtime, compiler, linter, formatter, doc server, and test runner.</p>
+      </div>
+
+      <div class="table-container card glass-card">
+        <table class="reference-table">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Command Syntax</th>
+              <th style="width: 18%;">Arguments</th>
+              <th>Behavior &amp; Pipeline Execution</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cliToolchain.map((c) => (
+              <tr>
+                <td><code>{c.cmd}</code></td>
+                <td><span class="args-tag">{c.args || '—'}</span></td>
+                <td>{c.desc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: SYNTAX PRIMITIVES & RULES -->
+    <section id="syntax-primitives" class="doc-section scroll-target">
+      <div class="section-title-block">
+        <span class="badge">Core Language Syntax</span>
+        <h2>Syntax Primitives &amp; Patterns</h2>
+        <p>Modern expression-oriented ergonomics without boilerplate ceremony.</p>
+      </div>
+
+      <div class="primitives-grid">
+        {syntaxPrimitives.map((p) => (
+          <div class="primitive-card card glass-card">
+            <h3 class="prim-title">{p.name}</h3>
+            <p class="prim-desc">{p.desc}</p>
+            <div class="code-viewport">
+              <pre><code>{p.code}</code></pre>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SECTION 4: STANDARD LIBRARY CATALOG -->
+    <section id="stdlib-reference" class="doc-section scroll-target">
+      <span id="stdlib" class="anchor-alias"></span>
+      <div class="section-title-block">
+        <span class="badge badge-red">Native Modules</span>
+        <h2>Standard Library Specifications</h2>
+        <p>Built directly into the binary runtime with zero external package dependencies.</p>
+      </div>
+
+      <div class="stdlib-cluster">
+        {stdlibModules.map((mod) => (
+          <div id={mod.id} class="module-card card glass-card">
+            <div class="mod-header">
+              <div class="mod-title-area">
+                <span class="mod-badge">{mod.badge}</span>
+                <span class="mod-tag">{mod.tag}</span>
+                <h3 class="mod-name"><code>{mod.name}</code></h3>
+              </div>
+              <p class="mod-summary">{mod.summary}</p>
+            </div>
+
+            <div class="signatures-list">
+              {mod.signatures.map((sig) => (
+                <div class="signature-entry">
+                  <div class="sig-header">
+                    <span class="sig-code"><code>{sig.sig}</code></span>
+                  </div>
+                  <p class="sig-desc">{sig.desc}</p>
+                  <div class="sig-example-box">
+                    <pre><code>{sig.example}</code></pre>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   </div>
 </Layout>
 
 <style>
-  .docs-header {
-    padding: 4rem 0 2rem;
+  /* Header Section */
+  .docs-hero {
+    padding: 4.5rem 0 2rem;
+    border-bottom: 1px solid var(--border-color);
     background: var(--bg-surface);
-    border-bottom: 1px solid var(--border-dim);
     text-align: center;
   }
 
-  .docs-header h1 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: var(--text-main);
-    margin: 0.75rem 0 0.5rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+  .docs-hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
   }
 
-  .docs-header p {
+  .docs-title {
+    font-size: clamp(2.3rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin: 0.85rem 0 0.6rem;
+  }
+
+  .docs-subtitle {
+    font-size: 1.15rem;
+    line-height: 1.65;
     color: var(--text-muted);
-    font-size: 1.1rem;
+    margin-bottom: 2rem;
   }
 
-  .docs-body {
-    padding: 3rem 0 6rem;
+  /* Quick Navigation Bar */
+  .quick-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
   }
 
-  .docs-section {
-    margin-bottom: 4rem;
+  .quick-link {
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-base);
+    border: 1px solid var(--border-color);
+    padding: 0.45rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.18s ease;
   }
 
-  .section-title-row {
-    margin-bottom: 1.5rem;
-  }
-
-  .section-title-row h2 {
-    font-size: 1.7rem;
+  .quick-link:hover {
     color: var(--text-main);
-    margin-top: 0.5rem;
-    font-weight: 800;
+    border-color: var(--border-bright);
+    background: var(--bg-hover);
+  }
+
+  /* Main Layout */
+  .docs-main-layout {
+    padding: 3.5rem 1.5rem 6rem;
+  }
+
+  .doc-section {
+    margin-bottom: 5rem;
+  }
+
+  .scroll-target {
+    scroll-margin-top: 80px;
+  }
+
+  .section-title-block {
+    margin-bottom: 2rem;
+  }
+
+  .section-title-block h2 {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0.35rem;
     letter-spacing: -0.02em;
   }
 
-  /* CLI Table */
-  .cli-table-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-dim);
-    border-radius: var(--card-radius);
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-  }
-
-  .cli-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-
-  .cli-table th {
-    background: var(--bg-card-subtle);
-    padding: 0.85rem 1.25rem;
-    text-align: left;
+  .section-title-block p {
     color: var(--text-muted);
-    font-weight: 600;
-    border-bottom: 1px solid var(--border-dim);
+    font-size: 1.05rem;
   }
 
-  .cli-table td {
-    padding: 0.85rem 1.25rem;
-    border-bottom: 1px solid var(--border-dim);
+  /* Prominent 42-Page PDF Publication Card */
+  .pdf-card {
+    border-color: var(--accent-badge-border, rgba(139, 0, 0, 0.25));
+    padding: 2.5rem;
+    background: var(--glass-bg);
+  }
+
+  .pdf-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pdf-meta-left {
+    max-width: 680px;
+  }
+
+  .badge-cluster {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.85rem;
+  }
+
+  .pdf-book-title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+
+  .pdf-book-authors {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .pdf-action-cluster {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    min-width: 260px;
+  }
+
+  .btn-download {
+    font-size: 0.95rem;
+    padding: 0.85rem 1.4rem;
+  }
+
+  .dl-icon {
+    font-size: 1.1rem;
+  }
+
+  .pdf-synopsis {
+    background: var(--accent-badge-bg, rgba(139, 0, 0, 0.04));
+    border-left: 3px solid var(--accent-primary, #8b0000);
+    padding: 1.15rem 1.5rem;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 2.25rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
     color: var(--text-main);
   }
 
-  .cli-table tr:last-child td {
+  /* Chapter Index Grid */
+  .chapter-index-area {
+    border-top: 1px solid var(--border-color);
+    padding-top: 2rem;
+  }
+
+  .chapter-index-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+  }
+
+  .chapter-index-heading h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .chapter-count {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-dim);
+  }
+
+  .chapters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.15rem;
+  }
+
+  .chapter-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem;
+    border-radius: 6px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    transition: all 0.18s ease;
+  }
+
+  .chapter-item:hover {
+    border-color: var(--border-bright);
+    transform: translateY(-1px);
+  }
+
+  .chapter-num-badge {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    background: var(--text-main);
+    color: var(--bg-base);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .chapter-title {
+    font-weight: 700;
+    font-size: 0.98rem;
+    line-height: 1.35;
+    margin-bottom: 0.2rem;
+    color: var(--text-main);
+  }
+
+  .chapter-part {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+  }
+
+  .chapter-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  /* Reference Table (CLI) */
+  .table-container {
+    padding: 0;
+    overflow-x: auto;
+  }
+
+  .reference-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .reference-table th {
+    background: var(--bg-card-subtle);
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  .reference-table td {
+    padding: 0.95rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .reference-table tr:last-child td {
     border-bottom: none;
   }
 
-  .cli-table code {
-    color: var(--accent-primary);
-    background: var(--accent-badge-bg);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
+  .reference-table code {
     font-family: var(--font-mono);
     font-size: 0.84rem;
+    background: var(--accent-badge-bg);
+    color: var(--accent-primary);
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
   }
 
-  /* Builtin Cards Grid */
-  .builtin-cards-grid {
+  .args-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+
+  /* Primitives Grid */
+  .primitives-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 1.5rem;
   }
 
-  .builtin-card {
+  .primitive-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
 
-  .builtin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .func-name {
-    font-size: 1.1rem;
-    color: var(--text-main);
-    font-family: var(--font-mono);
+  .prim-title {
+    font-size: 1.2rem;
     font-weight: 700;
+    margin-bottom: 0.4rem;
   }
 
-  .returns-badge {
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    background: var(--bg-surface);
-    padding: 0.15rem 0.5rem;
-    border-radius: 9999px;
-    border: 1px solid var(--border-dim);
-  }
-
-  .func-desc {
+  .prim-desc {
     font-size: 0.88rem;
     color: var(--text-muted);
     line-height: 1.5;
     margin-bottom: 1rem;
   }
 
-  .func-code-box {
-    background: var(--bg-code);
+  .code-viewport {
+    background: var(--bg-code, #18181b);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 1rem;
     overflow-x: auto;
   }
 
-  .func-code-box pre code {
+  .code-viewport code {
+    font-family: var(--font-mono);
     font-size: 0.82rem;
     color: #f1f5f9;
-    font-family: var(--font-mono);
     line-height: 1.6;
+  }
+
+  /* Standard Library Modules */
+  .stdlib-cluster {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+  }
+
+  .module-card {
+    padding: 2rem;
+  }
+
+  .mod-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mod-title-area {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .mod-name {
+    font-size: 1.45rem;
+    font-weight: 700;
+  }
+
+  .mod-name code {
+    font-family: var(--font-mono);
+    color: var(--text-main);
+  }
+
+  .mod-badge {
+    font-family: var(--font-serif);
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--text-main);
+    color: var(--bg-base);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  .mod-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--accent-primary);
+    background: var(--accent-badge-bg);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .mod-summary {
+    color: var(--text-muted);
+    font-size: 0.96rem;
+  }
+
+  .signatures-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .signature-entry {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1.25rem;
+  }
+
+  .sig-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .sig-code code {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .sig-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .sig-example-box {
+    background: var(--bg-code, #18181b);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 0.85rem 1.1rem;
+    overflow-x: auto;
+  }
+
+  .sig-example-box code {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: #38bdf8;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 768px) {
+    .pdf-card-header {
+      flex-direction: column;
+    }
+    .pdf-action-cluster {
+      width: 100%;
+    }
+    .pdf-action-cluster .btn {
+      width: 100%;
+    }
+    .chapters-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

@@ -1,0 +1,1982 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface ChunkItem {
+  id: number;
+  name: string;
+  category: 'foundation' | 'tooling' | 'enterprise';
+  categoryLabel: string;
+  files: string[];
+  summary: string;
+  highlights: string[];
+  codeSample?: string;
+  cliSample?: string;
+}
+
+const chunks: ChunkItem[] = [
+  {
+    id: 1,
+    name: "Language Ergonomics & Core Primitives",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/value.rs", "src/eval.rs", "src/ast.rs"],
+    summary: "Foundational data types, 64-bit integer and floating-point math, radix literals, destructuring, and pattern matching.",
+    highlights: [
+      "Distinct Value::Int(i64) and Value::Float(f64) primitives",
+      "Radix literals: Hex (0xFF), Binary (0b1010), Octal (0o755), and numeric underscores (1_000_000)",
+      "Bitwise operators: &, |, ^, ~, <<, >>",
+      "Array & struct destructuring: let [a, b, ..rest], let { name, ..extra }",
+      "Pattern matching with arm guards (case p if cond => ...) and ranges (0..10, 1..=10)",
+      "Comprehensive array & string method suites (find, some, flat, pad_start, lines)"
+    ],
+    codeSample: `// Pattern matching with guards and range conditions
+fn classify(val) {
+    match val {
+        0 => "zero",
+        1..=9 => "single digit",
+        10..=99 if val % 2 == 0 => "even double digit: {val}",
+        10..=99 => "odd double digit: {val}",
+        _ => "large number"
+    }
+}`
+  },
+  {
+    id: 2,
+    name: "Code Formatter & Linter Polish",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/fmt.rs", "src/linter.rs"],
+    summary: "Canonical AST-driven source code formatter and static analysis engine detecting dead code, shadowing, and unused variables.",
+    highlights: [
+      "AST canonical formatter (shae fmt, shae fmt --check) with standard 4-space indentation",
+      "Static linter (shae check) detecting unused variables/parameters with _ prefix suppression",
+      "Dead code detection following unconditional return / throw statements",
+      "Variable shadowing warnings and unreachable pattern match arms"
+    ],
+    cliSample: `shae fmt --check src/
+shae check main.shae`
+  },
+  {
+    id: 3,
+    name: "Bytecode VM Foundation — Control Flow",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/vm.rs", "src/compiler.rs", "src/chunk.rs"],
+    summary: "High-throughput stack-based bytecode virtual machine with compile-time local slot resolution and structured jumps.",
+    highlights: [
+      "Compile-time local variable slot allocation (OpGetLocal, OpSetLocal)",
+      "Jump instructions: OpJump, OpJumpIfFalse, OpLoop",
+      "Low-overhead execution loops for while, for..in, and if/else branching",
+      "Constant pool indexing for strings, numbers, and boolean literals"
+    ]
+  },
+  {
+    id: 4,
+    name: "Bytecode VM — Call Frames & Closures",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/vm.rs", "src/compiler.rs"],
+    summary: "Virtual stack CallFrame architecture with lexical upvalue capturing for first-class closures and nested functions.",
+    highlights: [
+      "Stack-based CallFrame architecture with max recursion depth protection",
+      "Lexical closure upvalue capturing: OpGetUpvalue, OpSetUpvalue, OpCloseUpvalue",
+      "First-class function values and closures passed as parameters",
+      "OpAllocArray and OpAllocMap for fast composite data construction"
+    ]
+  },
+  {
+    id: 5,
+    name: "Memory Efficiency & Garbage Collection",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/gc.rs", "src/value.rs"],
+    summary: "Mark-and-sweep garbage collector with stack root tracing, eliminating heavy Arc/RwLock overhead for primitive values.",
+    highlights: [
+      "Mark-and-sweep GC engine with virtual stack and call frame root tracing",
+      "Automatic cyclic reference collection for nested closures and structures",
+      "Elimination of reference counting overhead for hot numeric and string loops",
+      "Configurable GC thresholds and explicit gc_collect() triggers"
+    ]
+  },
+  {
+    id: 6,
+    name: "Structured Module System",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/eval.rs", "src/stdlib.rs"],
+    summary: "Relative path module resolution with selective symbol imports and standard library system namespaces.",
+    highlights: [
+      "Relative module imports: use { a, b } from \"./module.shae\"",
+      "Circular dependency detection with clear diagnostic traces",
+      "Core standard modules: std:fs (file I/O), std:path (path manipulation)",
+      "System interfaces: std:sys (arguments, exit, platform) and std:time (high-res clocks)"
+    ],
+    codeSample: `use { read, write, exists } from "std:fs"
+use { platform, args } from "std:sys"
+
+if exists("config.json") {
+    let raw = read("config.json")
+    print("Loaded config on {platform()}: {raw.len} bytes")
+}`
+  },
+  {
+    id: 7,
+    name: "Concurrency & Async I/O",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/channel.rs", "src/builtins.rs"],
+    summary: "Message-passing channels and built-in multi-threaded HTTP and TLS web server runtimes.",
+    highlights: [
+      "Channel-based message passing: channel(capacity), send(), recv()",
+      "Multi-threaded non-blocking HTTP web server: serve(port, handler)",
+      "High-security TLS server runtime: serve_tls(port, cert, key, handler) via Rustls",
+      "JSON serialization built-in: json(obj) and parse_json(str)"
+    ]
+  },
+  {
+    id: 8,
+    name: "Expanded Standard Library",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/stdlib.rs"],
+    summary: "Cryptographic hash functions, PCRE regular expressions, and standard binary/URL encoding utilities.",
+    highlights: [
+      "std:crypto: SHA-256, SHA-512, HMAC-SHA256, secure CSPRNG random bytes",
+      "std:regex: PCRE regular expression matching, searching, and capture groups",
+      "std:codec: Base64 encoding/decoding and URL percent-encoding"
+    ]
+  },
+  {
+    id: 9,
+    name: "Package Manager & Project System",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/pkg.rs", "src/main.rs"],
+    summary: "Integrated CLI package manager with deterministic dependency resolution and project manifests.",
+    highlights: [
+      "CLI package commands: shae pkg init, shae pkg add, shae pkg install",
+      "Declarative shae.toml project manifest and metadata specification",
+      "Deterministic dependency resolution locked via shae.lock",
+      "Semantic versioning (SemVer) dependency graph validation"
+    ],
+    cliSample: `shae pkg init my-project
+shae pkg add @shae/sqlite
+shae pkg install`
+  },
+  {
+    id: 10,
+    name: "LSP Daemon & Standalone Bundler",
+    category: "foundation",
+    categoryLabel: "Core Foundation",
+    files: ["src/lsp.rs", "src/bundle.rs"],
+    summary: "Language Server Protocol daemon for editor integration and single-binary application distribution.",
+    highlights: [
+      "Language Server Protocol daemon (shae lsp) with JSON-RPC standard wire",
+      "Real-time syntax diagnostics, document symbols, and autocompletion",
+      "Single-binary application bundler (shae bundle app.shae -o app)",
+      "Self-contained executable distribution with zero runtime dependencies"
+    ]
+  },
+  {
+    id: 11,
+    name: "Bytecode Compilation & Serialization",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["src/compiler.rs", "src/chunk.rs"],
+    summary: "Ahead-of-time bytecode compilation into binary .shaec containers with disassembler inspection.",
+    highlights: [
+      "AOT bytecode compilation: shae compile <file.shae> -o <out.shaec>",
+      "Compact binary bytecode container with magic header \\x7fSHAE",
+      "Interactive bytecode disassembler: shae disasm <file.shaec>",
+      "Transparent direct loading of precompiled .shaec files via standard use"
+    ],
+    cliSample: `shae compile server.shae -o server.shaec
+shae disasm server.shaec`
+  },
+  {
+    id: 12,
+    name: "VM-Backed Interactive REPL",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["src/repl.rs"],
+    summary: "Persistent VM evaluation loop maintaining global variables across interactive lines with meta-commands.",
+    highlights: [
+      "Interactive VM session preserving global bindings across input prompts",
+      "Multiline balance checker for nested blocks, braces, and arrays",
+      "Meta commands: :help, :disasm, :globals, :reset, :engine [vm|ast]",
+      "Syntax highlighted token feedback and runtime error caret markers"
+    ]
+  },
+  {
+    id: 13,
+    name: "Standalone Bundler Bytecode Integration",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["src/bundle.rs"],
+    summary: "Bundling precompiled bytecode into standalone executables with zero startup parse overhead.",
+    highlights: [
+      "Direct embedding of precompiled bytecode chunks into the standalone binary stub",
+      "Instant startup time (sub-3ms) with zero source parsing or AST allocation",
+      "--strip flag for stripping debug symbols and source protection",
+      "Cross-platform binary output for Linux and macOS"
+    ]
+  },
+  {
+    id: 14,
+    name: "Actor Concurrency & Supervision Trees",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["src/actor.rs", "src/value.rs"],
+    summary: "Lightweight OS-thread actors with unbounded FIFO mailboxes, request-response messaging, and supervision trees.",
+    highlights: [
+      "Stateful actor processes backed by OS threads and Condvar zero-idle CPU parking",
+      "Unbounded FIFO mailboxes with synchronous request-response: ask(msg, [timeout])",
+      "Global actor registry: actor.register(\"name\", handle) and actor.whereis(\"name\")",
+      "Supervision strategies: OneForOne and AllForOne with sliding restart limits"
+    ],
+    codeSample: `let actor = use "std:actor"
+
+let counter = actor.spawn(0, fn(state, msg) {
+    if msg["op"] == "inc" {
+        let next_val = state + msg["by"]
+        return { "state": next_val, "reply": next_val }
+    }
+    return state
+})
+
+let val = counter.ask({ "op": "inc", "by": 5 })
+print("Counter incremented: {val}")`
+  },
+  {
+    id: 15,
+    name: "Pure-Shae Frontend & Self-Parsing",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["lib/compiler/lexer.shae", "lib/compiler/parser.shae"],
+    summary: "Complete lexical analyzer and Pratt recursive-descent parser written entirely in pure Shae.",
+    highlights: [
+      "Lexer tokenizing all Shae primitives, operators, and raw string literals in pure Shae",
+      "Recursive-descent Pratt parser handling operator precedence and expression trees",
+      "Complete AST node structure generation without Rust intermediaries",
+      "Self-parsing verified via tests/shae/self_parser_test.shae"
+    ]
+  },
+  {
+    id: 16,
+    name: "Pure-Shae Bytecode Compiler",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["lib/compiler/codegen.shae", "lib/compiler/chunk.shae"],
+    summary: "Pure-Shae bytecode code generator emitting .shaec bytecode chunks, constant pools, and upvalue descriptors.",
+    highlights: [
+      "Pure-Shae AST traversal and bytecode instruction generation",
+      "Constant pool deduplication and back-patching for forward jumps",
+      "Upvalue descriptor emission for nested closures and lexical environments",
+      "Direct binary writing to .shaec format conforming to VM specification"
+    ]
+  },
+  {
+    id: 17,
+    name: "Direct Native Linker (ELF & PE)",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["lib/compiler/linker.shae", "lib/compiler/elf.shae", "lib/compiler/pe.shae"],
+    summary: "Pure-Shae native object linker producing 64-bit ELF and PE/COFF binaries with zero external C toolchain dependencies.",
+    highlights: [
+      "Stand-alone 64-bit ELF executable emitter for Linux x86_64",
+      "Portable Executable (PE/COFF) binary emitter for Windows x86_64",
+      "Zero dependency on gcc, clang, ld, or lld toolchains (shae link)",
+      "Direct program header, section table, and entry point layout construction"
+    ]
+  },
+  {
+    id: 18,
+    name: "WebAssembly & Edge Runtime Target",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["lib/compiler/wasm.shae", "src/wasm.rs"],
+    summary: "Pure-Shae WebAssembly binary emitter and built-in zero-dependency WasmRunner execution runtime.",
+    highlights: [
+      "Pure-Shae WebAssembly binary emitter generating valid .wasm modules",
+      "Type section, function section, export section, and code section serialization",
+      "In-process zero-dependency WasmRunner interpreter (shae wasm <file> --run)",
+      "Ready for edge deployment in Cloudflare Workers and Fastly Compute"
+    ]
+  },
+  {
+    id: 19,
+    name: "Distributed Actor Mesh (`std:actor:cluster`)",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["src/actor_cluster.rs", "lib/actor/cluster.shae"],
+    summary: "Distributed actor clustering over length-delimited TCP with secret cookie handshakes and remote messaging.",
+    highlights: [
+      "TCP framed wire protocol with 64MB frame overflow protection",
+      "Cluster authentication handshake via shared secret cookie verification",
+      "Remote actor handle abstraction: actor@node with transparent ask/send routing",
+      "Dynamic cluster node discovery, round-robin pools, and bully leader election"
+    ]
+  },
+  {
+    id: 20,
+    name: "Self-Hosting Bootstrap Pipeline",
+    category: "tooling",
+    categoryLabel: "Tooling & Pure-Shae Frontend",
+    files: ["lib/compiler/main.shae"],
+    summary: "Unified pure-Shae compiler driver CLI coordinating lexing, parsing, bytecode, native linking, and WASM generation.",
+    highlights: [
+      "Central compiler driver entry point written in pure Shae",
+      "Unified interface for --compile, --disasm, --link, --wasm, and --llvm",
+      "Full command-line argument parser and pipeline coordinator",
+      "Self-compiles into standalone compiler binaries"
+    ]
+  },
+  {
+    id: 21,
+    name: "Cluster Transport Security: TLS & mTLS",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/actor_cluster.rs"],
+    summary: "Mutual TLS (mTLS) wire transport for distributed actor clusters using Rustls 0.23 with root CA peer verification.",
+    highlights: [
+      "Rustls 0.23 wire encryption with ring cryptography provider",
+      "Mutual TLS (mTLS) client and server certificate verification via root CA",
+      "Rogue peer connection rejection and tamper-proof wire messaging",
+      "Runtime reflection inspection method: node.is_tls()"
+    ],
+    codeSample: `let cluster = use "std:actor:cluster"
+
+let secure_node = cluster.node("vault_alpha", "0.0.0.0:9443", {
+    "cookie": "cluster_secret_token",
+    "tls": {
+        "cert_path": "/etc/shae/tls/node.crt",
+        "key_path": "/etc/shae/tls/node.key",
+        "ca_path": "/etc/shae/tls/ca.crt"
+    }
+})
+
+print("Secure mTLS Cluster Node online: {secure_node.is_tls()}")`
+  },
+  {
+    id: 22,
+    name: "First-Class `async` / `await` Coroutines",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/value.rs", "src/async_rt.rs", "std:async"],
+    summary: "Thread-safe coroutine tasks with idempotent awaiting and standard combinators (spawn, all, race, timeout).",
+    highlights: [
+      "Thread-safe TaskInner coroutine primitive with idempotent await resolution",
+      "Coroutine combinators: async.spawn, async.all, async.race, async.sleep",
+      "Safe execution timeouts with async.timeout(task, ms)",
+      "Zero thread blocking for timer-based delays"
+    ],
+    codeSample: `let async = use "std:async"
+
+let task1 = async.spawn(fn() {
+    async.sleep(50)
+    return "alpha"
+})
+
+let task2 = async.spawn(fn() {
+    async.sleep(30)
+    return "beta"
+})
+
+let results = await async.all([task1, task2])
+print("Async tasks resolved: {results}") // ["alpha", "beta"]`
+  },
+  {
+    id: 23,
+    name: "Standard Documentation Engine",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/doc.rs"],
+    summary: "Static HTML documentation generator parsing item (///) and module-level (!//) doc comments.",
+    highlights: [
+      "Extraction of doc comments: /// for functions/types and //! for modules",
+      "Generation of static searchable HTML documentation sites (shae doc)",
+      "Markdown export and JSON AST API data model generation",
+      "Cross-linking of standard library and user modules"
+    ],
+    cliSample: `shae doc src/ -o docs/
+shae doc --json > api.json`
+  },
+  {
+    id: 24,
+    name: "Package Registry & Publishing",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/pkg.rs"],
+    summary: "Gzip tarball package archive format (.shaepkg) with cryptographic SHA-256 integrity checksums.",
+    highlights: [
+      "Standard package packaging: shae pkg pack creates .shaepkg tarballs",
+      "Cryptographic SHA-256 integrity checksum generation and verification",
+      "Registry publishing pipeline: shae pkg publish and shae pkg verify",
+      "Zero external archive utilities required"
+    ],
+    cliSample: `shae pkg pack
+shae pkg verify my-package-0.1.0.shaepkg`
+  },
+  {
+    id: 25,
+    name: "Pure-Shae Test Runner & Live Doc Server",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/test_runner.rs", "src/doc.rs"],
+    summary: "Integrated unit test runner with pattern filtering, assertions, and live HTTP documentation server.",
+    highlights: [
+      "Built-in test runner: shae test [dir] with regex filtering (-f, --filter)",
+      "Rich assertion suite: assert_eq, assert_ne, assert_throws",
+      "Dual-engine verification (tests execute identically on VM and AST)",
+      "Live HTTP documentation server with instant hot-reload (shae doc --serve --port 8080)"
+    ],
+    cliSample: `shae test tests/ -f "buffer"
+shae doc --serve --port 8080`
+  },
+  {
+    id: 26,
+    name: "Authenticated Symmetric Cryptography",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/stdlib.rs"],
+    summary: "Industrial-grade AEAD authenticated ciphers and standard cryptographic key derivation functions.",
+    highlights: [
+      "AES-256-GCM authenticated encryption and decryption with 128-bit authentication tags",
+      "ChaCha20-Poly1305 high-performance AEAD cipher",
+      "HKDF-SHA256 (HMAC-based Extract-and-Expand Key Derivation Function)",
+      "PBKDF2-HMAC-SHA256 password hashing with configurable iterations"
+    ]
+  },
+  {
+    id: 27,
+    name: "Stage 2 Self-Hosting Two-Stage Bootstrap",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["tests/stage2_bootstrap_test.rs"],
+    summary: "Bit-for-bit identical two-stage compiler bootstrap verification across both Bytecode VM and AST Evaluator.",
+    highlights: [
+      "Stage 1 compiler compiles Stage 2 compiler source into bytecode",
+      "Stage 2 compiler compiles itself again, achieving bit-for-bit identical bytecode hashes",
+      "Full language self-hosting verification executed in automated CI test harness",
+      "Dual-engine parity verified during every stage of compilation"
+    ]
+  },
+  {
+    id: 28,
+    name: "Direct LLVM SSA Code Generation (`shae llvm`)",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/llvm.rs", "lib/compiler/llvm.shae"],
+    summary: "Direct emission of compliant LLVM 18 SSA IR with entry block allocas, mem2reg promotion, and Clang -O2 native compilation.",
+    highlights: [
+      "Direct LLVM 18 IR SSA code generation without third-party LLVM C library bindings",
+      "Canonical entry block alloca allocation promoted to hardware registers via mem2reg",
+      "External C runtime interop bindings (printf, puts, malloc, free, exit)",
+      "Clang -O2 integration producing optimized standalone native executables (shae llvm -c)"
+    ],
+    cliSample: `shae llvm app.shae -o app.ll
+shae llvm -c app.shae -o app
+shae llvm -r app.shae`
+  },
+  {
+    id: 29,
+    name: "Zero-Copy Typed Memory Buffers (`std:buffer`)",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/buffer.rs", "examples/buffer_demo.shae"],
+    summary: "Arc/RwLock-backed ByteBuffer container with zero-copy slicing, endian binary I/O, and struct pack/unpack engine.",
+    highlights: [
+      "ByteBuffer container sharing Arc<RwLock<Vec<u8>>> with offset and length pointers",
+      "Sub-slice creation buf.slice(start, end) with zero heap memory allocation",
+      "Bidirectional in-place mutation reflection between slices and parent buffers",
+      "Endian-aware numeric reads/writes (u8..u64, i8..i64, f32, f64 in Little/Big-Endian)",
+      "Struct layout packing engine: pack(\"<I2h4s\", ...), unpack, pack_into, and calcsize"
+    ],
+    codeSample: `use { alloc, pack, unpack, calcsize } from "std:buffer"
+
+// Allocate 24-byte buffer and slice [8..16) with zero allocations
+let parent = alloc(24)
+let child = parent.slice(8, 16)
+
+child[0] = 255
+print("Parent at byte 8 reflects child slice mutation: {parent[8]}") // 255
+
+// High-speed binary struct packing
+let packed = pack("<I2h4s", 4000000000, -800, 1600, "SHAE")
+let fields = unpack("<I2h4s", packed)
+print("Unpacked struct fields: u32={fields[0]}, tag={fields[3]}")`
+  },
+  {
+    id: 30,
+    name: "Hot-Code Reloading for Actors & Clusters",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/actor.rs", "src/actor_cluster.rs", "examples/actor_hot_reload_demo.shae"],
+    summary: "Zero-downtime actor handler swapping with continuous state preservation, schema migrations, and remote cluster reload.",
+    highlights: [
+      "ActorMessage::Reload hot-swaps active handler while preserving daemon state and FIFO mailboxes",
+      "Zero dropped messages or severed client connections during code reloading",
+      "State schema migration via migration_fn(&mut state) transforming in-memory models",
+      "Distributed cluster hot-reload over TCP/TLS mesh via ClusterWireMsg::Reload"
+    ],
+    codeSample: `let actor = use "std:actor"
+
+let daemon = actor.spawn({ "balance": 1000 }, fn(st, msg) {
+    if msg["op"] == "deposit" {
+        return { "state": { "balance": st["balance"] + msg["val"] }, "reply": "v1 ok" }
+    }
+    return st
+})
+
+// Swap logic to V2 with 10% bonus without dropping messages or restarting thread
+let v2_handler = fn(st, msg) {
+    if msg["op"] == "deposit" {
+        let bonus = msg["val"] / 10
+        return { "state": { "balance": st["balance"] + msg["val"] + bonus }, "reply": "v2 bonus added" }
+    }
+    return st
+}
+
+daemon.reload(v2_handler)
+print("Daemon successfully hot-reloaded to V2 with continuous state.")`
+  },
+  {
+    id: 31,
+    name: "Benchmark Suite & Showcase (`shae bench`)",
+    category: "enterprise",
+    categoryLabel: "Enterprise & Native SSA",
+    files: ["src/bench.rs", "benchmarks/*.shae", "tests/bench_test.rs"],
+    summary: "Automated telemetry benchmark runner reporting iterations, latency, and ops/sec throughput across real workloads.",
+    highlights: [
+      "CLI benchmark command: shae bench [filter] with ASCII formatted telemetry tables",
+      "Real workloads: Fibonacci (recursive/iterative), ByteBuffer allocation, Actor throughput, collections",
+      "Reporting iterations, total duration, mean latency (µs), and throughput (ops/sec)",
+      "Showcase demo programs in examples/ verifying end-to-end language features"
+    ],
+    cliSample: `shae bench
+shae bench -f "buffer" -i 500`
+  }
+];
+
+const llvmIrCode = `; ModuleID = 'fibonacci.shae'
+target triple = "x86_64-pc-linux-gnu"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+
+declare i32 @printf(i8*, ...)
+declare void @exit(i32)
+
+define i64 @fib(i64 %n) {
+entry:
+  %t.0 = icmp sle i64 %n, 1
+  br i1 %t.0, label %then.1, label %else.2
+
+then.1:
+  ret i64 %n
+
+else.2:
+  %t.1 = sub i64 %n, 1
+  %t.2 = call i64 @fib(i64 %t.1)
+  %t.3 = sub i64 %n, 2
+  %t.4 = call i64 @fib(i64 %t.3)
+  %t.5 = add i64 %t.2, %t.4
+  ret i64 %t.5
+}
+
+define i32 @main() {
+entry:
+  %res = call i64 @fib(i64 20)
+  ret i32 0
+}`;
+
+const craneliftJitCode = `// Hot loop automatically triggers Cranelift JIT tiering
+fn compute_pi(iterations) {
+    let pi = 0.0
+    let sign = 1.0
+    let i = 0
+    while i < iterations {
+        pi = pi + sign / (2.0 * i + 1.0)
+        sign = -sign
+        i = i + 1
+    }
+    return pi * 4.0
+}
+
+// Invocations 1..19: Bytecode VM execution
+// Invocation 20: Cranelift JIT compilation triggered
+// Invocations 21+: Direct machine code execution (~80,000 ops/sec)
+let result = compute_pi(100000)
+print("Approximated Pi: {result}")`;
+
+const bufferDiagram = `Parent ByteBuffer [ offset: 0, length: 24, storage: Arc<RwLock<Vec<u8>>> ]
+  |
+  +---> [ 0, 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 11, 12, 13, 14, 15,  16, 17, 18, 19, 20, 21, 22, 23 ]
+                                   ^                               ^
+                                   |                               |
+Child Slice ByteBuffer ------------+-------------------------------+
+[ offset: 8, length: 8, storage: Arc<RwLock<Vec<u8>>> ]
+(Mutating child[0] mutates parent[8] in-place with ZERO memory allocation)`;
+
+const bufferDemoCode = `use { alloc, pack, unpack, calcsize } from "std:buffer"
+
+// 1. Zero-copy slicing & shared mutation
+let parent = alloc(24)
+let slice = parent.slice(8, 16)
+
+slice[0] = 255
+assert(parent[8] == 255, "Zero-copy mutation verified")
+
+// 2. Endian-aware multi-byte numeric reads/writes
+let buf = alloc(32)
+buf.write_u16_le(0, 0x1234) // [0x34, 0x12]
+buf.write_u16_be(2, 0x1234) // [0x12, 0x34]
+buf.write_f64_be(4, 3.1415926535)
+
+// 3. High-performance struct layout packing
+let sz = calcsize("<I2h4s") // 12 bytes
+let packet = pack("<I2h4s", 4000000000, -800, 1600, "SHAE")
+let fields = unpack("<I2h4s", packet)
+
+print("u32: {fields[0]}, i16: {fields[1]}, tag: {fields[3]}")`;
+
+const hotReloadDiagram = `Primary Node Alpha                                     Worker Node Beta (pricing_engine)
+       |                                                               |
+       |  remote_actor.reload(v2_handler, migration_fn)                |
+       |-------------------------------------------------------------->|
+       |    ClusterWireMsg::Reload { actor_name, handler_code }        |
+       |                                                               |
+       |                                         1. Enqueue ActorMessage::Reload
+       |                                         2. Finish active message
+       |                                         3. Execute migration_fn(&mut state)
+       |                                         4. Atomically swap handler pointer
+       |                                         5. Process remaining FIFO mailbox
+       |                                                               |
+       |<--------------------------------------------------------------|
+       |    ClusterWireMsg::Reply { correlation_id, status: "ok" }     |`;
+
+const actorHotReloadCode = `let actor = use "std:actor"
+let cluster = use "std:actor:cluster"
+
+// 1. Spawn initial stateful actor (V1)
+let account = actor.spawn({ "balance": 1000, "tx": 0 }, fn(st, msg) {
+    if msg["op"] == "deposit" {
+        let next = { "balance": st["balance"] + msg["amount"], "tx": st["tx"] + 1 }
+        return { "state": next, "reply": next["balance"] }
+    }
+    return st
+})
+
+// 2. Hot-reload to V2 handler with schema migration
+let migration_fn = fn(old_st) {
+    return {
+        "schema_version": 2,
+        "funds": old_st["balance"],
+        "migrated_tx": old_st["tx"]
+    }
+}
+
+let v2_handler = fn(st, msg) {
+    if msg["op"] == "deposit" {
+        let bonus = msg["amount"] / 10 // 10% bonus credit
+        let new_funds = st["funds"] + msg["amount"] + bonus
+        let next = { "schema_version": 2, "funds": new_funds, "migrated_tx": st["migrated_tx"] + 1 }
+        return { "state": next, "reply": { "funds": new_funds, "bonus": bonus } }
+    }
+    return st
+}
+
+account.reload(v2_handler, migration_fn)
+let reply = account.ask({ "op": "deposit", "amount": 200 })
+print("Deposited under V2 without losing state: {reply['funds']}") // 1220`;
+
+const selfHostingMainCode = `use { tokenize } from "./lexer.shae"
+use { parse } from "./parser.shae"
+use { compile_file_to_shaec } from "./codegen.shae"
+use { link_file } from "./linker.shae"
+use { emit_wasm_file } from "./wasm.shae"
+use { compile_to_llvm } from "./llvm.shae"
+
+fn main() {
+    let args = args()
+    if args.len < 2 {
+        print("Shae Pure Self-Hosting Compiler Suite")
+        return 1
+    }
+    let cmd = args[1]
+    if cmd == "compile" {
+        return compile_file_to_shaec(args[2], args[3])
+    } else if cmd == "link" {
+        return link_file(args[2], args[3], "elf", null, "x86_64")
+    } else if cmd == "llvm" {
+        return compile_to_llvm(args[2], args[3])
+    }
+}`;
+
+---
+
+<Layout
+  title="Shae — Features & Systems Architecture (Chunks 1–31)"
+  description="Comprehensive systems breakdown of Shae Chunks 1–31: LLVM 18 SSA compiler, Cranelift JIT engine, zero-copy buffers, TLS/mTLS cluster mesh, actor hot-reloading, and pure-Shae self-hosting."
+>
+  <!-- Hero Section -->
+  <header class="features-hero">
+    <div class="container hero-container animate-fade-up">
+      <div class="hero-badge-row">
+        <span class="badge badge-red">
+          <span class="dot"></span> Milestone 3 Systems Architecture
+        </span>
+        <span class="badge">Shae v0.4.0 Engine</span>
+        <span class="badge">31 Evolution Chunks</span>
+      </div>
+
+      <h1 class="hero-title">
+        Features &amp; Systems Architecture
+      </h1>
+
+      <p class="hero-subtitle">
+        An engineering deep-dive across all 31 language evolution chunks. Explore Shae's native LLVM 18 SSA generator, Cranelift JIT tiered compilation, zero-copy typed memory buffers, fault-tolerant TLS/mTLS actor cluster mesh, live hot-code reloading, and pure-Shae self-hosting bootstrap pipeline.
+      </p>
+
+      <!-- Quick Jump Navigation -->
+      <nav class="anchor-jump-bar" aria-label="Section Quick Navigation">
+        <span class="jump-label">Jump to:</span>
+        <a href="#topology" class="jump-pill">System Topology</a>
+        <a href="#llvm-ssa" class="jump-pill">LLVM 18 SSA</a>
+        <a href="#cranelift-jit" class="jump-pill">Cranelift JIT</a>
+        <a href="#zero-copy-buffer" class="jump-pill">Zero-Copy Buffers</a>
+        <a href="#cluster-mesh" class="jump-pill">TLS Mesh &amp; Hot Reload</a>
+        <a href="#self-hosting" class="jump-pill">Self-Hosting Compiler</a>
+        <a href="#dual-engine" class="jump-pill">Dual-Engine Parity</a>
+        <a href="#chunks-matrix" class="jump-pill highlight-pill">Chunks 1–31 Matrix</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Technical System Topology Map -->
+  <section id="topology" class="section-block">
+    <div class="container">
+      <div class="section-head animate-fade-up">
+        <span class="badge badge-red">Pipeline Topology</span>
+        <h2>Unified Execution &amp; Lowering Topology</h2>
+        <p>From source tokens to SSA register allocation, in-memory JIT machine code, and standalone native object linking.</p>
+      </div>
+
+      <div class="terminal-window topology-terminal animate-fade-up delay-100">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+          </div>
+          <span class="terminal-title">architecture_topology_v0.4.0.txt — System Flow</span>
+          <span class="badge" style="font-size: 0.68rem; padding: 0.1rem 0.4rem;">SSA Tiering</span>
+        </div>
+        <div class="terminal-body font-mono">
+<pre class="topology-art"><code>+---------------------------------------------------------------------------------------------------------+
+|                                    SHAE SOURCE CODE (*.shae)                                            |
++---------------------------------------------------------------------------------------------------------+
+                                                     |
+                                                     v
+                       +-----------------------------------------------------------+
+                       |   Lexer &amp; Pratt Recursive-Descent Parser (src/parser.rs)   |
+                       |   Self-Parsing Pure-Shae Frontend (lib/compiler/parser.shae)|
+                       +-----------------------------------------------------------+
+                                                     |
+                         +---------------------------+---------------------------+
+                         |                                                       |
+                         v                                                       v
+        +----------------------------------+                   +----------------------------------+
+        |   AST Evaluator (src/eval.rs)    |                   |   Bytecode Compiler (Chunk 3/11)  |
+        |   - Tree-walking evaluation      |                   |   - Constant pool allocation     |
+        |   - Instant startup (sub-2ms)    |                   |   - Local slot resolution        |
+        |   - Full language semantics      |                   |   - Binary .shaec emission       |
+        +----------------------------------+                   +----------------------------------+
+                         |                                                       |
+                         |                               +-----------------------+-----------------------+
+                         |                               |                                               |
+                         |                               v                                               v
+                         |                +-----------------------------+                 +-----------------------------+
+                         |                |  Stack Bytecode VM (vm.rs)  |                 |  Cranelift JIT SSA (jit.rs) |
+                         |                |  - Local slot resolution    |                 |  - In-memory machine code   |
+                         |                |  - Fast CallFrame dispatch  |                 |  - JIT_THRESHOLD = 20 calls |
+                         |                |  - Upvalue closure captures |                 |  - Native float SSA math    |
+                         |                +-----------------------------+                 +-----------------------------+
+                         |                               |                                               |
+                         +-------------------------------+-----------------------------------------------+
+                                                         |
+                                                         v
+                                       +-----------------------------------+
+                                       |    DUAL-ENGINE PARITY BOUNDARY    |
+                                       |    100% Identical Value Semantics |
+                                       +-----------------------------------+
+                                                         |
+        +--------------------------------+---------------+-------------------------------+
+        |                                |                                               |
+        v                                v                                               v
++-------------------------------+ +-------------------------------+ +-------------------------------------------+
+|  Zero-Copy Typed ByteBuffer   | |  TLS/mTLS Cluster Actor Mesh  | |   Direct LLVM 18 SSA &amp; Native Linker       |
+|  (Chunk 29, src/buffer.rs)    | |  (Chunk 30, actor_cluster.rs) | |   (Chunk 28, src/llvm.rs / shae llvm)     |
+|  - Arc&lt;RwLock&lt;Vec&lt;u8&gt;&gt;&gt;       | |  - Rustls 0.23 mutual TLS    | |   - Entry block alloca + mem2reg          |
+|  - Zero-heap child slicing    | |  - ActorMessage::Reload       | |   - Clang -O2 standalone binary compile   |
+|  - Endian numeric binary I/O  | |  - ClusterWireMsg::Reload     | |   - Pure-Shae ELF/PE Linker (linker.shae) |
+|  - Struct pack/unpack &lt;I2h4s  | |  - Continuous state migration | |   - WebAssembly Emitter (wasm.shae)       |
++-------------------------------+ +-------------------------------+ +-------------------------------------------+</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 1: LLVM SSA Compiler -->
+  <section id="llvm-ssa" class="section-block">
+    <span id="llvm" class="anchor-alias"></span>
+    <div class="container">
+      <div class="deep-dive-card card glass-card animate-fade-up">
+        <div class="deep-dive-header">
+          <div class="header-meta">
+            <span class="badge badge-red">Ahead-of-Time Native Compilation</span>
+            <span class="badge">Chunk 28</span>
+            <span class="badge font-mono">src/llvm.rs &bull; lib/compiler/llvm.shae</span>
+          </div>
+          <h2>LLVM 18 SSA Compiler (<code>shae llvm</code>)</h2>
+          <p class="deep-dive-lead">
+            Shae implements direct code generation targeting compliant LLVM 18 Single Static Assignment (SSA) intermediate representation without requiring bulky C library wrapper dependencies.
+          </p>
+        </div>
+
+        <div class="deep-dive-grid">
+          <div class="deep-dive-text">
+            <h3>Entry Block Alloca &amp; Register Promotion</h3>
+            <p>
+              Rather than generating complex &phi; (phi) nodes directly during AST traversal, Shae's LLVM frontend emits local variables into the function's <code>%entry</code> basic block using typed <code>alloca</code> instructions. LLVM's canonical <code>mem2reg</code> optimization pass automatically lifts these stack variables into hardware SSA virtual registers, ensuring maximum optimization without frontend bloat.
+            </p>
+            <h3>External C ABI Interoperability</h3>
+            <p>
+              The LLVM backend declares standard C ABI runtime symbols (<code>printf</code>, <code>puts</code>, <code>malloc</code>, <code>free</code>, <code>exit</code>), maps Shae functions to native calling conventions, and generates a standard <code>@main</code> entry point that initializes globals and runs top-level statements.
+            </p>
+            <h3>Clang -O2 Pipeline Integration</h3>
+            <p>
+              Using the <code>-c</code> flag, Shae automatically invokes the system Clang compiler with <code>-O2</code> optimization, producing standalone, stripped native executables ready for deployment.
+            </p>
+
+            <div class="cli-box">
+              <span class="cli-title">CLI Commands</span>
+              <div class="cli-cmd"><code>shae llvm file.shae -o file.ll</code> <span class="cli-desc">&mdash; Emit raw LLVM 18 IR</span></div>
+              <div class="cli-cmd"><code>shae llvm -c file.shae -o binary</code> <span class="cli-desc">&mdash; Compile native binary via Clang -O2</span></div>
+              <div class="cli-cmd"><code>shae llvm -r file.shae</code> <span class="cli-desc">&mdash; Compile and run immediately</span></div>
+            </div>
+          </div>
+
+          <div class="deep-dive-code">
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">llvm_ir_codegen_sample.ll</span>
+              </div>
+              <div class="terminal-body">
+<pre><code>{llvmIrCode}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 2: Cranelift JIT Compiler -->
+  <section id="cranelift-jit" class="section-block">
+    <div class="container">
+      <div class="deep-dive-card card glass-card animate-fade-up">
+        <div class="deep-dive-header">
+          <div class="header-meta">
+            <span class="badge badge-red">In-Memory JIT Compilation</span>
+            <span class="badge">Chunks 1–4, 12, 14</span>
+            <span class="badge font-mono">src/jit.rs &bull; cranelift 0.136.2</span>
+          </div>
+          <h2>Cranelift 0.136.2 JIT SSA Engine</h2>
+          <p class="deep-dive-lead">
+            High-speed in-memory Just-In-Time machine code generation targeting x86_64 and AArch64 with automatic call-frequency tiering and deoptimization fallbacks.
+          </p>
+        </div>
+
+        <div class="deep-dive-grid">
+          <div class="deep-dive-text">
+            <h3>Tiering Threshold: JIT_THRESHOLD = 20</h3>
+            <p>
+              Shae employs an adaptive tiering strategy. During initial script execution, functions run on the lightweight Bytecode VM with zero compilation latency. Once any compiled function reaches <code>JIT_THRESHOLD = 20</code> invocations, the VM background-compiles its bytecode into Cranelift SSA IR.
+            </p>
+            <h3>Direct C Function Pointer Execution</h3>
+            <p>
+              Compiled native code is emitted directly into executable memory pages and invoked via the standard C calling convention:
+              <code>unsafe extern "C" fn(*const i64, usize, *mut i64) -&gt; i32</code>.
+              This completely bypasses virtual stack dispatch, opcode fetch-decode loops, and interpreter call overhead.
+            </p>
+            <h3>Native Float SSA &amp; Deoptimization Fallback</h3>
+            <p>
+              Numerical operations use Cranelift's native 64-bit float registers (<code>types::F64</code>) and integer registers (<code>types::I64</code>). If dynamic types diverge at runtime or an unsupported opcode is encountered, execution seamlessly falls back to the Bytecode VM interpreter.
+            </p>
+
+            <div class="spec-table-card">
+              <table class="spec-table">
+                <tbody>
+                  <tr>
+                    <th>Backend Engine</th>
+                    <td>Cranelift 0.136.2 SSA JIT</td>
+                  </tr>
+                  <tr>
+                    <th>Tiering Threshold</th>
+                    <td>20 calls (<code>JIT_THRESHOLD = 20</code>)</td>
+                  </tr>
+                  <tr>
+                    <th>Memory Access</th>
+                    <td><code>MachMemFlags::trusted()</code></td>
+                  </tr>
+                  <tr>
+                    <th>Target Architectures</th>
+                    <td>x86_64, aarch64 (Apple Silicon / Linux ARM)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="deep-dive-code">
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">jit_execution_trace.shae</span>
+              </div>
+              <div class="terminal-body">
+<pre><code>{craneliftJitCode}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 3: Zero-Copy Typed Memory Buffers -->
+  <section id="zero-copy-buffer" class="section-block">
+    <div class="container">
+      <div class="deep-dive-card card glass-card animate-fade-up">
+        <div class="deep-dive-header">
+          <div class="header-meta">
+            <span class="badge badge-red">High-Throughput Binary Memory</span>
+            <span class="badge">Chunk 29</span>
+            <span class="badge font-mono">src/buffer.rs &bull; examples/buffer_demo.shae</span>
+          </div>
+          <h2>Zero-Copy Typed Memory Buffers (<code>std:buffer</code>)</h2>
+          <p class="deep-dive-lead">
+            Engineered for high-volume network packet parsing, file formats, and IPC. A thread-safe container sharing underlying storage without heap copies.
+          </p>
+        </div>
+
+        <div class="deep-dive-grid">
+          <div class="deep-dive-text">
+            <h3>Shared Arc Storage &amp; Zero-Allocation Slices</h3>
+            <p>
+              The <code>ByteBuffer</code> struct wraps <code>storage: Arc&lt;RwLock&lt;Vec&lt;u8&gt;&gt;&gt;</code> with local <code>offset</code> and <code>length</code> tracking. Calling <code>buf.slice(start, end)</code> creates a lightweight window pointing to the exact same storage without copying bytes. Mutating a byte in the child slice updates the parent buffer immediately.
+            </p>
+            <h3>Endian-Aware Multi-Byte Reads &amp; Writes</h3>
+            <p>
+              Read and write 16-bit, 32-bit, and 64-bit integers and floating-point values with explicit byte order:
+              <code>read_u16_le</code>, <code>write_u16_be</code>, <code>read_u32_le</code>, <code>write_i64_be</code>, <code>read_f64_be</code>.
+            </p>
+            <h3>High-Performance Struct Packing Engine</h3>
+            <p>
+              Python-compatible format strings (e.g., <code>&lt;I2h4s</code> for Little-Endian u32, two i16s, and a 4-byte ASCII string) provide single-step packing and unpacking via <code>pack</code>, <code>unpack</code>, <code>pack_into</code>, and <code>calcsize</code>.
+            </p>
+
+            <div class="terminal-window" style="margin-top: 1.25rem;">
+              <div class="terminal-header">
+                <span class="terminal-title">Zero-Copy Memory Layout Diagram</span>
+              </div>
+              <div class="terminal-body font-mono" style="font-size: 0.78rem;">
+<pre><code>{bufferDiagram}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="deep-dive-code">
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">buffer_demo.shae</span>
+              </div>
+              <div class="terminal-body">
+<pre><code>{bufferDemoCode}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 4: TLS/mTLS Cluster Mesh & Hot Reloading -->
+  <section id="cluster-mesh" class="section-block">
+    <span id="actor-mesh" class="anchor-alias"></span>
+    <div class="container">
+      <div class="deep-dive-card card glass-card animate-fade-up">
+        <div class="deep-dive-header">
+          <div class="header-meta">
+            <span class="badge badge-red">Enterprise Concurrency &amp; Reliability</span>
+            <span class="badge">Chunks 19, 21, 30</span>
+            <span class="badge font-mono">src/actor_cluster.rs &bull; src/actor.rs</span>
+          </div>
+          <h2>TLS/mTLS Cluster Mesh &amp; Hot-Code Reloading (<code>std:actor:cluster</code>)</h2>
+          <p class="deep-dive-lead">
+            Zero-downtime actor logic swapping, schema migrations, and mutual TLS encryption across distributed clusters.
+          </p>
+        </div>
+
+        <div class="deep-dive-grid">
+          <div class="deep-dive-text">
+            <h3>Zero-Downtime Hot-Code Reloading</h3>
+            <p>
+              In production services, stopping an actor drops active state and pending mailbox requests. Shae introduces <code>ActorMessage::Reload</code>: an actor handler function is swapped atomically in place. The actor thread continues executing without dropping queued FIFO messages.
+            </p>
+            <h3>Live State Schema Migrations</h3>
+            <p>
+              When new code requires a different state schema, pass an optional migration closure: <code>actor.reload(new_handler, migration_fn)</code>. The migration function transforms the active state (e.g., from V2 plain map to V3 versioned schema) before the new handler processes the next message.
+            </p>
+            <h3>Distributed Cluster Mesh Reload &amp; mTLS Security</h3>
+            <p>
+              Hot reloads propagate across the cluster over encrypted TCP framing using <code>ClusterWireMsg::Reload</code>. The cluster mesh uses <strong>Rustls 0.23</strong> for mutual TLS (mTLS): both client and server authenticate using trusted root CAs (<code>ClusterTlsConfig</code>), completely isolating rogue nodes.
+            </p>
+
+            <div class="terminal-window" style="margin-top: 1.25rem;">
+              <div class="terminal-header">
+                <span class="terminal-title">Distributed Hot-Reload Sequence</span>
+              </div>
+              <div class="terminal-body font-mono" style="font-size: 0.78rem;">
+<pre><code>{hotReloadDiagram}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="deep-dive-code">
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">actor_hot_reload_demo.shae</span>
+              </div>
+              <div class="terminal-body">
+<pre><code>{actorHotReloadCode}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 5: Pure-Shae Self-Hosting Compiler -->
+  <section id="self-hosting" class="section-block">
+    <div class="container">
+      <div class="deep-dive-card card glass-card animate-fade-up">
+        <div class="deep-dive-header">
+          <div class="header-meta">
+            <span class="badge badge-red">Language Self-Hosting</span>
+            <span class="badge">Chunks 15–18, 20, 27</span>
+            <span class="badge font-mono">lib/compiler/ (14 modules)</span>
+          </div>
+          <h2>Pure-Shae Self-Hosting Bootstrap Pipeline (<code>lib/compiler/</code>)</h2>
+          <p class="deep-dive-lead">
+            The complete Shae toolchain&mdash;lexer, Pratt parser, bytecode compiler, disassembler, native ELF/PE linker, WebAssembly emitter, and LLVM IR generator&mdash;is implemented entirely in pure Shae.
+          </p>
+        </div>
+
+        <div class="deep-dive-grid">
+          <div class="deep-dive-text">
+            <h3>14 Modular Pure-Shae Compiler Units</h3>
+            <p>
+              Divided cleanly across 14 modules in <code>lib/compiler/</code>, the compiler compiles Shae code from source text into multiple deployment targets without needing the Rust source compiler:
+            </p>
+            <ul class="module-bullet-list">
+              <li><code>lexer.shae</code> &bull; <code>parser.shae</code> &bull; <code>token.shae</code> &bull; <code>ast.shae</code>: Tokenization &amp; Pratt precedence parsing</li>
+              <li><code>codegen.shae</code> &bull; <code>chunk.shae</code> &bull; <code>opcode.shae</code>: Bytecode compilation &amp; binary serialization</li>
+              <li><code>disasm.shae</code>: Interactive bytecode disassembler</li>
+              <li><code>linker.shae</code> &bull; <code>elf.shae</code> &bull; <code>pe.shae</code>: Direct native 64-bit ELF and PE executable generation</li>
+              <li><code>wasm.shae</code>: Binary WebAssembly module generation</li>
+              <li><code>llvm.shae</code>: Direct LLVM 18 SSA intermediate representation emission</li>
+              <li><code>main.shae</code>: Unified compiler CLI driver</li>
+            </ul>
+
+            <h3>Two-Stage Bit-for-Bit Verified Bootstrap</h3>
+            <p>
+              Verified via <code>tests/stage2_bootstrap_test.rs</code>: Stage 1 compiler compiles Stage 2 compiler source into bytecode. Stage 2 compiler then compiles itself again. The resulting bytecode hashes match bit-for-bit, proving deterministic self-hosting maturity.
+            </p>
+          </div>
+
+          <div class="deep-dive-code">
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">lib/compiler/main.shae &mdash; Pure-Shae Driver</span>
+              </div>
+              <div class="terminal-body">
+<pre><code>{selfHostingMainCode}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 6: Dual-Engine Parity Model -->
+  <section id="dual-engine" class="section-block">
+    <div class="container">
+      <div class="deep-dive-card card glass-card animate-fade-up">
+        <div class="deep-dive-header">
+          <div class="header-meta">
+            <span class="badge badge-red">Runtime Architecture</span>
+            <span class="badge">Core Foundation</span>
+            <span class="badge font-mono">src/vm.rs &bull; src/eval.rs</span>
+          </div>
+          <h2>Dual-Engine Parity Model (Stack Bytecode VM + AST Evaluator)</h2>
+          <p class="deep-dive-lead">
+            Every feature, primitive, and standard library module in Shae is verified to run identically on both execution backends.
+          </p>
+        </div>
+
+        <div class="parity-matrix-grid">
+          <div class="parity-card card">
+            <div class="parity-title-row">
+              <h3>Stack Bytecode VM</h3>
+              <span class="badge">Default Engine (<code>--vm</code>)</span>
+            </div>
+            <p>
+              Precompiles AST into compact bytecode chunks (<code>.shaec</code>). Evaluates instructions on a fast virtual operand stack with indexed local slots, upvalue capture, and direct jumps.
+            </p>
+            <ul class="parity-feature-list">
+              <li><strong>Startup Latency:</strong> ~3 ms cold start</li>
+              <li><strong>Loop Throughput:</strong> ~80,000+ ops/sec</li>
+              <li><strong>AOT Ready:</strong> Direct bytecode serialization</li>
+              <li><strong>JIT Integration:</strong> Seamless Cranelift tiering</li>
+            </ul>
+          </div>
+
+          <div class="parity-card card">
+            <div class="parity-title-row">
+              <h3>Tree-Walking AST Evaluator</h3>
+              <span class="badge">Instant Scripting (<code>--ast</code>)</span>
+            </div>
+            <p>
+              Traverses the Abstract Syntax Tree directly without bytecode compilation passes. Ideal for rapid one-off scripting, macro transformations, and developer debugging.
+            </p>
+            <ul class="parity-feature-list">
+              <li><strong>Compilation Delay:</strong> 0 ms (Zero compile phase)</li>
+              <li><strong>Debug Introspection:</strong> Exact source AST spans</li>
+              <li><strong>Memory Footprint:</strong> Low overhead for single runs</li>
+              <li><strong>Engine Parity:</strong> 290+ tests pass identically</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Chunks 1-31 Matrix & Accordion -->
+  <section id="chunks-matrix" class="section-block">
+    <div class="container">
+      <div class="section-head animate-fade-up">
+        <span class="badge badge-red">Comprehensive Catalog</span>
+        <h2>Evolution Chunks 1–31 Interactive Matrix</h2>
+        <p>Explore all 31 milestones that built the Shae language, from ergonomic primitives to LLVM SSA and distributed actor clustering.</p>
+      </div>
+
+      <!-- Filter & Search Controls -->
+      <div class="matrix-controls-bar animate-fade-up delay-100">
+        <div class="category-tabs" role="tablist">
+          <button class="cat-tab-btn active" data-filter="all">All Chunks (31)</button>
+          <button class="cat-tab-btn" data-filter="foundation">Core Foundation (1–10)</button>
+          <button class="cat-tab-btn" data-filter="tooling">Tooling &amp; Frontend (11–20)</button>
+          <button class="cat-tab-btn" data-filter="enterprise">Enterprise &amp; Native SSA (21–31)</button>
+        </div>
+
+        <div class="search-box-wrapper">
+          <input
+            type="text"
+            id="chunk-search-input"
+            class="chunk-search-input"
+            placeholder="Search by keyword, module, or chunk # (e.g. LLVM, buffer, actor, jit)..."
+            aria-label="Search Chunks"
+          />
+          <span class="search-counter" id="chunk-count-display">Showing 31 of 31</span>
+        </div>
+      </div>
+
+      <!-- Chunks Accordion List -->
+      <div class="chunks-accordion-list animate-fade-up delay-200" id="chunks-list-container">
+        {chunks.map((item) => (
+          <details
+            class="chunk-card card"
+            data-chunk-id={item.id}
+            data-category={item.category}
+            data-keywords={`${item.id} ${item.name} ${item.categoryLabel} ${item.files.join(' ')} ${item.summary} ${item.highlights.join(' ')}`.toLowerCase()}
+          >
+            <summary class="chunk-summary">
+              <div class="chunk-summary-left">
+                <span class="chunk-number-badge">Chunk {item.id}</span>
+                <span class="chunk-name">{item.name}</span>
+              </div>
+              <div class="chunk-summary-right">
+                <span class="chunk-cat-badge">{item.categoryLabel}</span>
+                <span class="accordion-arrow">&darr;</span>
+              </div>
+            </summary>
+
+            <div class="chunk-body">
+              <p class="chunk-desc">{item.summary}</p>
+
+              <div class="chunk-files-row">
+                <span class="files-label">Primary Source Files:</span>
+                {item.files.map((file) => (
+                  <span class="file-tag font-mono">{file}</span>
+                ))}
+              </div>
+
+              <div class="chunk-highlights">
+                <span class="highlights-label">Key Engineering Deliverables:</span>
+                <ul>
+                  {item.highlights.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {item.codeSample && (
+                <div class="chunk-code-block">
+                  <div class="code-title">Example Shae Code</div>
+                  <pre class="font-mono"><code>{item.codeSample}</code></pre>
+                </div>
+              )}
+
+              {item.cliSample && (
+                <div class="chunk-cli-block">
+                  <div class="cli-title">CLI Verification Commands</div>
+                  <pre class="font-mono"><code>{item.cliSample}</code></pre>
+                </div>
+              )}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="section-block cta-section">
+    <div class="container text-center animate-fade-up">
+      <div class="card glass-card cta-card">
+        <h2>Explore More of the Shae Toolchain</h2>
+        <p>Read the complete 42-page architectural PDF book, view real-time benchmark telemetry, or install the compiler.</p>
+        <div class="cta-actions">
+          <a href="/docs" class="btn btn-primary">Read Documentation &amp; PDF Book</a>
+          <a href="/benchmarks" class="btn btn-secondary">View Benchmarks &amp; Roadmap</a>
+          <a href="/download" class="btn btn-secondary">Download Toolchain</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ==========================================================================
+     HERO & TOPOLOGY STYLES
+     ========================================================================== */
+  .features-hero {
+    padding: 4.5rem 0 2.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+    background: radial-gradient(circle at 50% 0%, var(--accent-badge-bg) 0%, transparent 60%);
+  }
+
+  .hero-container {
+    max-width: 960px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent-primary);
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .anchor-jump-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .jump-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-right: 0.25rem;
+  }
+
+  .jump-pill {
+    font-size: 0.82rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    color: var(--text-muted);
+    background: var(--bg-card-subtle);
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+  }
+
+  .jump-pill:hover {
+    color: var(--text-main);
+    border-color: var(--border-bright);
+    background: var(--bg-hover);
+  }
+
+  .highlight-pill {
+    color: var(--accent-primary);
+    font-weight: 600;
+    border-color: var(--accent-badge-border);
+    background: var(--accent-badge-bg);
+  }
+
+  /* ==========================================================================
+     SECTION HEADINGS & BLOCKS
+     ========================================================================== */
+  .section-block {
+    padding: 4rem 0;
+  }
+
+  .section-head {
+    margin-bottom: 2.25rem;
+  }
+
+  .section-head h2 {
+    font-size: 2.15rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0.5rem 0;
+  }
+
+  .section-head p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+  }
+
+  .topology-terminal {
+    box-shadow: var(--elevated-shadow);
+  }
+
+  .topology-art {
+    margin: 0;
+    line-height: 1.35;
+    font-size: 0.78rem;
+    overflow-x: auto;
+  }
+
+  /* ==========================================================================
+     DEEP-DIVE CARDS & GRIDS
+     ========================================================================== */
+  .deep-dive-card {
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .deep-dive-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .deep-dive-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .deep-dive-lead {
+    font-size: 1.12rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .deep-dive-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .deep-dive-text h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 1.25rem 0 0.45rem 0;
+    color: var(--text-main);
+  }
+
+  .deep-dive-text h3:first-child {
+    margin-top: 0;
+  }
+
+  .deep-dive-text p {
+    color: var(--text-muted);
+    font-size: 0.96rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+
+  .module-bullet-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 1.25rem 0;
+  }
+
+  .module-bullet-list li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    padding: 0.35rem 0;
+    border-bottom: 1px dashed var(--border-color);
+  }
+
+  .module-bullet-list li:last-child {
+    border-bottom: none;
+  }
+
+  .cli-box {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+  }
+
+  .cli-title {
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    margin-bottom: 0.65rem;
+  }
+
+  .cli-cmd {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    color: var(--text-main);
+    margin-bottom: 0.35rem;
+  }
+
+  .cli-desc {
+    font-family: var(--font-serif);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .spec-table-card {
+    margin-top: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+  }
+
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  .spec-table th,
+  .spec-table td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+
+  .spec-table th {
+    background: var(--bg-card-subtle);
+    color: var(--text-dim);
+    font-weight: 600;
+    width: 40%;
+  }
+
+  .spec-table td {
+    color: var(--text-main);
+  }
+
+  .spec-table tr:last-child th,
+  .spec-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ==========================================================================
+     DUAL ENGINE PARITY GRID
+     ========================================================================== */
+  .parity-matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .parity-card {
+    padding: 1.75rem;
+  }
+
+  .parity-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .parity-title-row h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .parity-feature-list {
+    list-style: none;
+    margin-top: 1.25rem;
+  }
+
+  .parity-feature-list li {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .parity-feature-list li:last-child {
+    border-bottom: none;
+  }
+
+  /* ==========================================================================
+     CHUNKS 1-31 INTERACTIVE MATRIX
+     ========================================================================== */
+  .matrix-controls-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .category-tabs {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .cat-tab-btn {
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0.55rem 1rem;
+    border-radius: var(--button-radius);
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+
+  .cat-tab-btn:hover {
+    color: var(--text-main);
+    background: var(--bg-hover);
+    border-color: var(--border-bright);
+  }
+
+  .cat-tab-btn.active {
+    background: var(--text-main);
+    color: var(--bg-base);
+    border-color: var(--text-main);
+  }
+
+  .search-box-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    max-width: 480px;
+  }
+
+  .chunk-search-input {
+    width: 100%;
+    padding: 0.55rem 0.95rem;
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    border-radius: var(--button-radius);
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    color: var(--text-main);
+    outline: none;
+    transition: border-color 0.18s ease;
+  }
+
+  .chunk-search-input:focus {
+    border-color: var(--border-focus);
+  }
+
+  .search-counter {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .chunks-accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .chunk-card {
+    padding: 0;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: border-color 0.18s ease;
+  }
+
+  .chunk-card[open] {
+    border-color: var(--border-bright);
+  }
+
+  .chunk-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.15rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    background: var(--bg-surface);
+    transition: background-color 0.15s ease;
+  }
+
+  .chunk-summary:hover {
+    background: var(--bg-hover);
+  }
+
+  .chunk-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .chunk-summary-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .chunk-number-badge {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    background: var(--accent-badge-bg);
+    color: var(--accent-primary);
+    border: 1px solid var(--accent-badge-border);
+  }
+
+  .chunk-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .chunk-summary-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .chunk-cat-badge {
+    font-size: 0.76rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-dim);
+  }
+
+  .accordion-arrow {
+    font-size: 1rem;
+    color: var(--text-dim);
+    transition: transform 0.2s ease;
+  }
+
+  .chunk-card[open] .accordion-arrow {
+    transform: rotate(180deg);
+  }
+
+  .chunk-body {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-card-subtle);
+  }
+
+  .chunk-desc {
+    font-size: 0.98rem;
+    color: var(--text-main);
+    line-height: 1.6;
+    margin-bottom: 1.15rem;
+  }
+
+  .chunk-files-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.15rem;
+  }
+
+  .files-label,
+  .highlights-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    margin-right: 0.25rem;
+  }
+
+  .file-tag {
+    font-size: 0.78rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+  }
+
+  .chunk-highlights ul {
+    margin: 0.5rem 0 1.25rem 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .chunk-code-block,
+  .chunk-cli-block {
+    margin-top: 1rem;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg-code);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .code-title,
+  .cli-title {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .chunk-code-block pre,
+  .chunk-cli-block pre {
+    padding: 1rem;
+    margin: 0;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: #f1f5f9;
+  }
+
+  /* ==========================================================================
+     BOTTOM CTA SECTION
+     ========================================================================== */
+  .cta-section {
+    padding-bottom: 6rem;
+  }
+
+  .cta-card {
+    padding: 3.5rem 2rem;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .cta-card h2 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-card p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ==========================================================================
+     RESPONSIVE MEDIA QUERIES
+     ========================================================================== */
+  @media (max-width: 960px) {
+    .deep-dive-grid {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .parity-matrix-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .features-hero {
+      padding: 3rem 0 2rem 0;
+    }
+
+    .hero-title {
+      font-size: 2.25rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .matrix-controls-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .search-box-wrapper {
+      max-width: 100%;
+    }
+
+    .deep-dive-card {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  function setupFeaturesInteractivity() {
+    const tabButtons = document.querySelectorAll<HTMLButtonElement>('.cat-tab-btn');
+    const searchInput = document.getElementById('chunk-search-input') as HTMLInputElement | null;
+    const countDisplay = document.getElementById('chunk-count-display');
+    const chunkCards = document.querySelectorAll<HTMLDetailsElement>('.chunk-card');
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function filterChunks() {
+      let visibleCount = 0;
+      const q = searchQuery.toLowerCase().trim();
+
+      chunkCards.forEach((card) => {
+        const cat = card.getAttribute('data-category') || '';
+        const keywords = card.getAttribute('data-keywords') || '';
+
+        const matchesCat = currentCategory === 'all' || cat === currentCategory;
+        const matchesSearch = !q || keywords.includes(q);
+
+        if (matchesCat && matchesSearch) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (countDisplay) {
+        countDisplay.textContent = `Showing ${visibleCount} of ${chunkCards.length}`;
+      }
+    }
+
+    // Category tab switching
+    tabButtons.forEach((btn) => {
+      btn.onclick = () => {
+        tabButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.getAttribute('data-filter') || 'all';
+        filterChunks();
+      };
+    });
+
+    // Real-time search filter
+    if (searchInput) {
+      searchInput.oninput = () => {
+        searchQuery = searchInput.value;
+        filterChunks();
+      };
+    }
+  }
+
+  // Bind to Astro's View Transitions page load event
+  document.addEventListener('astro:page-load', setupFeaturesInteractivity);
+</script>
