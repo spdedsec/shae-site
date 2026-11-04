@@ -1,24 +1,1029 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+// Prebuilt Binary Matrix for Shae v0.4.0
+const platformBinaries = [
+  {
+    os: 'Linux',
+    distro: 'glibc (Ubuntu, Debian, Fedora, Arch)',
+    arch: 'x86_64',
+    archive: 'shae-v0.4.0-linux-x86_64.tar.gz',
+    size: '8.4 MB',
+    format: '.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-x86_64.tar.gz',
+    recommended: true
+  },
+  {
+    os: 'Linux',
+    distro: 'musl (Alpine Linux, Minimal Containers)',
+    arch: 'x86_64',
+    archive: 'shae-v0.4.0-linux-x86_64-musl.tar.gz',
+    size: '7.9 MB',
+    format: '.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-x86_64-musl.tar.gz',
+    recommended: false
+  },
+  {
+    os: 'Linux',
+    distro: 'ARM64 (Raspberry Pi 4/5, AWS Graviton)',
+    arch: 'aarch64 / arm64',
+    archive: 'shae-v0.4.0-linux-aarch64.tar.gz',
+    size: '7.6 MB',
+    format: '.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-aarch64.tar.gz',
+    recommended: false
+  },
+  {
+    os: 'macOS',
+    distro: 'Apple Silicon (M1 / M2 / M3 / M4)',
+    arch: 'arm64',
+    archive: 'shae-v0.4.0-macos-arm64.tar.gz',
+    size: '8.1 MB',
+    format: '.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-macos-arm64.tar.gz',
+    recommended: true
+  },
+  {
+    os: 'macOS',
+    distro: 'Intel Core (Legacy x86_64 Macs)',
+    arch: 'x86_64',
+    archive: 'shae-v0.4.0-macos-x86_64.tar.gz',
+    size: '8.3 MB',
+    format: '.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-macos-x86_64.tar.gz',
+    recommended: false
+  },
+  {
+    os: 'Windows',
+    distro: 'Windows 10 / 11 (Standalone zip)',
+    arch: 'x86_64',
+    archive: 'shae-v0.4.0-windows-x86_64.zip',
+    size: '9.2 MB',
+    format: '.zip',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-windows-x86_64.zip',
+    recommended: false
+  }
+];
+
+// VS Code Extension Highlights
+const vscodeFeatures = [
+  {
+    icon: '🎨',
+    title: 'TextMate Syntax Grammar',
+    desc: 'Comprehensive syntax coloring for tokens, radix numbers (0xFF, 0b10), raw strings (r"..."), pipes (|>), and match arms.'
+  },
+  {
+    icon: '⚡',
+    title: 'Language Server Protocol (LSP)',
+    desc: 'Powered directly by shae lsp: live red squiggly diagnostics, dead code detection, and variable shadowing warnings.'
+  },
+  {
+    icon: '💡',
+    title: 'IntelliSense & Autocomplete',
+    desc: 'Instant keyword, builtin function (jit, spawn, ask), and standard library module autocompletion (std:buffer, std:actor, std:crypto).'
+  },
+  {
+    icon: '▶',
+    title: 'One-Click Code Runner',
+    desc: 'Run active .shae script button in the editor title bar and context menu, executing in the integrated terminal with F5.'
+  },
+  {
+    icon: '🐞',
+    title: 'DAP Debugger Integration',
+    desc: 'Native debugger client support: line breakpoints, stepping, call stack frames, and variable scope inspection.'
+  },
+  {
+    icon: '✨',
+    title: 'Canonical AST Formatting',
+    desc: 'Automatic formatting on save via shae fmt, enforcing 4-space indentation and clean syntax style.'
+  }
+];
+
+// Installer Options Breakdown
+const installEnvVars = [
+  {
+    name: 'SHAE_VERSION',
+    default: 'Latest (v0.4.0)',
+    example: 'SHAE_VERSION=v0.4.0',
+    desc: 'Explicitly pin a release version instead of querying GitHub releases API.'
+  },
+  {
+    name: 'SHAE_INSTALL_DIR',
+    default: '~/.cargo/bin or ~/.shae/bin',
+    example: 'SHAE_INSTALL_DIR=/usr/local/bin',
+    desc: 'Directory where the standalone executable binary is placed.'
+  },
+  {
+    name: 'SHAE_NO_MODIFY_PATH',
+    default: '0',
+    example: 'SHAE_NO_MODIFY_PATH=1',
+    desc: 'Suppress shell profile export advice when install directory is not in $PATH.'
+  }
+];
 ---
 
-<Layout title="Shae — Download & Install" description="Single-line universal installer, multi-platform binaries, and VS Code extension setup for Shae v0.4.0.">
-  <div class="container" style="padding: 5rem 1.5rem; max-width: 900px;">
-    <div class="animate-fade-up">
-      <span class="badge" style="margin-bottom: 1.25rem;">Milestone 3 Target</span>
-      <h1 style="font-size: 2.75rem; margin-bottom: 1.25rem; font-weight: 700;">Download &amp; Installation</h1>
-      <p style="font-size: 1.2rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 2rem;">
-        Universal installation scripts, cross-platform binary archives, and official VS Code syntax extension instructions for Shae v0.4.0.
-      </p>
-      <div class="card glass-card">
-        <h3 style="margin-bottom: 0.75rem;">Universal One-Line Installer</h3>
-        <div class="terminal-window" style="margin-bottom: 1.25rem;">
-          <div class="terminal-body" style="padding: 1rem 1.25rem;">
-            <code>curl -fsSL https://shae-site.vercel.app/install.sh | bash</code>
-          </div>
-        </div>
-        <a href="/" class="btn btn-secondary">Return to Overview</a>
+<Layout
+  title="Download & Installation — Shae"
+  description="Single-line universal installer, cross-platform prebuilt binaries, SHA-256 verification, and official VS Code tooling for Shae v0.4.0."
+>
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <div class="animate-fade-up">
+        <span class="badge badge-red">OFFICIAL DISTRIBUTION // RELEASE v0.4.0</span>
+        <h1 class="header-title">Download &amp; Installation</h1>
+        <p class="header-subtitle">
+          Standalone, zero-dependency pre-compiled binaries for Linux, macOS, and Windows. 
+          Verified with cryptographic SHA-256 integrity checksums.
+        </p>
       </div>
     </div>
+  </header>
+
+  <div class="container content-container">
+    <!-- Section 1: Universal One-Line Installer -->
+    <section class="content-block animate-fade-up stagger-1">
+      <div class="card installer-card">
+        <div class="installer-badge-row">
+          <span class="badge badge-red">UNIVERSAL ONE-LINE INSTALLER</span>
+          <span class="badge">LINUX &amp; MACOS</span>
+        </div>
+        <h2 class="card-heading">Single-Command Setup</h2>
+        <p class="card-desc">
+          The universal installer auto-detects your operating system, CPU architecture (x86_64 or ARM64), 
+          and C runtime library (glibc or musl), downloads the verified release archive, and installs <code>shae</code> into your path.
+        </p>
+
+        <!-- Primary Install Command -->
+        <div class="terminal-cmd-box">
+          <div class="terminal-cmd-inner">
+            <span class="cmd-prompt">$</span>
+            <code class="cmd-text font-mono" id="primary-install-cmd">curl -fsSL https://shae-site.vercel.app/install.sh | bash</code>
+          </div>
+          <button class="btn btn-primary copy-cmd-btn" data-copy="curl -fsSL https://shae-site.vercel.app/install.sh | bash">
+            Copy Command
+          </button>
+        </div>
+
+        <!-- Alternative Raw GitHub Mirror -->
+        <div class="mirror-row">
+          <span class="mirror-label">Raw GitHub Mirror:</span>
+          <code class="font-mono">curl -fsSL https://raw.githubusercontent.com/spdedsec/shae/main/install.sh | bash</code>
+          <button class="btn btn-secondary copy-cmd-btn btn-xs" data-copy="curl -fsSL https://raw.githubusercontent.com/spdedsec/shae/main/install.sh | bash">
+            Copy
+          </button>
+        </div>
+
+        <!-- Environment Variables Dropdown/Table -->
+        <div class="env-options-area">
+          <h4 class="env-title">Installer Customization Options</h4>
+          <div class="env-table-wrapper">
+            <table class="env-table">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Default</th>
+                  <th>Example Usage</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {installEnvVars.map((v) => (
+                  <tr>
+                    <td><code>{v.name}</code></td>
+                    <td class="font-mono text-muted">{v.default}</td>
+                    <td><code>{v.example}</code></td>
+                    <td class="text-muted">{v.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Platform Binary Matrix -->
+    <section class="content-block animate-fade-up stagger-2" id="binaries">
+      <div class="sec-heading">
+        <span class="badge">MANUAL DOWNLOADS</span>
+        <h2 class="block-title">Pre-Built Platform Binaries (v0.4.0)</h2>
+        <p class="block-desc">
+          Direct standalone archive downloads. No package managers or system runtimes required. 
+          Extract the archive and run the executable binary immediately.
+        </p>
+      </div>
+
+      <div class="card matrix-card">
+        <div class="table-responsive">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Operating System</th>
+                <th>Target Environment</th>
+                <th>Architecture</th>
+                <th>Format</th>
+                <th>Package Size</th>
+                <th>Download Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              {platformBinaries.map((b) => (
+                <tr class:list={[{ 'recommended-row': b.recommended }]}>
+                  <td>
+                    <div class="os-col">
+                      <strong>{b.os}</strong>
+                      {b.recommended && <span class="rec-badge">Recommended</span>}
+                    </div>
+                  </td>
+                  <td class="text-muted">{b.distro}</td>
+                  <td><span class="arch-badge font-mono">{b.arch}</span></td>
+                  <td class="font-mono">{b.format}</td>
+                  <td class="font-mono text-muted">{b.size}</td>
+                  <td>
+                    <a
+                      href={b.url}
+                      class="btn btn-secondary btn-sm download-link"
+                      download
+                    >
+                      <span>Download Archive</span>
+                      <span class="dl-arrow">↓</span>
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: SHA-256 Cryptographic Verification -->
+    <section class="content-block animate-fade-up stagger-3" id="verification">
+      <div class="card verify-card">
+        <span class="badge badge-red">SUPPLY CHAIN SECURITY</span>
+        <h2 class="card-heading" style="margin-top: 0.5rem;">Cryptographic SHA-256 Verification</h2>
+        <p class="card-desc">
+          Every official release archive is published alongside a verified <code>SHA256SUMS.txt</code> manifest. 
+          You can independently authenticate the cryptographic integrity of your downloaded artifact before execution.
+        </p>
+
+        <div class="verify-steps-grid">
+          <div class="step-card">
+            <span class="step-num font-mono">01</span>
+            <h4>Download Asset &amp; Manifest</h4>
+            <div class="terminal-window mini-term">
+              <div class="terminal-body font-mono">
+                <div>curl -fsSLO https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-x86_64.tar.gz</div>
+                <div>curl -fsSLO https://github.com/spdedsec/shae/releases/download/v0.4.0/SHA256SUMS.txt</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <span class="step-num font-mono">02</span>
+            <h4>Verify Checksum Hash</h4>
+            <div class="terminal-window mini-term">
+              <div class="terminal-body font-mono">
+                <div class="term-comment"># Linux (GNU coreutils)</div>
+                <div>sha256sum --ignore-missing -c SHA256SUMS.txt</div>
+                <div class="term-comment" style="margin-top: 0.5rem;"># macOS</div>
+                <div>shasum -a 256 -c SHA256SUMS.txt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: VS Code Extension Guide -->
+    <section class="content-block animate-fade-up stagger-4" id="vscode">
+      <div class="card vscode-card">
+        <div class="vscode-header">
+          <div>
+            <span class="badge badge-red">OFFICIAL EDITOR TOOLING</span>
+            <h2 class="card-heading" style="margin-top: 0.5rem;">Visual Studio Code Extension</h2>
+            <p class="card-desc">
+              First-class language tooling for VS Code and VSCodium powered directly by the <code>shae lsp</code> daemon.
+            </p>
+          </div>
+          <span class="badge badge-dark">v0.4.0 Extension</span>
+        </div>
+
+        <!-- Extension Quick Install -->
+        <div class="vscode-install-box">
+          <div class="install-prompt-area">
+            <span class="prompt-label">Install via VS Code CLI:</span>
+            <code class="font-mono">code --install-extension editors/vscode/shae-vscode-0.4.0.vsix</code>
+          </div>
+          <button class="btn btn-secondary copy-cmd-btn btn-sm" data-copy="code --install-extension editors/vscode/shae-vscode-0.4.0.vsix">
+            Copy
+          </button>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="vscode-features-grid">
+          {vscodeFeatures.map((f) => (
+            <div class="vscode-feat-item">
+              <span class="feat-icon">{f.icon}</span>
+              <div>
+                <h4 class="feat-title">{f.title}</h4>
+                <p class="feat-desc">{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- VS Code Configuration JSON -->
+        <div class="settings-box">
+          <h4 class="settings-title">Extension Settings (settings.json)</h4>
+          <div class="terminal-window mini-term">
+            <div class="terminal-body font-mono">
+              <div>&#123;</div>
+              <div>&nbsp;&nbsp;<span style="color: #93c5fd;">"shae.lsp.path"</span>: <span style="color: #86efac;">"shae"</span>,</div>
+              <div>&nbsp;&nbsp;<span style="color: #93c5fd;">"shae.lsp.trace.server"</span>: <span style="color: #86efac;">"off"</span>,</div>
+              <div>&nbsp;&nbsp;<span style="color: #93c5fd;">"[shae]"</span>: &#123;</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #93c5fd;">"editor.formatOnSave"</span>: <span style="color: #fcd34d;">true</span></div>
+              <div>&nbsp;&nbsp;&#125;</div>
+              <div>&#125;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Verification & First Steps -->
+    <section class="content-block animate-fade-up stagger-5">
+      <div class="sec-heading">
+        <span class="badge">QUICKSTART GUIDE</span>
+        <h2 class="block-title">Verify Your Installation</h2>
+        <p class="block-desc">
+          Test your toolchain setup and execute your first Shae program in four simple commands.
+        </p>
+      </div>
+
+      <div class="steps-container">
+        <div class="card step-row">
+          <div class="step-meta">
+            <span class="step-badge font-mono">Step 1</span>
+            <h4>Verify Version</h4>
+          </div>
+          <div class="step-code">
+            <code class="font-mono">shae --version</code>
+            <span class="step-expected">Expected: <code>shae 0.4.0</code></span>
+          </div>
+        </div>
+
+        <div class="card step-row">
+          <div class="step-meta">
+            <span class="step-badge font-mono">Step 2</span>
+            <h4>Run First Script</h4>
+          </div>
+          <div class="step-code">
+            <code class="font-mono">echo 'print("Hello from Shae silicon!")' > hello.shae &amp;&amp; shae run hello.shae</code>
+            <span class="step-expected">Output: <code>Hello from Shae silicon!</code></span>
+          </div>
+        </div>
+
+        <div class="card step-row">
+          <div class="step-meta">
+            <span class="step-badge font-mono">Step 3</span>
+            <h4>Launch Interactive REPL</h4>
+          </div>
+          <div class="step-code">
+            <code class="font-mono">shae repl</code>
+            <span class="step-expected">Access VM runtime with <code>:help</code> and <code>:engine</code> commands</span>
+          </div>
+        </div>
+
+        <div class="card step-row">
+          <div class="step-meta">
+            <span class="step-badge font-mono">Step 4</span>
+            <h4>Run Microbenchmarks</h4>
+          </div>
+          <div class="step-code">
+            <code class="font-mono">shae bench</code>
+            <span class="step-expected">Executes built-in telemetry suite and prints ASCII metrics table</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Build From Source (Cargo) -->
+    <section class="content-block animate-fade-up">
+      <div class="card source-card">
+        <div class="source-inner">
+          <div>
+            <span class="badge">DEVELOPERS &amp; PACKAGERS</span>
+            <h3 class="source-title">Compile From Source via Cargo</h3>
+            <p class="source-desc">
+              Requires a modern Rust toolchain (Rust 2024 edition, 1.80+). Clones the official repository 
+              and compiles all bytecode VM, Cranelift JIT, and LLVM backends.
+            </p>
+          </div>
+          <div class="source-code-box">
+            <code class="font-mono">git clone https://github.com/spdedsec/shae.git<br />cd shae<br />cargo install --path .</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: 42-Page Publication Guide Banner -->
+    <section class="content-block animate-fade-up">
+      <div class="card publication-card">
+        <div class="pub-inner">
+          <div class="pub-text">
+            <span class="badge badge-red">PUBLICATION REFERENCE</span>
+            <h2>The Shae Programming Language: From Sand to Supercomputers</h2>
+            <p>
+              A 42-page, publication-grade master reference book. Covers everything from variable scopes 
+              and closures to LLVM SSA compilation, TLS/mTLS actor cluster meshes, and self-hosting bootstrap pipelines.
+            </p>
+            <div class="pub-specs font-mono">
+              <span>Pages: 42</span>
+              <span>•</span>
+              <span>Size: 486 KB</span>
+              <span>•</span>
+              <span>Format: PDF</span>
+            </div>
+          </div>
+          <div class="pub-action">
+            <a href="/shae_the_complete_guide.pdf" target="_blank" rel="noopener" class="btn btn-primary">
+              Download 42-Page PDF (486 KB) →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </Layout>
+
+<style>
+  /* Header Area */
+  .page-header {
+    padding: 4.5rem 0 2.5rem;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+  }
+
+  .header-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text-main);
+    margin: 0.85rem 0 0.65rem;
+    line-height: 1.15;
+  }
+
+  .header-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 760px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Content Layout */
+  .content-container {
+    padding: 2.5rem 1.5rem 6rem;
+  }
+
+  .content-block {
+    margin-bottom: 4.5rem;
+  }
+
+  .sec-heading {
+    margin-bottom: 1.75rem;
+  }
+
+  .block-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+    margin: 0.4rem 0 0.35rem;
+  }
+
+  .block-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    max-width: 840px;
+  }
+
+  /* Installer Card */
+  .installer-card {
+    padding: 2.75rem;
+  }
+
+  .installer-badge-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .card-heading {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.4rem;
+  }
+
+  .card-desc {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+  }
+
+  .terminal-cmd-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-code);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--card-radius, 8px);
+    padding: 1rem 1.25rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .terminal-cmd-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow-x: auto;
+  }
+
+  .cmd-prompt {
+    color: #38bdf8;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    user-select: none;
+  }
+
+  .cmd-text {
+    color: #f1f5f9;
+    font-size: 0.98rem;
+    white-space: nowrap;
+  }
+
+  .mirror-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .mirror-row code {
+    background: var(--bg-card-subtle);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    font-size: 0.84rem;
+  }
+
+  .btn-xs {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.78rem;
+  }
+
+  .env-options-area {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.75rem;
+  }
+
+  .env-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.85rem;
+  }
+
+  .env-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .env-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+
+  .env-table th {
+    background: var(--bg-card-subtle);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: var(--text-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .env-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+  }
+
+  .env-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .env-table code {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    background: var(--bg-card-subtle);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  /* Binary Matrix */
+  .matrix-card {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .matrix-table th {
+    background: var(--bg-card-subtle);
+    padding: 1rem 1.25rem;
+    text-align: left;
+    color: var(--text-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+
+  .matrix-table td {
+    padding: 1.15rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    vertical-align: middle;
+  }
+
+  .matrix-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .recommended-row {
+    background: var(--accent-badge-bg);
+  }
+
+  .os-col {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .rec-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: var(--accent-primary);
+    color: #ffffff;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  .arch-badge {
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+  }
+
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .dl-arrow {
+    font-weight: 700;
+  }
+
+  /* Verification Card */
+  .verify-card {
+    padding: 2.5rem;
+  }
+
+  .verify-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .step-card {
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius, 8px);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .step-num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+  }
+
+  .step-card h4 {
+    font-size: 1.1rem;
+    color: var(--text-main);
+  }
+
+  .mini-term {
+    box-shadow: none;
+  }
+
+  .mini-term .terminal-body {
+    padding: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .term-comment {
+    color: #64748b;
+  }
+
+  /* VS Code Card */
+  .vscode-card {
+    padding: 2.75rem;
+  }
+
+  .vscode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .vscode-install-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius, 8px);
+    padding: 0.85rem 1.25rem;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .install-prompt-area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .prompt-label {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .install-prompt-area code {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    color: var(--accent-primary);
+  }
+
+  .vscode-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .vscode-feat-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .feat-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+    margin-top: 0.15rem;
+  }
+
+  .feat-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.25rem;
+  }
+
+  .feat-desc {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .settings-box {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.75rem;
+  }
+
+  .settings-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+  }
+
+  /* Verification Steps Stack */
+  .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .step-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .step-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 180px;
+  }
+
+  .step-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+  }
+
+  .step-meta h4 {
+    font-size: 1.15rem;
+    color: var(--text-main);
+  }
+
+  .step-code {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .step-code code {
+    background: var(--bg-card-subtle);
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-main);
+  }
+
+  .step-expected {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .step-expected code {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  /* Source Build Card */
+  .source-card {
+    padding: 2.25rem;
+  }
+
+  .source-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .source-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0.5rem 0 0.35rem;
+  }
+
+  .source-desc {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+    max-width: 540px;
+    line-height: 1.6;
+  }
+
+  .source-code-box {
+    background: var(--bg-code);
+    padding: 1rem 1.25rem;
+    border-radius: var(--card-radius, 8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #86efac;
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  /* Publication Card */
+  .publication-card {
+    padding: 2.5rem;
+    background: var(--bg-surface);
+  }
+
+  .pub-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .pub-text h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0.5rem 0 0.5rem;
+    line-height: 1.25;
+  }
+
+  .pub-text p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 680px;
+    margin-bottom: 0.85rem;
+  }
+
+  .pub-specs {
+    display: flex;
+    gap: 0.65rem;
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .installer-card,
+    .vscode-card,
+    .verify-card,
+    .publication-card {
+      padding: 1.5rem;
+    }
+    .pub-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<script>
+  function setupCopyButtons() {
+    const copyButtons = document.querySelectorAll<HTMLButtonElement>('.copy-cmd-btn');
+    copyButtons.forEach((btn) => {
+      btn.onclick = async () => {
+        const textToCopy = btn.getAttribute('data-copy') || '';
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<span>✓ Copied!</span>';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('copied');
+          }, 2000);
+        } catch (_) {
+          // fallback
+        }
+      };
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupCopyButtons);
+</script>
