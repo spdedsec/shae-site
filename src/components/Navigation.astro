@@ -4,30 +4,36 @@ const cleanPath = pathname.replace(/\/$/, '') || '/';
 
 const navItems = [
   { label: 'Overview', href: '/' },
-  { label: '5-Min Tour', href: '/tour' },
   { label: 'Docs', href: '/docs' },
+  { label: 'Features', href: '/features' },
   { label: 'Benchmarks', href: '/benchmarks' },
-  { label: 'Web REPL', href: '/repl' },
+  { label: 'Download', href: '/download' },
 ];
 ---
 
 <header class="site-header" transition:name="main-header" transition:persist>
   <div class="container header-inner">
+    <!-- Brand Mark (Editorial Serif) -->
     <div class="logo-area">
-      <a href="/" class="brand-link">
-        <span class="logo-text">shae</span>
-        <span class="logo-dot"></span>
+      <a href="/" class="brand-link" aria-label="Shae Home">
+        <span class="logo-serif">shae</span>
+        <span class="logo-period">.</span>
       </a>
-      <span class="tagline-pill">no bullshit</span>
+      <span class="brand-badge">v0.4.0</span>
     </div>
 
-    <nav class="nav-links">
+    <!-- 5 Canonical Navigation Links -->
+    <nav class="nav-links" aria-label="Main Navigation">
       {navItems.map((item) => {
-        const isActive = cleanPath === item.href.replace(/\/$/, '') || (item.href !== '/' && cleanPath.startsWith(item.href));
+        const itemHrefClean = item.href.replace(/\/$/, '') || '/';
+        const isActive = itemHrefClean === '/' 
+          ? cleanPath === '/' 
+          : cleanPath === itemHrefClean || cleanPath.startsWith(itemHrefClean + '/');
         return (
           <a
             href={item.href}
             class:list={['nav-item', { active: isActive }]}
+            aria-current={isActive ? 'page' : undefined}
           >
             {item.label}
           </a>
@@ -35,29 +41,32 @@ const navItems = [
       })}
     </nav>
 
+    <!-- Right-Side Action Cluster -->
     <div class="header-actions">
-      <!-- Theme Switcher Selector -->
+      <!-- Theme Switcher: Light, Dark, Vantablack -->
       <div class="theme-select-wrapper">
-        <select id="theme-switcher" class="theme-select" title="Switch Theme">
-          <option value="light">🔴 Core (White/Red)</option>
-          <option value="oled">⚫ OLED Dark</option>
-          <option value="cyber">🟢 Phosphor Matrix</option>
-          <option value="amber">🟡 Solar Amber</option>
+        <select id="theme-switcher" class="theme-select" aria-label="Theme selector" title="Select Theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="vantablack">Vantablack</option>
         </select>
       </div>
 
-      <button id="toggle-audio-btn" class="util-btn" title="Toggle Mechanical Audio">
+      <!-- Subtle Mechanical Audio Toggle -->
+      <button id="toggle-audio-btn" class="util-btn" title="Toggle Mechanical Audio" aria-label="Toggle Audio">
         <span class="icon">🔊</span>
       </button>
 
+      <!-- GitHub Link with Release Badge -->
       <a
         href="https://github.com/spdedsec/shae"
         target="_blank"
         rel="noopener noreferrer"
         class="github-btn"
+        aria-label="Shae GitHub Repository"
       >
         <span>GitHub</span>
-        <span class="v-tag">v0.2</span>
+        <span class="v-tag">v0.4.0</span>
       </a>
     </div>
   </div>
@@ -68,18 +77,24 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--header-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-dim);
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    background: var(--header-bg, rgba(250, 250, 249, 0.88));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  @supports not (backdrop-filter: blur(16px)) {
+    .site-header {
+      background: var(--bg-surface);
+    }
   }
 
   .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
+    height: 64px;
     gap: 1.5rem;
   }
 
@@ -90,67 +105,74 @@ const navItems = [
   }
 
   .brand-link {
-    display: flex;
-    align-items: center;
+    display: inline-flex;
+    align-items: baseline;
     text-decoration: none;
-    font-size: 1.35rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: var(--text-main);
+    font-family: 'Times New Roman', Times, 'Nimbus Roman No9 L', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-main, #111111);
+    line-height: 1;
+    transition: opacity 0.15s ease;
   }
 
-  .logo-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    background: var(--accent-primary);
-    border-radius: 50%;
-    margin-left: 3px;
-    box-shadow: 0 0 10px var(--accent-primary-glow);
+  .brand-link:hover {
+    opacity: 0.85;
   }
 
-  .tagline-pill {
-    font-size: 0.7rem;
+  .logo-period {
+    color: var(--accent-primary, #8b0000);
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+  }
+
+  .brand-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
     font-weight: 600;
-    color: var(--text-muted);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-dim);
+    color: var(--text-muted, #555555);
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
     padding: 0.15rem 0.5rem;
-    border-radius: 9999px;
+    border-radius: 4px;
     letter-spacing: -0.01em;
   }
 
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
   }
 
   .nav-item {
-    font-size: 0.88rem;
-    color: var(--text-muted);
+    font-family: 'Times New Roman', Times, 'Nimbus Roman No9 L', serif;
+    font-size: 0.96rem;
+    color: var(--text-muted, #555555);
     text-decoration: none;
     padding: 0.4rem 0.85rem;
-    border-radius: 9999px;
+    border-radius: 4px;
     font-weight: 500;
-    transition: all 0.15s ease;
+    position: relative;
+    transition: color 0.18s ease, background-color 0.18s ease;
   }
 
   .nav-item:hover {
-    color: var(--text-main);
-    background: var(--bg-hover);
+    color: var(--text-main, #111111);
+    background: var(--bg-hover, rgba(0, 0, 0, 0.04));
   }
 
   .nav-item.active {
-    color: var(--accent-primary);
-    background: var(--accent-badge-bg);
-    font-weight: 600;
+    color: var(--text-main, #111111);
+    font-weight: 700;
+    background: var(--accent-badge-bg, rgba(139, 0, 0, 0.06));
+    box-shadow: inset 0 -2px 0 0 var(--accent-primary, #8b0000);
   }
 
   .header-actions {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.65rem;
   }
 
   .theme-select-wrapper {
@@ -160,28 +182,28 @@ const navItems = [
   .theme-select {
     appearance: none;
     -webkit-appearance: none;
-    background: var(--bg-surface);
-    color: var(--text-main);
-    border: 1px solid var(--border-dim);
-    border-radius: 9999px;
+    background: var(--bg-surface, #ffffff);
+    color: var(--text-main, #111111);
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+    border-radius: 4px;
     padding: 0.35rem 0.85rem;
-    font-size: 0.78rem;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 0.82rem;
     font-weight: 500;
     cursor: pointer;
     outline: none;
-    transition: all 0.15s ease;
+    transition: all 0.18s ease;
   }
 
   .theme-select:hover {
-    border-color: var(--border-bright);
-    background: var(--bg-hover);
+    border-color: var(--text-main, #111111);
   }
 
   .util-btn {
-    background: var(--bg-surface);
-    color: var(--text-muted);
-    border: 1px solid var(--border-dim);
-    border-radius: 9999px;
+    background: var(--bg-surface, #ffffff);
+    color: var(--text-muted, #555555);
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+    border-radius: 4px;
     width: 32px;
     height: 32px;
     display: inline-flex;
@@ -189,28 +211,28 @@ const navItems = [
     justify-content: center;
     cursor: pointer;
     font-size: 0.82rem;
-    transition: all 0.15s ease;
+    transition: all 0.18s ease;
   }
 
   .util-btn:hover {
-    color: var(--text-main);
-    border-color: var(--border-bright);
-    background: var(--bg-hover);
+    color: var(--text-main, #111111);
+    border-color: var(--text-main, #111111);
   }
 
   .github-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    background: var(--text-main);
-    color: var(--bg-base);
-    border: 1px solid var(--text-main);
-    padding: 0.35rem 0.9rem;
-    border-radius: 9999px;
-    font-size: 0.82rem;
+    gap: 0.45rem;
+    background: var(--text-main, #111111);
+    color: var(--bg-base, #ffffff);
+    border: 1px solid var(--text-main, #111111);
+    padding: 0.35rem 0.85rem;
+    border-radius: 4px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 0.85rem;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.15s ease;
+    transition: opacity 0.18s ease, transform 0.18s ease;
   }
 
   .github-btn:hover {
@@ -219,21 +241,46 @@ const navItems = [
   }
 
   .v-tag {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.68rem;
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
   @media (max-width: 860px) {
     .nav-links {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 0.2rem;
+    }
+    .nav-links::-webkit-scrollbar {
       display: none;
+    }
+    .nav-item {
+      padding: 0.35rem 0.55rem;
+      font-size: 0.88rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .brand-badge {
+      display: none;
+    }
+    .header-inner {
+      gap: 0.75rem;
     }
   }
 </style>
 
 <script>
   function setupNavigation() {
-    const themeSwitcher = document.getElementById('theme-switcher') as HTMLSelectElement;
-    const currentTheme = localStorage.getItem('shae-theme') || 'light';
+    // 1. Sync theme dropdown with currently applied theme
+    const themeSwitcher = document.getElementById('theme-switcher') as HTMLSelectElement | null;
+    let currentTheme = localStorage.getItem('shae-theme') || 
+      (document.documentElement.getAttribute('data-theme') || 'light');
+    if (currentTheme === 'oled') currentTheme = 'vantablack';
+    if (!['light', 'dark', 'vantablack'].includes(currentTheme)) currentTheme = 'light';
     
     if (themeSwitcher) {
       themeSwitcher.value = currentTheme;
@@ -244,6 +291,24 @@ const navItems = [
       };
     }
 
+    // 2. Synchronize active navigation link across client-side router navigation
+    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-links .nav-item');
+    navLinks.forEach((link) => {
+      const rawHref = link.getAttribute('href') || '/';
+      const hrefClean = rawHref.replace(/\/$/, '') || '/';
+      const isActive = hrefClean === '/'
+        ? currentPath === '/'
+        : currentPath === hrefClean || currentPath.startsWith(hrefClean + '/');
+      link.classList.toggle('active', isActive);
+      if (isActive) {
+        link.setAttribute('aria-current', 'page');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+
+    // 3. Audio toggle persistence
     const audioBtn = document.getElementById('toggle-audio-btn');
     if (audioBtn) {
       audioBtn.onclick = () => {
