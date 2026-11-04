@@ -907,6 +907,12 @@ const comparisons = [
             if (label) label.textContent = 'Copy Code';
             btn.style.borderColor = '';
           }, 2000);
+        }).catch((err) => {
+          console.warn('Clipboard copy denied or failed:', err);
+          if (label) label.textContent = 'Copy Failed';
+          setTimeout(() => {
+            if (label) label.textContent = 'Copy Code';
+          }, 2000);
         });
       };
     });
