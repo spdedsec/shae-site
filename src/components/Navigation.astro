@@ -11,23 +11,20 @@ const navItems = [
 ];
 ---
 
-<header class="site-header" transition:name="main-header" transition:persist>
+<header class="site-header">
   <div class="container header-inner">
-    <!-- Brand Mark (Editorial Serif) -->
     <div class="logo-area">
       <a href="/" class="brand-link" aria-label="Shae Home">
-        <span class="logo-serif">shae</span>
-        <span class="logo-period">.</span>
+        <span class="logo-word">shae</span><span class="logo-period">.</span>
       </a>
       <span class="brand-badge">v0.4.0</span>
     </div>
 
-    <!-- 5 Canonical Navigation Links -->
     <nav class="nav-links" aria-label="Main Navigation">
       {navItems.map((item) => {
         const itemHrefClean = item.href.replace(/\/$/, '') || '/';
-        const isActive = itemHrefClean === '/' 
-          ? cleanPath === '/' 
+        const isActive = itemHrefClean === '/'
+          ? cleanPath === '/'
           : cleanPath === itemHrefClean || cleanPath.startsWith(itemHrefClean + '/');
         return (
           <a
@@ -41,32 +38,37 @@ const navItems = [
       })}
     </nav>
 
-    <!-- Right-Side Action Cluster -->
     <div class="header-actions">
-      <!-- Theme Switcher: Light, Dark, Vantablack -->
-      <div class="theme-select-wrapper">
-        <select id="theme-switcher" class="theme-select" aria-label="Theme selector" title="Select Theme">
+      <label class="theme-select-wrapper">
+        <span class="util-label">Theme</span>
+        <select id="theme-switcher" class="theme-select" aria-label="Theme selector" title="Select theme">
           <option value="light">Light</option>
           <option value="dark">Dark</option>
           <option value="vantablack">Vantablack</option>
         </select>
-      </div>
+      </label>
 
-      <!-- Subtle Mechanical Audio Toggle -->
-      <button id="toggle-audio-btn" class="util-btn" title="Toggle Mechanical Audio" aria-label="Toggle Audio">
-        <span class="icon">🔊</span>
+      <button
+        id="toggle-audio-btn"
+        class="util-btn"
+        type="button"
+        title="Toggle interface audio"
+        aria-label="Sound"
+        aria-pressed="true"
+      >
+        <span class="audio-mark" aria-hidden="true"></span>
+        <span class="util-label">Sound</span>
       </button>
 
-      <!-- GitHub Link with Release Badge -->
       <a
         href="https://github.com/spdedsec/shae"
         target="_blank"
         rel="noopener noreferrer"
         class="github-btn"
-        aria-label="Shae GitHub Repository"
+        aria-label="Shae GitHub repository"
       >
         <span>GitHub</span>
-        <span class="v-tag">v0.4.0</span>
+        <span class="v-tag" aria-hidden="true">↗</span>
       </a>
     </div>
   </div>
@@ -77,211 +79,338 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--header-bg, rgba(250, 250, 249, 0.88));
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-    transition: background-color 0.25s ease, border-color 0.25s ease;
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
   }
 
-  @supports not (backdrop-filter: blur(16px)) {
+  /* One functional material layer: content scrolls beneath the toolbar. */
+  @supports (backdrop-filter: blur(1px)) {
     .site-header {
-      background: var(--bg-surface);
+      background: color-mix(in srgb, var(--header-bg) 84%, transparent);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
     }
   }
 
   .header-inner {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
-    height: 64px;
-    gap: 1.5rem;
+    min-height: 68px;
+    gap: 2rem;
   }
 
   .logo-area {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.7rem;
+    flex: none;
   }
 
   .brand-link {
     display: inline-flex;
     align-items: baseline;
     text-decoration: none;
-    font-family: 'Times New Roman', Times, 'Nimbus Roman No9 L', serif;
-    font-size: 1.55rem;
+    font-family: var(--font-display);
+    font-size: 1.42rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text-main, #111111);
+    letter-spacing: -0.055em;
+    color: var(--text-main);
     line-height: 1;
-    transition: opacity 0.15s ease;
   }
 
   .brand-link:hover {
-    opacity: 0.85;
+    color: var(--text-main);
   }
 
   .logo-period {
-    color: var(--accent-primary, #8b0000);
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: 700;
+    color: var(--accent-primary);
+    margin-left: 0.04em;
   }
 
   .brand-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: var(--text-muted, #555555);
-    background: var(--bg-surface, #ffffff);
-    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    letter-spacing: -0.01em;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 0.18rem 0.38rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
   }
 
   .nav-links {
     display: flex;
-    align-items: center;
-    gap: 0.35rem;
+    align-items: stretch;
+    gap: 0;
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
   }
 
   .nav-item {
-    font-family: 'Times New Roman', Times, 'Nimbus Roman No9 L', serif;
-    font-size: 0.96rem;
-    color: var(--text-muted, #555555);
-    text-decoration: none;
-    padding: 0.4rem 0.85rem;
-    border-radius: 4px;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
     position: relative;
-    transition: color 0.18s ease, background-color 0.18s ease;
+    font-family: var(--font-mono);
+    font-size: 0.67rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0 0.9rem;
+    transition: color var(--dur-fast) ease;
+  }
+
+  .nav-item::after {
+    content: "";
+    position: absolute;
+    left: 0.9rem;
+    right: 0.9rem;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent-primary);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform var(--dur-base) var(--ease-out);
   }
 
   .nav-item:hover {
-    color: var(--text-main, #111111);
-    background: var(--bg-hover, rgba(0, 0, 0, 0.04));
+    color: var(--text-main);
+    background: transparent;
   }
 
   .nav-item.active {
-    color: var(--text-main, #111111);
-    font-weight: 700;
-    background: var(--accent-badge-bg, rgba(139, 0, 0, 0.06));
-    box-shadow: inset 0 -2px 0 0 var(--accent-primary, #8b0000);
+    color: var(--text-main);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .nav-item.active::after,
+  .nav-item:hover::after {
+    transform: scaleX(1);
+    transform-origin: 0 50%;
   }
 
   .header-actions {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.5rem;
+    flex: none;
   }
 
   .theme-select-wrapper {
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--border-color);
+    padding: 0.28rem 0.5rem;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .theme-select-wrapper:hover {
+    border-color: var(--text-main);
+  }
+
+  .util-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 
   .theme-select {
     appearance: none;
     -webkit-appearance: none;
-    background: var(--bg-surface, #ffffff);
-    color: var(--text-main, #111111);
-    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
-    border-radius: 4px;
-    padding: 0.35rem 0.85rem;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 0.82rem;
+    background: transparent;
+    color: var(--text-main);
+    border: 0;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
     font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
     outline: none;
-    transition: all 0.18s ease;
   }
 
-  .theme-select:hover {
-    border-color: var(--text-main, #111111);
+  .theme-select option {
+    background: var(--bg-surface);
+    color: var(--text-main);
+    text-transform: none;
   }
 
   .util-btn {
-    background: var(--bg-surface, #ffffff);
-    color: var(--text-muted, #555555);
-    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
-    border-radius: 4px;
-    width: 32px;
-    height: 32px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 0.4rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 0.34rem 0.5rem;
     cursor: pointer;
-    font-size: 0.82rem;
-    transition: all 0.18s ease;
+    transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease, opacity var(--dur-fast) ease;
   }
 
   .util-btn:hover {
-    color: var(--text-main, #111111);
-    border-color: var(--text-main, #111111);
+    color: var(--text-main);
+    border-color: var(--text-main);
+  }
+
+  .util-btn:active,
+  .github-btn:active,
+  .theme-select-wrapper:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+  }
+
+  .util-btn[aria-pressed="false"] {
+    opacity: 0.45;
+  }
+
+  .audio-mark {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-primary);
+    display: inline-block;
+  }
+
+  .util-btn[aria-pressed="false"] .audio-mark {
+    background: var(--text-dim);
   }
 
   .github-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    background: var(--text-main, #111111);
-    color: var(--bg-base, #ffffff);
-    border: 1px solid var(--text-main, #111111);
-    padding: 0.35rem 0.85rem;
-    border-radius: 4px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 0.85rem;
-    font-weight: 600;
+    background: var(--text-main);
+    color: var(--bg-base);
+    border: 1px solid var(--text-main);
+    padding: 0.38rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     text-decoration: none;
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition: background-color var(--dur-fast) ease, border-color var(--dur-fast) ease;
   }
 
   .github-btn:hover {
-    opacity: 0.88;
-    transform: translateY(-1px);
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #ffffff;
+    transform: none;
   }
 
   .v-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    opacity: 0.8;
+    font-size: 0.7rem;
+    line-height: 1;
+    opacity: 0.7;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 1020px) {
     .nav-links {
+      justify-content: flex-start;
       overflow-x: auto;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      gap: 0.2rem;
+      -webkit-overflow-scrolling: touch;
     }
     .nav-links::-webkit-scrollbar {
       display: none;
     }
     .nav-item {
-      padding: 0.35rem 0.55rem;
-      font-size: 0.88rem;
+      padding: 0 0.6rem;
+      white-space: nowrap;
+    }
+    .theme-select-wrapper .util-label {
+      display: none;
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
+    .header-inner {
+      min-height: 58px;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      padding-block: 0.55rem;
+    }
+    .theme-select-wrapper,
+    .util-btn,
+    .github-btn {
+      min-height: 38px;
+    }
+    .nav-item {
+      min-height: 40px;
+    }
+    .nav-links {
+      order: 3;
+      flex: 1 0 100%;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      justify-content: flex-start;
+      border-top: 1px solid var(--border-dim);
+      padding-top: 0.4rem;
+      margin-top: 0.1rem;
+    }
+    .nav-item {
+      padding: 0.25rem 0.55rem 0.3rem;
+      font-size: 0.62rem;
+    }
+    .nav-item::after {
+      left: 0.55rem;
+      right: 0.55rem;
+    }
     .brand-badge {
       display: none;
     }
-    .header-inner {
-      gap: 0.75rem;
+    .github-btn {
+      padding: 0.38rem 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .site-header {
+      background: var(--header-bg);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .site-header {
+      background: var(--header-bg);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-bottom-color: var(--text-main);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .header-actions .github-btn span:first-child {
+      display: none;
+    }
+    .header-actions .github-btn::before {
+      content: "GitHub";
+      font-size: 0.6rem;
     }
   }
 </style>
 
 <script>
   function setupNavigation() {
-    // 1. Sync theme dropdown with currently applied theme
     const themeSwitcher = document.getElementById('theme-switcher') as HTMLSelectElement | null;
-    let currentTheme = localStorage.getItem('shae-theme') || 
+    let currentTheme = localStorage.getItem('shae-theme') ||
       (document.documentElement.getAttribute('data-theme') || 'light');
     if (currentTheme === 'oled') currentTheme = 'vantablack';
     if (!['light', 'dark', 'vantablack'].includes(currentTheme)) currentTheme = 'light';
-    
+
     if (themeSwitcher) {
       themeSwitcher.value = currentTheme;
       themeSwitcher.onchange = () => {
@@ -291,7 +420,6 @@ const navItems = [
       };
     }
 
-    // 2. Synchronize active navigation link across client-side router navigation
     const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
     const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-links .nav-item');
     navLinks.forEach((link) => {
@@ -308,17 +436,17 @@ const navItems = [
       }
     });
 
-    // 3. Audio toggle persistence
     const audioBtn = document.getElementById('toggle-audio-btn');
     if (audioBtn) {
+      const syncAudioState = () => {
+        const muted = localStorage.getItem('shae-audio-muted') === 'true';
+        audioBtn.setAttribute('aria-pressed', String(!muted));
+      };
+      syncAudioState();
       audioBtn.onclick = () => {
         window.dispatchEvent(new CustomEvent('toggle-audio'));
-        const muted = localStorage.getItem('shae-audio-muted') === 'true';
-        audioBtn.style.opacity = muted ? '0.4' : '1.0';
+        syncAudioState();
       };
-      if (localStorage.getItem('shae-audio-muted') === 'true') {
-        audioBtn.style.opacity = '0.4';
-      }
     }
   }
 

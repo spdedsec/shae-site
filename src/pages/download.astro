@@ -176,7 +176,7 @@ const installEnvVars = [
 
         <!-- Environment Variables Dropdown/Table -->
         <div class="env-options-area">
-          <h4 class="env-title">Installer Customization Options</h4>
+          <h3 class="env-title">Installer Customization Options</h3>
           <div class="env-table-wrapper">
             <table class="env-table">
               <thead>
@@ -271,7 +271,7 @@ const installEnvVars = [
         <div class="verify-steps-grid">
           <div class="step-card">
             <span class="step-num font-mono">01</span>
-            <h4>Download Asset &amp; Manifest</h4>
+            <h3>Download Asset &amp; Manifest</h3>
             <div class="terminal-window mini-term">
               <div class="terminal-body font-mono">
                 <div>curl -fsSLO https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-x86_64.tar.gz</div>
@@ -282,7 +282,7 @@ const installEnvVars = [
 
           <div class="step-card">
             <span class="step-num font-mono">02</span>
-            <h4>Verify Checksum Hash</h4>
+            <h3>Verify Checksum Hash</h3>
             <div class="terminal-window mini-term">
               <div class="terminal-body font-mono">
                 <div class="term-comment"># Linux (GNU coreutils)</div>
@@ -327,7 +327,7 @@ const installEnvVars = [
             <div class="vscode-feat-item">
               <span class="feat-icon">{f.icon}</span>
               <div>
-                <h4 class="feat-title">{f.title}</h4>
+                <h3 class="feat-title">{f.title}</h3>
                 <p class="feat-desc">{f.desc}</p>
               </div>
             </div>
@@ -336,7 +336,7 @@ const installEnvVars = [
 
         <!-- VS Code Configuration JSON -->
         <div class="settings-box">
-          <h4 class="settings-title">Extension Settings (settings.json)</h4>
+          <h3 class="settings-title">Extension Settings (settings.json)</h3>
           <div class="terminal-window mini-term">
             <div class="terminal-body font-mono">
               <div>&#123;</div>
@@ -366,7 +366,7 @@ const installEnvVars = [
         <div class="card step-row">
           <div class="step-meta">
             <span class="step-badge font-mono">Step 1</span>
-            <h4>Verify Version</h4>
+            <h3>Verify Version</h3>
           </div>
           <div class="step-code">
             <code class="font-mono">shae --version</code>
@@ -377,10 +377,10 @@ const installEnvVars = [
         <div class="card step-row">
           <div class="step-meta">
             <span class="step-badge font-mono">Step 2</span>
-            <h4>Run First Script</h4>
+            <h3>Run First Script</h3>
           </div>
           <div class="step-code">
-            <code class="font-mono">echo 'print("Hello from Shae silicon!")' > hello.shae &amp;&amp; shae run hello.shae</code>
+            <code class="font-mono">echo 'print("Hello from Shae silicon!")' &gt; hello.shae &amp;&amp; shae run hello.shae</code>
             <span class="step-expected">Output: <code>Hello from Shae silicon!</code></span>
           </div>
         </div>
@@ -388,7 +388,7 @@ const installEnvVars = [
         <div class="card step-row">
           <div class="step-meta">
             <span class="step-badge font-mono">Step 3</span>
-            <h4>Launch Interactive REPL</h4>
+            <h3>Launch Interactive REPL</h3>
           </div>
           <div class="step-code">
             <code class="font-mono">shae repl</code>
@@ -399,7 +399,7 @@ const installEnvVars = [
         <div class="card step-row">
           <div class="step-meta">
             <span class="step-badge font-mono">Step 4</span>
-            <h4>Run Microbenchmarks</h4>
+            <h3>Run Microbenchmarks</h3>
           </div>
           <div class="step-code">
             <code class="font-mono">shae bench</code>
@@ -743,7 +743,7 @@ const installEnvVars = [
     color: var(--accent-primary);
   }
 
-  .step-card h4 {
+  .step-card h3 {
     font-size: 1.1rem;
     color: var(--text-main);
   }
@@ -759,7 +759,7 @@ const installEnvVars = [
   }
 
   .term-comment {
-    color: #64748b;
+    color: #a9a294;
   }
 
   /* VS Code Card */
@@ -883,7 +883,7 @@ const installEnvVars = [
     color: var(--accent-primary);
   }
 
-  .step-meta h4 {
+  .step-meta h3 {
     font-size: 1.15rem;
     color: var(--text-main);
   }
@@ -1001,6 +1001,312 @@ const installEnvVars = [
       align-items: flex-start;
     }
   }
+  /* ============ FIELD MANUAL OVERRIDES ============ */
+  .page-header {
+    padding: 4rem 0 3rem;
+    background: var(--bg-base);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+
+  .header-title {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    letter-spacing: -0.045em;
+    line-height: 0.96;
+    margin: 1rem 0 1rem;
+  }
+
+  .header-subtitle {
+    font-size: 1.02rem;
+    max-width: 62ch;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .content-container {
+    padding: 4rem var(--gutter) 6rem;
+  }
+
+  .content-block {
+    margin-bottom: 5rem;
+  }
+
+  .block-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    letter-spacing: -0.04em;
+    margin: 0.6rem 0 0.5rem;
+  }
+
+  .block-desc {
+    font-size: 0.98rem;
+    max-width: 68ch;
+  }
+
+  .installer-card,
+  .vscode-card,
+  .verify-card,
+  .source-card,
+  .publication-card {
+    padding: 2rem;
+  }
+
+  .installer-card {
+    border-left: 3px solid var(--accent-primary);
+  }
+
+  .installer-badge-row {
+    margin-bottom: 1.1rem;
+  }
+
+  .card-heading {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing: -0.03em;
+  }
+
+  .card-desc {
+    font-size: 0.98rem;
+    max-width: 68ch;
+  }
+
+  .terminal-cmd-box {
+    border-radius: 0;
+    border-color: var(--border-bright);
+    padding: 0.9rem 1rem;
+  }
+
+  .cmd-prompt {
+    color: var(--accent-primary);
+  }
+
+  .cmd-text {
+    color: #ece7da;
+    font-size: 0.9rem;
+  }
+
+  .mirror-row code,
+  .install-prompt-area code,
+  .step-code code {
+    border-radius: 0;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 0.2rem 0.45rem;
+  }
+
+  .btn-xs {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.68rem;
+  }
+
+  .env-table th,
+  .matrix-table th {
+    background: transparent;
+    border-bottom: 1px solid var(--border-bright);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .env-table td,
+  .matrix-table td {
+    padding: 0.9rem;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 0.84rem;
+  }
+
+  .env-table code {
+    border-radius: 0;
+    background: transparent;
+    border-left: 2px solid var(--accent-primary);
+    padding: 0.1rem 0.35rem;
+  }
+
+  .recommended-row {
+    background: var(--accent-badge-bg);
+  }
+
+  .rec-badge {
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+
+  .arch-badge {
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+  }
+
+  .verify-steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    background: transparent;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+  }
+
+  .step-card {
+    background: var(--bg-card);
+    border: 0;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    padding: 1.35rem;
+    min-width: 0;
+  }
+
+  .step-card .mini-term,
+  .step-card .terminal-body {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .vscode-install-box {
+    border-radius: 0;
+    background: transparent;
+    border-width: 1px 0;
+  }
+
+  .vscode-features-grid {
+    gap: 1.5rem 2rem;
+  }
+
+  .feat-icon {
+    display: none;
+  }
+
+  .vscode-feat-item {
+    position: relative;
+    padding-left: 0.95rem;
+  }
+
+  .vscode-feat-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.42rem;
+    width: 5px;
+    height: 5px;
+    background: var(--accent-primary);
+  }
+
+  .feat-title {
+    font-size: 0.98rem;
+  }
+
+  .steps-container {
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .step-row {
+    padding: 1.35rem 0;
+    border-width: 0 0 1px;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .step-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .source-code-box {
+    border-radius: 0;
+    border-color: var(--border-bright);
+    color: #b9c9a8;
+  }
+
+  .publication-card {
+    background: var(--bg-code);
+    border: 0;
+  }
+
+  .pub-text h2 {
+    color: #f2eee5;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing: -0.035em;
+  }
+
+  .pub-text p {
+    color: rgba(242, 238, 229, 0.66);
+  }
+
+  .pub-specs {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ff8a6c;
+  }
+
+  .publication-card .badge,
+  .publication-card .badge-red {
+    color: #ff8a6c;
+    border-color: rgba(255, 138, 108, 0.45);
+  }
+
+  .publication-card .btn-primary {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+  }
+
+  .publication-card .btn-secondary {
+    color: #f2eee5;
+    border-color: rgba(242, 238, 229, 0.3);
+  }
+
+  @media (max-width: 900px) {
+    .verify-steps-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .content-container {
+      padding-top: 2.5rem;
+    }
+    .installer-card,
+    .vscode-card,
+    .verify-card,
+    .source-card,
+    .publication-card {
+      padding: 1.35rem;
+    }
+  }
+
+  .env-table-wrapper,
+  .matrix-card,
+  .terminal-cmd-inner,
+  .terminal-cmd-box {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .mirror-row {
+    overflow-x: auto;
+    min-width: 0;
+  }
+
+  .mirror-row code {
+    white-space: nowrap;
+    min-width: 0;
+  }
 </style>
 
 <script>
@@ -1018,7 +1324,7 @@ const installEnvVars = [
             btn.innerHTML = originalText;
             btn.classList.remove('copied');
           }, 2000);
-        } catch (_) {
+        } catch {
           // fallback
         }
       };

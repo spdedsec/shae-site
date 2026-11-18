@@ -277,12 +277,12 @@ const roadmapPhases = [
       </div>
 
       <!-- Suite Tabs Navigation -->
-      <div class="suite-tabs" role="tablist">
-        <button class="tab-btn active" data-target="all">All Suites</button>
-        <button class="tab-btn" data-target="fibonacci">Arithmetic &amp; Fibonacci</button>
-        <button class="tab-btn" data-target="buffer">Zero-Copy Memory</button>
-        <button class="tab-btn" data-target="actor">Actor Concurrency</button>
-        <button class="tab-btn" data-target="collections">Collections</button>
+      <div class="suite-tabs" role="group" aria-label="Filter benchmark suites">
+        <button class="tab-btn active" data-target="all" aria-pressed="true">All Suites</button>
+        <button class="tab-btn" data-target="fibonacci" aria-pressed="false">Arithmetic &amp; Fibonacci</button>
+        <button class="tab-btn" data-target="buffer" aria-pressed="false">Zero-Copy Memory</button>
+        <button class="tab-btn" data-target="actor" aria-pressed="false">Actor Concurrency</button>
+        <button class="tab-btn" data-target="collections" aria-pressed="false">Collections</button>
       </div>
 
       <!-- Benchmark Cards Grid -->
@@ -1078,6 +1078,355 @@ const roadmapPhases = [
       align-items: flex-start;
     }
   }
+  /* ============ FIELD MANUAL OVERRIDES ============ */
+  .page-header {
+    padding: 4rem 0 3rem;
+    background: var(--bg-base);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+
+  .header-title {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.96;
+    margin: 1rem 0 1rem;
+    max-width: 18ch;
+  }
+
+  .header-subtitle {
+    font-size: 1.02rem;
+    color: var(--text-muted);
+    max-width: 64ch;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .header-subtitle code {
+    background: transparent;
+    padding: 0 0.2rem;
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid var(--accent-primary);
+    color: var(--text-main);
+  }
+
+  .summary-section {
+    padding: 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    border-left: 1px solid var(--border-color);
+  }
+
+  .summary-card {
+    text-align: left;
+    padding: 1.5rem 1.4rem 1.7rem;
+    border: 0;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-surface);
+  }
+
+  .summary-value {
+    font-size: 2rem;
+    font-family: var(--font-display);
+    letter-spacing: -0.04em;
+    color: var(--text-main);
+    margin-bottom: 0.6rem;
+  }
+
+  .summary-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .summary-detail {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .content-container {
+    padding: 4rem var(--gutter) 6rem;
+  }
+
+  .content-block {
+    margin-bottom: 5rem;
+  }
+
+  .block-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    letter-spacing: -0.04em;
+    margin: 0.6rem 0 0.5rem;
+  }
+
+  .block-desc {
+    font-size: 0.98rem;
+    max-width: 68ch;
+  }
+
+  .terminal-showcase-card {
+    padding: 2rem;
+  }
+
+  .showcase-header .btn-sm {
+    align-self: flex-start;
+  }
+
+  .btn-sm {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .cli-flags-grid {
+    gap: 1.25rem 2rem;
+  }
+
+  .flag-item code {
+    border-radius: 0;
+    background: transparent;
+    border-left: 2px solid var(--accent-primary);
+    padding: 0.1rem 0.45rem;
+  }
+
+  .suite-tabs {
+    gap: 0;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+  }
+
+  .tab-btn.active {
+    background: transparent;
+    color: var(--text-main);
+    border-color: var(--accent-primary);
+  }
+
+  .suite-card {
+    padding: 1.75rem 0;
+    border-width: 1px 0 0;
+    background: transparent;
+  }
+
+  .suite-category {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+  }
+
+  .suite-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+  }
+
+  .suite-head > * {
+    min-width: 0;
+  }
+
+  .bench-table th {
+    background: transparent;
+    border-bottom: 1px solid var(--border-bright);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .bench-table td {
+    padding: 0.9rem 0.8rem;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 0.84rem;
+  }
+
+  .engine-badge {
+    border-radius: 0;
+    background: transparent;
+    font-size: 0.64rem;
+  }
+
+  .mini-bar-track,
+  .mini-bar-fill {
+    border-radius: 0;
+  }
+
+  .mini-bar-track {
+    height: 3px;
+  }
+
+  .suite-footer {
+    border-top: 1px solid var(--border-dim);
+  }
+
+  .comparisons-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+  }
+
+  .comparison-card {
+    padding: 1.75rem;
+    border-width: 0 1px 1px 0;
+  }
+
+  .card-top {
+    margin-bottom: 1.5rem;
+  }
+
+  .card-top h3 {
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+  }
+
+  .entry-track,
+  .entry-fill {
+    border-radius: 0;
+  }
+
+  .entry-track {
+    height: 6px;
+    border: 0;
+    background: var(--bg-card-subtle);
+  }
+
+  .roadmap-progress-card {
+    padding: 1.35rem 0;
+    border-width: 1px 0;
+  }
+
+  .progress-bar-track,
+  .progress-bar-fill {
+    border-radius: 0;
+  }
+
+  .progress-bar-track {
+    height: 4px;
+    border: 0;
+  }
+
+  .phase-card {
+    padding: 2rem;
+  }
+
+  .chunks-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    background: transparent;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+  }
+
+  @media (max-width: 1020px) {
+    .chunks-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
+    .chunks-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .chunk-item {
+    background: var(--bg-card);
+    border: 0;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    padding: 1.1rem;
+  }
+
+  .chunk-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .bottom-cta-section {
+    margin-top: 5rem;
+  }
+
+  .cta-card {
+    padding: 3rem;
+    background: var(--bg-code);
+    border: 0;
+  }
+
+  .cta-text h2,
+  .cta-text p {
+    color: #f2eee5;
+  }
+
+  .cta-text p {
+    opacity: 0.66;
+  }
+
+  .cta-card .btn-secondary {
+    color: #f2eee5;
+    border-color: rgba(242, 238, 229, 0.3);
+  }
+
+  @media (max-width: 1000px) {
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .comparisons-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+    .content-container {
+      padding-top: 2.5rem;
+    }
+    .terminal-showcase-card,
+    .phase-card {
+      padding: 1.25rem;
+    }
+    .cta-card {
+      padding: 1.75rem;
+    }
+  }
+
+  .table-responsive,
+  .suites-container,
+  .content-container {
+    min-width: 0;
+    max-width: 100%;
+  }
 </style>
 
 <script>
@@ -1087,8 +1436,12 @@ const roadmapPhases = [
 
     tabs.forEach((tab) => {
       tab.onclick = () => {
-        tabs.forEach((t) => t.classList.remove('active'));
+        tabs.forEach((t) => {
+          t.classList.remove('active');
+          t.setAttribute('aria-pressed', 'false');
+        });
         tab.classList.add('active');
+        tab.setAttribute('aria-pressed', 'true');
 
         const target = tab.getAttribute('data-target');
         cards.forEach((card) => {

@@ -1208,11 +1208,11 @@ fn main() {
 
       <!-- Filter & Search Controls -->
       <div class="matrix-controls-bar animate-fade-up delay-100">
-        <div class="category-tabs" role="tablist">
-          <button class="cat-tab-btn active" data-filter="all">All Chunks (31)</button>
-          <button class="cat-tab-btn" data-filter="foundation">Core Foundation (1–10)</button>
-          <button class="cat-tab-btn" data-filter="tooling">Tooling &amp; Frontend (11–20)</button>
-          <button class="cat-tab-btn" data-filter="enterprise">Enterprise &amp; Native SSA (21–31)</button>
+        <div class="category-tabs" role="group" aria-label="Filter chunks by category">
+          <button class="cat-tab-btn active" data-filter="all" aria-pressed="true">All Chunks (31)</button>
+          <button class="cat-tab-btn" data-filter="foundation" aria-pressed="false">Core Foundation (1–10)</button>
+          <button class="cat-tab-btn" data-filter="tooling" aria-pressed="false">Tooling &amp; Frontend (11–20)</button>
+          <button class="cat-tab-btn" data-filter="enterprise" aria-pressed="false">Enterprise &amp; Native SSA (21–31)</button>
         </div>
 
         <div class="search-box-wrapper">
@@ -1922,6 +1922,425 @@ fn main() {
       padding: 1.5rem;
     }
   }
+  /* ============ FIELD MANUAL OVERRIDES ============ */
+  .features-hero {
+    padding: 4rem 0 2.5rem;
+    background: transparent;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .hero-container {
+    max-width: 1280px;
+    text-align: left;
+  }
+
+  .hero-badge-row {
+    justify-content: flex-start;
+    margin-bottom: 1.1rem;
+  }
+
+  .dot {
+    border-radius: 0;
+    width: 5px;
+    height: 5px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    margin-bottom: 1rem;
+    max-width: 18ch;
+  }
+
+  .hero-subtitle {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    margin: 0 0 2rem;
+    max-width: 64ch;
+  }
+
+  .anchor-jump-bar {
+    justify-content: flex-start;
+    gap: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .jump-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding-right: 0.75rem;
+  }
+
+  .jump-pill {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.75rem 0.85rem;
+    border-radius: 0;
+    color: var(--text-muted);
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .jump-pill:hover {
+    color: var(--text-main);
+    background: transparent;
+    border-color: var(--accent-primary);
+  }
+
+  .highlight-pill {
+    color: var(--accent-primary);
+    background: transparent;
+    border-color: transparent;
+  }
+
+  .section-block {
+    padding: 4.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+    counter-increment: feature;
+  }
+
+  .section-head {
+    margin-bottom: 2.25rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border-color);
+    position: relative;
+  }
+
+  .section-head::before {
+    content: "0" counter(feature) " / Specification";
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.85rem;
+  }
+
+  .section-head h2 {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    letter-spacing: -0.04em;
+    line-height: 0.99;
+    margin: 0.4rem 0 0.55rem;
+    max-width: 22ch;
+  }
+
+  .section-head p {
+    font-size: 0.98rem;
+    max-width: 68ch;
+    line-height: 1.65;
+  }
+
+  .topology-terminal {
+    box-shadow: none;
+  }
+
+  .deep-dive-card {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0;
+  }
+
+  .deep-dive-header {
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .deep-dive-header h2 {
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    letter-spacing: -0.035em;
+  }
+
+  .deep-dive-lead {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .deep-dive-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2rem;
+  }
+
+  .deep-dive-grid > * {
+    min-width: 0;
+  }
+
+  .deep-dive-code {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .deep-dive-code .terminal-body,
+  .deep-dive-code pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .deep-dive-text h3 {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin: 1.4rem 0 0.5rem;
+  }
+
+  .module-bullet-list li {
+    font-size: 0.84rem;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .cli-box {
+    background: var(--bg-code);
+    border: 1px solid var(--border-bright);
+    border-radius: 0;
+    padding: 1rem 1.15rem;
+  }
+
+  .cli-box .cli-title {
+    color: rgba(236, 231, 218, 0.5);
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+
+  .cli-box .cli-cmd {
+    color: #ece7da;
+  }
+
+  .cli-box .cli-desc {
+    color: rgba(236, 231, 218, 0.55);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+  }
+
+  .spec-table-card {
+    border-radius: 0;
+    margin-top: 1.15rem;
+  }
+
+  .spec-table th,
+  .spec-table td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 0.8rem;
+  }
+
+  .spec-table th {
+    background: transparent;
+    border-bottom-color: var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .parity-matrix-grid {
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+  }
+
+  .parity-card {
+    border-width: 0 1px 1px 0;
+    border-radius: 0;
+    padding: 1.6rem;
+  }
+
+  .parity-title-row h3 {
+    font-size: 1.3rem;
+    letter-spacing: -0.03em;
+  }
+
+  .parity-feature-list li {
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .matrix-controls-bar {
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+  }
+
+  .category-tabs {
+    gap: 0;
+  }
+
+  .cat-tab-btn {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.55rem 0.7rem;
+    border-radius: 0;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+  }
+
+  .cat-tab-btn.active {
+    background: transparent;
+    color: var(--text-main);
+    border-color: var(--accent-primary);
+  }
+
+  .chunk-search-input {
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    background: transparent;
+    padding: 0.55rem 0.75rem;
+  }
+
+  .search-counter {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .chunks-accordion-list {
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .chunk-card {
+    border-width: 0 0 1px;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .chunk-summary {
+    background: transparent;
+    padding: 1rem 0.25rem;
+  }
+
+  .chunk-summary:hover {
+    background: transparent;
+  }
+
+  .chunk-number-badge {
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    border: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    min-width: 2.2rem;
+  }
+
+  .chunk-name {
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .chunk-cat-badge {
+    border-radius: 0;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .chunk-body {
+    background: transparent;
+    padding: 1.25rem 0.25rem 1.5rem;
+  }
+
+  .files-label,
+  .highlights-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+  }
+
+  .file-tag {
+    border-radius: 0;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+  }
+
+  .chunk-code-block,
+  .chunk-cli-block {
+    border-radius: 0;
+    border-color: var(--border-bright);
+  }
+
+  .chunk-code-block .code-title,
+  .chunk-cli-block .cli-title {
+    background: transparent;
+    border-bottom: 1px solid rgba(236, 231, 218, 0.12);
+    color: rgba(236, 231, 218, 0.5);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem;
+  }
+
+  .cta-section {
+    padding: 5rem 0 6rem;
+  }
+
+  .cta-card {
+    padding: 3rem;
+    max-width: none;
+    margin: 0;
+    background: var(--bg-code);
+    border: 0;
+    text-align: left;
+  }
+
+  .cta-card h2 {
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    letter-spacing: -0.04em;
+    color: #f2eee5;
+  }
+
+  .cta-card p {
+    color: rgba(242, 238, 229, 0.66);
+    font-size: 1rem;
+    max-width: 60ch;
+  }
+
+  .cta-actions {
+    justify-content: flex-start;
+  }
+
+  .cta-card .btn-secondary {
+    color: #f2eee5;
+    border-color: rgba(242, 238, 229, 0.3);
+  }
+
+  @media (max-width: 760px) {
+    .features-hero {
+      padding-top: 3rem;
+    }
+    .deep-dive-card {
+      padding: 1.35rem;
+    }
+    .cta-card {
+      padding: 1.75rem;
+    }
+  }
+
 </style>
 
 <script>
@@ -1961,8 +2380,12 @@ fn main() {
     // Category tab switching
     tabButtons.forEach((btn) => {
       btn.onclick = () => {
-        tabButtons.forEach((b) => b.classList.remove('active'));
+        tabButtons.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
         currentCategory = btn.getAttribute('data-filter') || 'all';
         filterChunks();
       };
