@@ -171,36 +171,54 @@ const comparisons = [
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container hero-container">
-      <div class="hero-badge-row animate-fade-up">
-        <span class="badge badge-red">
-          <span class="pulse-indicator"></span> v0.4.0 Release
-        </span>
-        <span class="badge">290+ Tests Passing</span>
-        <span class="badge">Dual-Engine Parity</span>
-        <span class="badge">Pure-Shae Self-Hosting</span>
-      </div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow animate-fade-up">Systems scripting language / v0.4.0</span>
 
-      <h1 class="hero-title animate-fade-up delay-100">
-        A Modern Systems Scripting Language.<br />
-        <span class="hero-serif-italic">Strict, Expressive, and Fast as Silicon.</span>
-      </h1>
+          <h1 class="hero-title animate-fade-up delay-100">
+            A modern systems scripting language.<br />
+            <span class="hero-accent">Strict, expressive, fast as silicon.</span>
+          </h1>
 
-      <p class="hero-subtitle animate-fade-up delay-200">
-        Built from first principles with zero external dependencies. Dual-engine runtime featuring a stack bytecode VM, 
-        Cranelift JIT compilation, direct LLVM 18 SSA generation, zero-copy memory buffers, and fault-tolerant actor mesh.
-      </p>
+          <p class="hero-subtitle animate-fade-up delay-200">
+            Built from first principles with zero external dependencies. A dual-engine runtime with a stack
+            bytecode VM, Cranelift JIT compilation, direct LLVM 18 SSA generation, zero-copy memory buffers,
+            and a fault-tolerant actor mesh.
+          </p>
 
-      <div class="hero-actions animate-fade-up delay-300">
-        <a href="/download" class="btn btn-primary">
-          <span>Get Started</span>
-          <span class="arrow-glyph">→</span>
-        </a>
-        <a href="/docs" class="btn btn-secondary">
-          <span>Documentation &amp; 42-Page Guide</span>
-        </a>
-        <a href="/features" class="btn btn-secondary">
-          <span>Explore Architecture (Chunks 1–31)</span>
-        </a>
+          <div class="hero-actions animate-fade-up delay-300">
+            <a href="/download" class="btn btn-primary">
+              <span>Get started</span>
+              <span class="arrow-glyph">→</span>
+            </a>
+            <a href="/docs" class="btn btn-secondary">
+              <span>Documentation &amp; 42-page guide</span>
+            </a>
+            <a href="/features" class="hero-text-link">
+              <span>Explore the architecture</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <aside class="hero-dossier animate-fade-up delay-300" aria-label="Release specification">
+          <div class="dossier-head">
+            <span>Release dossier</span>
+            <span>SHAE / 04</span>
+          </div>
+          <dl class="dossier-list">
+            <div><dt>Version</dt><dd>0.4.0</dd></div>
+            <div><dt>Runtime</dt><dd>Bytecode VM + AST</dd></div>
+            <div><dt>Native</dt><dd>Cranelift / LLVM 18</dd></div>
+            <div><dt>Tests</dt><dd>290+ passing</dd></div>
+            <div><dt>Chunks</dt><dd>1—31</dd></div>
+            <div><dt>License</dt><dd>MIT</dd></div>
+          </dl>
+          <a class="dossier-link" href="/download">
+            <span>Install the binary</span>
+            <span aria-hidden="true">↓</span>
+          </a>
+        </aside>
       </div>
 
       <!-- Quickstart Terminal Card -->
@@ -238,8 +256,11 @@ const comparisons = [
   <section class="showcase-section">
     <div class="container">
       <div class="section-intro">
-        <span class="badge badge-red">Interactive Showcase</span>
-        <h2 class="section-heading">Systems Capabilities in Modern Syntax</h2>
+        <div class="section-kicker">
+          <span class="index-mark">01 / Capabilities</span>
+          <span class="kicker-rule" aria-hidden="true"></span>
+        </div>
+        <h2 class="section-heading">Systems capabilities in modern syntax</h2>
         <p class="section-desc">
           Explore Shae's native features across JIT compilation, actor hot-reloading, zero-copy buffers, encrypted clusters, and coroutines.
         </p>
@@ -274,14 +295,13 @@ const comparisons = [
             >
               <div class="panel-meta-bar">
                 <div class="meta-left">
-                  <span class="file-glyph">📄</span>
                   <span class="file-name">{item.filename}</span>
                   <span class="panel-desc">{item.description}</span>
                 </div>
                 <button
                   class="panel-copy-btn"
                   data-snippet={item.code}
-                  aria-label={`Copy ${item.filename} code`}
+                  aria-label={`Copy code for ${item.filename}`}
                 >
                   <span class="copy-icon">📋</span>
                   <span class="panel-copy-label">Copy Code</span>
@@ -301,16 +321,20 @@ const comparisons = [
   <section class="metrics-section">
     <div class="container">
       <div class="metrics-header">
-        <span class="badge">Silicon Benchmarks</span>
-        <h2 class="section-heading">Architectural Metrics &amp; Performance Telemetry</h2>
+        <div class="section-kicker">
+          <span class="index-mark">02 / Telemetry</span>
+          <span class="kicker-rule" aria-hidden="true"></span>
+        </div>
+        <h2 class="section-heading">Architectural metrics &amp; performance telemetry</h2>
         <p class="section-desc">
           Measured with <code>shae bench</code> on release builds. Zero startup overhead, minimal memory consumption, and wire-speed throughput.
         </p>
       </div>
 
       <div class="metrics-grid">
-        {architecturalMetrics.map((m) => (
-          <div class="metric-card card glass-card">
+        {architecturalMetrics.map((m, idx) => (
+          <div class="metric-cell">
+            <span class="metric-index">{String(idx + 1).padStart(2, '0')}</span>
             <div class="metric-value">{m.value}</div>
             <div class="metric-label">{m.label}</div>
             <div class="metric-note">{m.note}</div>
@@ -330,23 +354,27 @@ const comparisons = [
   <section class="editorial-reality-section">
     <div class="container">
       <div class="section-intro">
-        <span class="badge badge-red">Engineering Philosophy</span>
-        <h2 class="section-heading">The Editorial Reality: Why Shae?</h2>
+        <div class="section-kicker">
+          <span class="index-mark">03 / Position</span>
+          <span class="kicker-rule" aria-hidden="true"></span>
+        </div>
+        <h2 class="section-heading">Why Shae?</h2>
         <p class="section-desc">
           Modern systems engineering has accumulated friction. Shae is engineered to restore balance between expressive ergonomics and machine reality.
         </p>
       </div>
 
       <div class="comparison-grid">
-        {comparisons.map((c) => (
-          <div class="compare-card card">
+        {comparisons.map((c, idx) => (
+          <div class="compare-card">
             <div class="compare-head">
+              <span class="compare-index">{String(idx + 1).padStart(2, '0')}</span>
               <h3 class="compare-title">{c.lang}</h3>
               <span class="verdict-tag">{c.verdict}</span>
             </div>
             <p class="compare-flaw">{c.flaw}</p>
             <div class="compare-advantage">
-              <div class="adv-label">The Shae Advantage:</div>
+              <div class="adv-label">The Shae advantage</div>
               <p class="adv-text">{c.shaeAdvantage}</p>
             </div>
           </div>
@@ -354,18 +382,19 @@ const comparisons = [
       </div>
 
       <!-- Feature Deep Dive Link Banner -->
-      <div class="deepdive-banner card glass-card">
+      <div class="deepdive-banner">
+        <span class="deepdive-mark" aria-hidden="true">04</span>
         <div class="deepdive-content">
-          <span class="badge badge-red">Chunks 1–31 Verified</span>
-          <h3 class="deepdive-title">Explore the Complete Engineering Pipeline</h3>
+          <span class="index-mark">Chunks 1–31 verified</span>
+          <h3 class="deepdive-title">Explore the complete engineering pipeline</h3>
           <p class="deepdive-text">
-            From the Pratt parser and AST evaluator to the Cranelift JIT, zero-copy <code>std:buffer</code>, 
+            From the Pratt parser and AST evaluator to the Cranelift JIT, zero-copy <code>std:buffer</code>,
             Rustls TLS cluster mesh, and pure-Shae self-hosting compiler suite.
           </p>
         </div>
         <div class="deepdive-actions">
-          <a href="/features" class="btn btn-primary">Features &amp; Architecture →</a>
-          <a href="/docs" class="btn btn-secondary">Read 42-Page Publication Guide</a>
+          <a href="/features" class="btn btn-primary">Features &amp; architecture →</a>
+          <a href="/docs" class="btn btn-secondary">Read the 42-page guide</a>
         </div>
       </div>
     </div>
@@ -373,84 +402,170 @@ const comparisons = [
 </Layout>
 
 <style>
-  /* Hero Section Styling */
+  /* ================= HERO ================= */
   .hero-section {
-    padding: 5rem 0 3.5rem;
+    padding: 4.5rem 0 3.5rem;
     position: relative;
-    text-align: center;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .hero-container {
-    max-width: 960px;
-    margin: 0 auto;
+    max-width: 1280px;
   }
 
-  .hero-badge-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: end;
   }
 
-  .pulse-indicator {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent-primary, #8b0000);
-    display: inline-block;
+  .hero-copy {
+    min-width: 0;
   }
 
   .hero-title {
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
-    line-height: 1.15;
+    font-size: clamp(2.55rem, 5.3vw, 4.55rem);
+    line-height: 0.96;
     font-weight: 700;
     color: var(--text-main);
-    letter-spacing: -0.025em;
-    margin-bottom: 1.35rem;
+    letter-spacing: -0.045em;
+    margin: 1rem 0 1.5rem;
   }
 
-  .hero-serif-italic {
-    font-style: italic;
-    font-weight: 400;
-    color: var(--text-main);
+  .hero-accent {
+    color: var(--text-muted);
+    font-weight: 500;
   }
 
   .hero-subtitle {
-    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    font-size: clamp(1.02rem, 1.5vw, 1.14rem);
     line-height: 1.65;
     color: var(--text-muted);
-    max-width: 780px;
-    margin: 0 auto 2.25rem;
+    max-width: 58ch;
+    margin: 0 0 2rem;
   }
 
   .hero-actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
-    margin-bottom: 2.75rem;
+    margin-bottom: 0;
+  }
+
+  .hero-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-main);
+    text-decoration: none;
+    padding: 0.5rem 0.25rem;
+    border-bottom: 1px solid var(--border-bright);
+    transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+  }
+
+  .hero-text-link:hover {
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
   }
 
   .arrow-glyph {
-    transition: transform 0.2s ease;
+    transition: transform 0.2s var(--ease-out);
   }
 
   .btn-primary:hover .arrow-glyph {
     transform: translateX(3px);
   }
 
-  /* Quickstart Terminal Card */
+  /* Release dossier */
+  .hero-dossier {
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    align-self: end;
+  }
+
+  .dossier-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .dossier-head span:first-child {
+    color: var(--accent-primary);
+  }
+
+  .dossier-list {
+    margin: 0;
+  }
+
+  .dossier-list > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .dossier-list dt {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .dossier-list dd {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-main);
+    text-align: right;
+  }
+
+  .dossier-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0.9rem;
+    background: var(--text-main);
+    color: var(--bg-base);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+  }
+
+  .dossier-link:hover {
+    background: var(--accent-primary);
+    color: #ffffff;
+  }
+
+  /* Quickstart terminal */
   .quickstart-wrapper {
-    max-width: 760px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 3rem 0 0;
     text-align: left;
   }
 
   .quickstart-body {
-    padding: 1.25rem 1.5rem;
+    padding: 1.15rem 1.35rem;
   }
 
   .command-row {
@@ -458,12 +573,12 @@ const comparisons = [
     align-items: center;
     gap: 0.75rem;
     font-family: var(--font-mono);
-    font-size: 0.95rem;
-    color: #f1f5f9;
+    font-size: 0.9rem;
+    color: #ece7da;
   }
 
   .prompt-symbol {
-    color: var(--accent-primary, #f43f5e);
+    color: var(--accent-primary);
     font-weight: 700;
     user-select: none;
   }
@@ -476,85 +591,115 @@ const comparisons = [
   }
 
   .copy-terminal-btn {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #f1f5f9;
+    background: transparent;
+    border: 1px solid rgba(236, 231, 218, 0.28);
+    color: #ece7da;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.35rem 0.75rem;
-    border-radius: 4px;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background-color var(--dur-fast) ease, border-color var(--dur-fast) ease;
     flex-shrink: 0;
   }
 
   .copy-terminal-btn:hover {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(236, 231, 218, 0.1);
+    border-color: rgba(236, 231, 218, 0.6);
   }
 
   .terminal-feedback {
-    margin-top: 0.75rem;
+    margin-top: 0.85rem;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-family: var(--font-mono);
-    opacity: 0.7;
   }
 
   .comment-line {
-    color: #94a3b8;
+    color: #c4bdaf;
   }
 
   .exec-line {
-    color: #e2e8f0;
+    color: #ece7da;
     margin-top: 0.25rem;
   }
 
   .terminal-tag {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #b8b1a2;
   }
 
-  /* Interactive Code Showcase */
-  .showcase-section {
-    padding: 4.5rem 0 3.5rem;
+  /* ================= SHARED SECTION HEAD ================= */
+  .section-intro,
+  .metrics-header {
+    text-align: left;
+    max-width: 860px;
+    margin: 0 0 2.5rem;
   }
 
-  .section-intro {
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto 2.5rem;
+  .section-kicker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .kicker-rule {
+    height: 1px;
+    background: var(--border-color);
+    flex: 1;
+    max-width: 140px;
+  }
+
+  .index-mark {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    white-space: nowrap;
   }
 
   .section-heading {
-    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-size: clamp(2rem, 3.6vw, 3.15rem);
     font-weight: 700;
-    margin: 0.75rem 0 0.5rem;
-    letter-spacing: -0.02em;
+    margin: 0 0 0.8rem;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
   }
 
   .section-desc {
     color: var(--text-muted);
-    font-size: 1.05rem;
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+
+  /* ================= CODE SHOWCASE ================= */
+  .showcase-section {
+    padding: 4.5rem 0;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .code-showcase-window {
-    background: var(--bg-code, #18181b);
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
-    border-radius: var(--card-radius, 8px);
+    background: var(--bg-code);
+    border: 1px solid var(--border-bright);
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    box-shadow: none;
   }
 
   .showcase-nav {
     display: flex;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    border-bottom: 1px solid rgba(236, 231, 218, 0.16);
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -566,38 +711,43 @@ const comparisons = [
   .showcase-tab {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.85rem 1.35rem;
+    gap: 0.6rem;
+    padding: 0.85rem 1.2rem;
     background: transparent;
     border: none;
     border-bottom: 2px solid transparent;
-    color: rgba(255, 255, 255, 0.6);
-    font-family: var(--font-serif);
-    font-size: 0.92rem;
-    font-weight: 600;
+    color: rgba(236, 231, 218, 0.52);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.18s ease;
+    transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
   }
 
   .showcase-tab:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.04);
+    color: #ece7da;
+    background: transparent;
   }
 
   .showcase-tab.active {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.07);
-    border-bottom-color: var(--accent-primary, #f43f5e);
+    color: #ece7da;
+    background: transparent;
+    border-bottom-color: var(--accent-primary);
   }
 
   .tab-badge {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.8);
-    padding: 0.15rem 0.45rem;
-    border-radius: 3px;
+    font-size: 0.56rem;
+    letter-spacing: 0.04em;
+    background: transparent;
+    color: rgba(236, 231, 218, 0.62);
+    border: 1px solid rgba(236, 231, 218, 0.18);
+    padding: 0.12rem 0.35rem;
+    border-radius: 0;
+    text-transform: none;
   }
 
   .code-panel {
@@ -612,9 +762,9 @@ const comparisons = [
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0.7rem 1.35rem;
+    background: transparent;
+    border-bottom: 1px solid rgba(236, 231, 218, 0.1);
     flex-wrap: wrap;
     gap: 0.75rem;
   }
@@ -626,40 +776,52 @@ const comparisons = [
     flex-wrap: wrap;
   }
 
+  .file-glyph {
+    display: none;
+  }
+
   .file-name {
     font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: #38bdf8;
-    font-weight: 600;
+    font-size: 0.7rem;
+    color: #ff8a6c;
+    letter-spacing: 0.02em;
   }
 
   .panel-desc {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.78rem;
+    color: rgba(236, 231, 218, 0.5);
+    max-width: 70ch;
   }
 
   .panel-copy-btn {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.85);
-    font-family: var(--font-serif);
-    font-size: 0.8rem;
-    padding: 0.3rem 0.75rem;
-    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba(236, 231, 218, 0.22);
+    color: rgba(236, 231, 218, 0.8);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease;
   }
 
   .panel-copy-btn:hover {
-    background: rgba(255, 255, 255, 0.16);
-    color: #ffffff;
+    background: transparent;
+    border-color: rgba(236, 231, 218, 0.7);
+    color: #ece7da;
+  }
+
+  .copy-icon {
+    display: none;
   }
 
   .editor-viewport {
-    padding: 1.5rem;
+    padding: 1.35rem;
     overflow-x: auto;
   }
 
@@ -669,168 +831,263 @@ const comparisons = [
 
   .editor-viewport code {
     font-family: var(--font-mono);
-    font-size: 0.88rem;
-    line-height: 1.65;
-    color: #f8fafc;
+    font-size: 0.8rem;
+    line-height: 1.72;
+    color: #e8e3d6;
   }
 
-  /* Metrics Section */
+  /* ================= METRICS ================= */
   .metrics-section {
-    padding: 4rem 0;
-    border-top: 1px solid var(--border-color);
+    padding: 4.5rem 0;
+    border-top: 0;
     border-bottom: 1px solid var(--border-color);
     background: var(--bg-surface);
   }
 
-  .metrics-header {
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto 2.5rem;
-  }
-
   .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
   }
 
-  .metric-card {
-    padding: 1.5rem;
-    text-align: center;
+  .metric-cell {
+    padding: 1.35rem 1.5rem 1.6rem;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background: transparent;
+    text-align: left;
+  }
+
+  .metric-index {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
   }
 
   .metric-value {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 2.4rem;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3vw, 2.9rem);
     font-weight: 700;
-    color: var(--accent-primary, #8b0000);
-    line-height: 1.1;
-    margin-bottom: 0.35rem;
+    color: var(--text-main);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.55rem;
   }
 
   .metric-label {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
   }
 
   .metric-note {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
-    line-height: 1.45;
+    line-height: 1.5;
   }
 
   .metrics-cta-row {
-    text-align: center;
-    margin-top: 1rem;
+    text-align: left;
+    margin-top: 1.25rem;
   }
 
-  /* Editorial Reality Section */
+  /* ================= POSITION ================= */
   .editorial-reality-section {
-    padding: 4.5rem 0 5.5rem;
+    padding: 5rem 0 5.5rem;
   }
 
   .comparison-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-bottom: 0;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
   }
 
   .compare-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    padding: 1.85rem;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background: transparent;
   }
 
   .compare-head {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: baseline;
-    gap: 0.5rem;
-    margin-bottom: 0.85rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .compare-index {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--accent-primary);
   }
 
   .compare-title {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--text-main);
+    letter-spacing: -0.03em;
   }
 
   .verdict-tag {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--accent-primary);
-    background: var(--accent-badge-bg);
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    font-weight: 600;
+    font-size: 0.56rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: transparent;
+    padding: 0.15rem 0;
+    border-radius: 0;
+    text-align: right;
   }
 
   .compare-flaw {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
-    line-height: 1.55;
-    margin-bottom: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 1.35rem;
   }
 
   .compare-advantage {
-    border-top: 1px solid var(--border-color);
-    padding-top: 0.85rem;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 0.9rem;
+    margin-top: auto;
   }
 
   .adv-label {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-size: 0.6rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-dim);
-    margin-bottom: 0.25rem;
+    letter-spacing: 0.11em;
+    color: var(--accent-primary);
+    margin-bottom: 0.35rem;
   }
 
   .adv-text {
-    font-size: 0.88rem;
+    font-size: 0.87rem;
     color: var(--text-main);
-    line-height: 1.5;
+    line-height: 1.55;
   }
 
-  /* Deep Dive Banner */
+  /* ================= DEEP DIVE ================= */
   .deepdive-banner {
+    position: relative;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 2.25rem;
-    gap: 2rem;
+    align-items: flex-end;
+    padding: 2.75rem;
+    gap: 2.5rem;
     flex-wrap: wrap;
+    background: var(--bg-code);
+    color: #f2eee5;
+    border: 0;
+    border-radius: 0;
+    margin-top: 3rem;
+    overflow: hidden;
   }
 
   .deepdive-content {
-    max-width: 600px;
+    max-width: 60ch;
+    position: relative;
+    z-index: 1;
+  }
+
+  .deepdive-content .index-mark {
+    color: #ff8a6c;
   }
 
   .deepdive-title {
-    font-size: 1.6rem;
+    font-size: clamp(1.6rem, 2.6vw, 2.15rem);
     font-weight: 700;
-    margin: 0.6rem 0 0.4rem;
+    margin: 0.7rem 0 0.55rem;
+    color: #f2eee5;
+    letter-spacing: -0.035em;
   }
 
   .deepdive-text {
-    color: var(--text-muted);
-    font-size: 0.96rem;
-    line-height: 1.55;
+    color: rgba(242, 238, 229, 0.66);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .deepdive-text code {
+    color: #f2eee5;
+  }
+
+  .deepdive-mark {
+    position: absolute;
+    top: -1.5rem;
+    right: 1rem;
+    font-family: var(--font-display);
+    font-size: 9rem;
+    font-weight: 700;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(242, 238, 229, 0.14);
+    pointer-events: none;
   }
 
   .deepdive-actions {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.65rem;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
   }
 
-  @media (max-width: 768px) {
+  .deepdive-banner .btn-secondary {
+    color: #f2eee5;
+    border-color: rgba(242, 238, 229, 0.28);
+  }
+
+  .deepdive-banner .btn-secondary:hover {
+    border-color: #f2eee5;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+    .hero-dossier {
+      max-width: 420px;
+    }
+    .metrics-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .comparison-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-section {
+      padding-top: 3rem;
+    }
+    .metrics-grid {
+      grid-template-columns: 1fr;
+    }
     .deepdive-banner {
+      padding: 1.75rem;
       flex-direction: column;
       align-items: flex-start;
     }
@@ -838,7 +1095,11 @@ const comparisons = [
       width: 100%;
     }
     .deepdive-actions .btn {
-      width: 100%;
+      flex: 1 1 100%;
+    }
+    .deepdive-mark {
+      font-size: 6rem;
+      top: -0.5rem;
     }
   }
 </style>
@@ -855,12 +1116,10 @@ const comparisons = [
         const textToCopy = installCmd.innerText.trim();
         navigator.clipboard.writeText(textToCopy).then(() => {
           copyBtnText.innerText = 'COPIED ✓';
-          copyQuickBtn.style.background = 'rgba(34, 197, 94, 0.25)';
-          copyQuickBtn.style.borderColor = 'rgba(34, 197, 94, 0.5)';
+          copyQuickBtn.classList.add('copied');
           setTimeout(() => {
             copyBtnText.innerText = 'COPY';
-            copyQuickBtn.style.background = '';
-            copyQuickBtn.style.borderColor = '';
+            copyQuickBtn.classList.remove('copied');
           }, 2000);
         }).catch(() => {
           copyBtnText.innerText = 'ERROR';
@@ -872,7 +1131,9 @@ const comparisons = [
     const tabButtons = document.querySelectorAll<HTMLButtonElement>('.showcase-tab');
     const codePanels = document.querySelectorAll<HTMLElement>('.code-panel');
 
-    tabButtons.forEach((tab) => {
+    tabButtons.forEach((tab, index) => {
+      tab.tabIndex = index === 0 ? 0 : -1;
+
       tab.onclick = () => {
         const targetId = tab.getAttribute('data-tab-target');
         if (!targetId) return;
@@ -880,6 +1141,7 @@ const comparisons = [
         tabButtons.forEach((btn) => {
           btn.classList.remove('active');
           btn.setAttribute('aria-selected', 'false');
+          btn.tabIndex = -1;
         });
         codePanels.forEach((panel) => {
           panel.classList.remove('active');
@@ -887,11 +1149,27 @@ const comparisons = [
 
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.tabIndex = 0;
         const activePanel = document.getElementById(`panel-${targetId}`);
         if (activePanel) {
           activePanel.classList.add('active');
         }
       };
+
+      tab.addEventListener('keydown', (event) => {
+        const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
+        if (!keys.includes(event.key)) return;
+        event.preventDefault();
+        const last = tabButtons.length - 1;
+        let nextIndex = index;
+        if (event.key === 'ArrowRight') nextIndex = index === last ? 0 : index + 1;
+        if (event.key === 'ArrowLeft') nextIndex = index === 0 ? last : index - 1;
+        if (event.key === 'Home') nextIndex = 0;
+        if (event.key === 'End') nextIndex = last;
+        const next = tabButtons[nextIndex] as HTMLButtonElement;
+        next.focus();
+        next.click();
+      });
     });
 
     // 3. Code Panel Copy Buttons
@@ -901,17 +1179,17 @@ const comparisons = [
         const snippet = btn.getAttribute('data-snippet') || '';
         const label = btn.querySelector('.panel-copy-label');
         navigator.clipboard.writeText(snippet).then(() => {
-          if (label) label.textContent = 'Copied!';
-          btn.style.borderColor = 'rgba(34, 197, 94, 0.6)';
+          if (label) label.textContent = 'COPIED';
+          btn.classList.add('copied');
           setTimeout(() => {
-            if (label) label.textContent = 'Copy Code';
-            btn.style.borderColor = '';
+            if (label) label.textContent = 'COPY CODE';
+            btn.classList.remove('copied');
           }, 2000);
         }).catch((err) => {
           console.warn('Clipboard copy denied or failed:', err);
-          if (label) label.textContent = 'Copy Failed';
+          if (label) label.textContent = 'COPY FAILED';
           setTimeout(() => {
-            if (label) label.textContent = 'Copy Code';
+            if (label) label.textContent = 'COPY CODE';
           }, 2000);
         });
       };

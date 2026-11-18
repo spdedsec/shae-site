@@ -3,3 +3,11 @@ dist/
 .astro/
 .env*
 .DS_Store
+
+.lighthouseci/
+playwright-report/
+test-results/
+blob-report/
+
+# Impeccable downloads its platform binary on demand; do not commit it.
+.opencode/skills/impeccable/scripts/bin/

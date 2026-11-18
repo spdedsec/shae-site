@@ -1,5 +1,7 @@
 ---
-import { ClientRouter } from 'astro:transitions';
+import '@fontsource-variable/archivo/wght.css';
+import '@fontsource-variable/instrument-sans/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import SoundEffects from '../components/SoundEffects.astro';
@@ -14,6 +16,8 @@ const {
   title = "Shae — Fast, Simple, Real",
   description = "A programming language. It runs, it does stuff, it leaves you alone. Zero ceremony, built-in servers, effortless concurrency."
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site ?? 'https://shae-site.vercel.app');
 ---
 
 <!doctype html>
@@ -24,14 +28,31 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#f2eee5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#17161a" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Shae" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
     <title>{title}</title>
-    
-    <!-- Instant Zero-FOUC Theme Init -->
+
+    <!-- Emit one lifecycle event for normal (non-SPA) navigations. -->
     <script is:inline>
-      (function() {
+      document.addEventListener('DOMContentLoaded', () => {
+        document.dispatchEvent(new Event('astro:page-load'));
+      });
+    </script>
+
+    <!-- Instant zero-FOUC theme init -->
+    <script is:inline>
+      (function () {
         try {
           let savedTheme = localStorage.getItem('shae-theme');
           if (savedTheme === 'oled') savedTheme = 'vantablack';
@@ -39,43 +60,40 @@ const {
             savedTheme = 'light';
           }
           document.documentElement.setAttribute('data-theme', savedTheme);
-        } catch (_) {
+        } catch {
           document.documentElement.setAttribute('data-theme', 'light');
         }
       })();
     </script>
-    <ClientRouter />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <Navigation />
-    <main class="page-content">
+    <main id="main" class="page-content">
       <slot />
     </main>
     <Footer />
     <SoundEffects />
 
     <script>
-      // Seamlessly sync theme before DOM swap to avoid View Transitions flash
-      document.addEventListener('astro:before-swap', (ev: any) => {
-        let savedTheme = localStorage.getItem('shae-theme') || 'light';
-        if (savedTheme === 'oled') savedTheme = 'vantablack';
-        if (!['light', 'dark', 'vantablack'].includes(savedTheme)) savedTheme = 'light';
-        if (ev.newDocument) {
-          ev.newDocument.documentElement.setAttribute('data-theme', savedTheme);
-        }
-      });
+      function makeScrollRegionsFocusable() {
+        // Any element that can scroll horizontally must also be reachable by keyboard.
+        document.querySelectorAll<HTMLElement>('body *').forEach((el) => {
+          const overflowX = getComputedStyle(el).overflowX;
+          const canScrollX = (overflowX === 'auto' || overflowX === 'scroll') && el.scrollWidth > el.clientWidth + 1;
+          if (!canScrollX) return;
+          el.setAttribute('tabindex', '0');
+          if (!el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')) {
+            el.setAttribute('aria-label', 'Scrollable content');
+          }
+        });
+      }
 
-      // Confirm theme persistence after swap and sync UI controls
-      document.addEventListener('astro:after-swap', () => {
-        let savedTheme = localStorage.getItem('shae-theme') || 'light';
-        if (savedTheme === 'oled') savedTheme = 'vantablack';
-        if (!['light', 'dark', 'vantablack'].includes(savedTheme)) savedTheme = 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
-        const switcher = document.getElementById('theme-switcher') as HTMLSelectElement | null;
-        if (switcher && switcher.value !== savedTheme) {
-          switcher.value = savedTheme;
-        }
+      let resizeFrame = 0;
+      document.addEventListener('astro:page-load', makeScrollRegionsFocusable);
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(makeScrollRegionsFocusable);
       });
     </script>
   </body>

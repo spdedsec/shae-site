@@ -386,10 +386,10 @@ print("Connecting to {host}:{port}")`
 
       <!-- Quick Section Anchor Bar -->
       <nav class="quick-nav animate-fade-up delay-100" aria-label="Documentation Jump Links">
-        <a href="#pdf-guide" class="quick-link active">📖 42-Page PDF Guide</a>
-        <a href="#cli-reference" class="quick-link">⚡ CLI Toolchain</a>
-        <a href="#syntax-primitives" class="quick-link">🔤 Syntax &amp; Primitives</a>
-        <a href="#stdlib-reference" class="quick-link">📦 Standard Library</a>
+        <a href="#pdf-guide" class="quick-link active">42-Page PDF Guide</a>
+        <a href="#cli-reference" class="quick-link">CLI Toolchain</a>
+        <a href="#syntax-primitives" class="quick-link">Syntax &amp; Primitives</a>
+        <a href="#stdlib-reference" class="quick-link">Standard Library</a>
       </nav>
     </div>
   </header>
@@ -416,7 +416,6 @@ print("Connecting to {host}:{port}")`
               download="shae_the_complete_guide.pdf"
               class="btn btn-primary btn-download"
             >
-              <span class="dl-icon">📥</span>
               <span>Download 42-Page PDF (496 KB)</span>
             </a>
             <a
@@ -938,16 +937,23 @@ print("Connecting to {host}:{port}")`
   }
 
   .signatures-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.35rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
   }
 
   .signature-entry {
     background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border: 0;
+    border-radius: 0;
     padding: 1.25rem;
+    min-width: 0;
+  }
+
+  .signature-entry pre {
+    overflow-x: auto;
   }
 
   .sig-header {
@@ -996,5 +1002,316 @@ print("Connecting to {host}:{port}")`
     .chapters-grid {
       grid-template-columns: 1fr;
     }
+  }
+  /* ============ FIELD MANUAL OVERRIDES ============ */
+  .docs-hero {
+    padding: 4rem 0 2.5rem;
+    background: var(--bg-base);
+    text-align: left;
+  }
+
+  .docs-hero-inner {
+    max-width: 1280px;
+  }
+
+  .docs-title {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    letter-spacing: -0.045em;
+    line-height: 0.96;
+    margin: 1rem 0 1rem;
+    max-width: 20ch;
+  }
+
+  .docs-subtitle {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    max-width: 64ch;
+    margin-bottom: 2.25rem;
+  }
+
+  .quick-nav {
+    justify-content: flex-start;
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+    padding-top: 0;
+  }
+
+  .quick-link {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 0.8rem 1rem;
+    border-radius: 0;
+  }
+
+  .quick-link:hover {
+    color: var(--text-main);
+    background: transparent;
+    border-bottom-color: var(--accent-primary);
+  }
+
+  .docs-main-layout {
+    padding: 4rem var(--gutter) 6rem;
+  }
+
+  .doc-section {
+    margin-bottom: 6rem;
+  }
+
+  .section-title-block {
+    margin-bottom: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .section-title-block h2 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    letter-spacing: -0.04em;
+    margin: 0.6rem 0 0.45rem;
+  }
+
+  .section-title-block p {
+    font-size: 0.98rem;
+    max-width: 68ch;
+  }
+
+  .pdf-card {
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--accent-primary);
+    padding: 2.25rem;
+    background: var(--bg-surface);
+  }
+
+  .pdf-book-title {
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .pdf-book-authors {
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .btn-download {
+    font-size: 0.82rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .pdf-synopsis {
+    background: transparent;
+    border-left: 2px solid var(--accent-primary);
+    padding: 0.85rem 1.25rem;
+    border-radius: 0;
+    font-size: 0.94rem;
+  }
+
+  .chapter-index-area {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.75rem;
+  }
+
+  .chapter-index-heading h3 {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .chapters-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--border-dim);
+    border-left: 1px solid var(--border-dim);
+  }
+
+  .chapter-item {
+    border: 0;
+    border-right: 1px solid var(--border-dim);
+    border-bottom: 1px solid var(--border-dim);
+    border-radius: 0;
+    background: transparent;
+    padding: 0.9rem;
+    gap: 0.7rem;
+  }
+
+  .chapter-item:hover {
+    transform: none;
+    background: var(--bg-hover);
+    border-color: var(--border-dim);
+  }
+
+  .chapter-num-badge {
+    background: transparent;
+    color: var(--accent-primary);
+    border-radius: 0;
+    padding: 0;
+    font-size: 0.66rem;
+    min-width: 1.4rem;
+  }
+
+  .chapter-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .chapter-desc {
+    font-size: 0.8rem;
+  }
+
+  .table-container {
+    border-width: 1px 0 0;
+    background: transparent;
+  }
+
+  .reference-table th {
+    background: transparent;
+    border-bottom: 1px solid var(--border-bright);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .reference-table td {
+    padding: 0.85rem 0.9rem;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 0.84rem;
+  }
+
+  .reference-table code {
+    background: var(--bg-card-subtle);
+    color: var(--text-main);
+    border-radius: 0;
+    border: 0;
+    padding: 0.12rem 0.35rem;
+  }
+
+  .args-tag {
+    font-size: 0.68rem;
+  }
+
+  .primitives-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    background: transparent;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+  }
+
+  .primitive-card {
+    border: 0;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-card);
+    border-radius: 0;
+    padding: 1.5rem;
+    min-width: 0;
+  }
+
+  .primitive-card:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .signatures-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
+  }
+
+  .signature-entry {
+    background: var(--bg-surface);
+    border: 0;
+    border-radius: 0;
+    padding: 1.25rem;
+    min-width: 0;
+  }
+
+  .signature-entry pre {
+    overflow-x: auto;
+  }
+
+  .primitive-card .code-viewport {
+    min-width: 0;
+  }
+
+  .prim-title {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .code-viewport,
+  .sig-example-box {
+    border-radius: 0;
+    border-color: var(--border-bright);
+  }
+
+  .module-card {
+    padding: 1.75rem 0;
+    border-width: 1px 0 0;
+    background: transparent;
+  }
+
+  .mod-header {
+    padding-bottom: 1rem;
+  }
+
+  .mod-name {
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+  }
+
+  .mod-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 0;
+    padding: 0.18rem 0.45rem;
+  }
+
+  .mod-tag {
+    border-radius: 0;
+    font-size: 0.64rem;
+  }
+
+  .signature-entry {
+    border-radius: 0;
+    border-width: 1px 0 1px 2px;
+    border-left-color: var(--accent-primary);
+    background: transparent;
+    padding: 1rem 1.25rem;
+  }
+
+  .sig-example-box code {
+    color: #b9c9a8;
+  }
+
+  @media (max-width: 760px) {
+    .chapters-grid,
+    .primitives-grid,
+    .signatures-list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .pdf-card {
+      padding: 1.35rem;
+    }
+  }
+
+  .table-container,
+  .docs-main-layout {
+    min-width: 0;
+    max-width: 100%;
   }
 </style>

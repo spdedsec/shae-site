@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="repl-topbar">
       <div class="topbar-left">
         <span class="badge badge-red">Browser Sandbox</span>
-        <h2>Interactive Shae Playground</h2>
+        <h1>Interactive Shae Playground</h1>
       </div>
 
       <div class="topbar-controls">
@@ -36,7 +36,7 @@ import Layout from '../layouts/Layout.astro';
           <span class="pane-title">main.shae</span>
           <span class="key-hint">Press Ctrl+Enter to execute</span>
         </div>
-        <textarea id="code-editor" class="code-textarea" spellcheck="false"></textarea>
+        <textarea id="code-editor" class="code-textarea" spellcheck="false" aria-label="Shae source code"></textarea>
       </div>
 
       <!-- Output Pane -->
@@ -73,7 +73,7 @@ import Layout from '../layouts/Layout.astro';
     gap: 1rem;
   }
 
-  .topbar-left h2 {
+  .topbar-left h1 {
     font-size: 1.6rem;
     color: var(--text-main);
     font-weight: 800;
@@ -142,14 +142,14 @@ import Layout from '../layouts/Layout.astro';
 
   .pane-title {
     font-size: 0.8rem;
-    color: var(--accent-primary);
+    color: #ff8a6c;
     font-weight: 700;
     font-family: var(--font-mono);
   }
 
   .key-hint {
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(236, 231, 218, 0.68);
   }
 
   .clear-btn {
@@ -201,7 +201,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .term-dim {
-    color: var(--text-dim);
+    color: #9a958a;
   }
 
   .term-green {
@@ -235,6 +235,133 @@ import Layout from '../layouts/Layout.astro';
       min-height: 200px;
     }
   }
+  /* ============ FIELD MANUAL OVERRIDES ============ */
+  .repl-container {
+    padding: 2.5rem var(--gutter) 4rem;
+    height: calc(100vh - 68px);
+    min-height: 560px;
+  }
+
+  .repl-topbar {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .topbar-left h1 {
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    margin-top: 0.5rem;
+  }
+
+  .topbar-controls {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .sample-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .sample-select {
+    border-radius: 0;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 0.5rem 0.65rem;
+  }
+
+  .sample-select:focus {
+    border-color: var(--border-focus);
+  }
+
+  .btn-run {
+    padding: 0.55rem 1rem;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .repl-workspace {
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
+  }
+
+  .workspace-pane {
+    border: 0;
+    border-radius: 0;
+    background: #0d0c09;
+    box-shadow: none;
+  }
+
+  .pane-header {
+    background: #12110d;
+    border-bottom: 1px solid rgba(236, 231, 218, 0.12);
+    padding: 0.6rem 1rem;
+  }
+
+  .pane-title {
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ff8a6c;
+  }
+
+  .key-hint {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.04em;
+    color: #a9a294;
+  }
+
+  .clear-btn {
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-color: rgba(236, 231, 218, 0.2);
+    padding: 0.25rem 0.5rem;
+  }
+
+  .code-textarea {
+    background: #0d0c09;
+    color: #ece7da;
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .terminal-output {
+    background: #0a0906;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .term-dim {
+    color: #9a958a;
+  }
+
+  .term-green { color: #9ec49a; }
+  .term-amber { color: #e0b264; }
+  .term-cyan { color: #8cc6cc; }
+  .term-red { color: #e08a72; }
+
+  @media (max-width: 860px) {
+    .repl-container {
+      height: auto;
+      min-height: 0;
+      padding-top: 2rem;
+    }
+  }
+
 </style>
 
 <script>
@@ -400,7 +527,7 @@ print("Current value: {countr}")`
         const lines = src.split('\n');
         let printed = false;
         for (const line of lines) {
-          const m = line.match(/print\((?:\"(.*)\"|(.*))\)/);
+          const m = line.match(/print\((?:"(.*)"|(.*))\)/);
           if (m) {
             printed = true;
             appendLine(m[1] || m[2] || "");

@@ -120,7 +120,7 @@ print("Service continues running without interruption.")`
 
   <div class="tour-body">
     <div class="container tour-grid">
-      <div class="tour-sidebar" transition:persist>
+      <div class="tour-sidebar">
         <div class="sidebar-sticky">
           <span class="sidebar-label">JUMP TO SECTION</span>
           <nav class="tour-toc">
@@ -332,4 +332,144 @@ print("Service continues running without interruption.")`
       display: none;
     }
   }
+  /* ============ FIELD MANUAL OVERRIDES ============ */
+  .tour-header {
+    padding: 4rem 0 2.5rem;
+    background: var(--bg-base);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+
+  .tour-header h1 {
+    font-size: clamp(2.3rem, 4.6vw, 3.8rem);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    margin: 1rem 0 0.75rem;
+    font-weight: 700;
+    max-width: 20ch;
+  }
+
+  .tour-header p {
+    font-size: 1.02rem;
+    max-width: 58ch;
+  }
+
+  .tour-body {
+    padding: 3.5rem 0 6rem;
+  }
+
+  .tour-grid {
+    grid-template-columns: 240px 1fr;
+    gap: 3.5rem;
+  }
+
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .tour-toc {
+    gap: 0;
+  }
+
+  .toc-link {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding: 0.5rem 0.65rem;
+    border-radius: 0;
+    border-left: 1px solid var(--border-color);
+    line-height: 1.35;
+  }
+
+  .toc-link:hover {
+    color: var(--text-main);
+    background: transparent;
+    border-left-color: var(--accent-primary);
+  }
+
+  .sidebar-card {
+    border-radius: 0;
+    background: transparent;
+    border-width: 1px 0 0;
+    padding: 1.25rem 0 0;
+  }
+
+  .sidebar-card h4 {
+    font-size: 0.86rem;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-sm {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.68rem;
+    width: 100%;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .tour-content {
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .tour-card {
+    border-width: 0 0 1px;
+    border-radius: 0;
+    padding: 2rem 0;
+    background: transparent;
+  }
+
+  .card-header {
+    margin-bottom: 0.6rem;
+    align-items: baseline;
+  }
+
+  .card-header h2 {
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    letter-spacing: -0.03em;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--accent-primary);
+  }
+
+  .tour-desc {
+    font-size: 0.92rem;
+    max-width: 72ch;
+  }
+
+  .tour-next {
+    border-width: 0;
+    border-radius: 0;
+    padding: 2.5rem 0 0;
+    background: transparent;
+    text-align: left;
+  }
+
+  .tour-next h3 {
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+  }
+
+  .tour-next p {
+    font-size: 0.92rem;
+    max-width: 60ch;
+  }
+
+  @media (max-width: 860px) {
+    .tour-header {
+      padding-top: 3rem;
+    }
+  }
+
 </style>
