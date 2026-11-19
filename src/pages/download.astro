@@ -1,66 +1,66 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Prebuilt Binary Matrix for Shae v0.4.0
+// Prebuilt Binary Matrix for Shae v0.6.0
 const platformBinaries = [
   {
     os: 'Linux',
     distro: 'glibc (Ubuntu, Debian, Fedora, Arch)',
     arch: 'x86_64',
-    archive: 'shae-v0.4.0-linux-x86_64.tar.gz',
+    archive: 'shae-v0.6.0-linux-x86_64.tar.gz',
     size: '8.4 MB',
     format: '.tar.gz',
-    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-x86_64.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.6.0/shae-v0.6.0-linux-x86_64.tar.gz',
     recommended: true
   },
   {
     os: 'Linux',
     distro: 'musl (Alpine Linux, Minimal Containers)',
     arch: 'x86_64',
-    archive: 'shae-v0.4.0-linux-x86_64-musl.tar.gz',
+    archive: 'shae-v0.6.0-linux-x86_64-musl.tar.gz',
     size: '7.9 MB',
     format: '.tar.gz',
-    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-x86_64-musl.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.6.0/shae-v0.6.0-linux-x86_64-musl.tar.gz',
     recommended: false
   },
   {
     os: 'Linux',
     distro: 'ARM64 (Raspberry Pi 4/5, AWS Graviton)',
     arch: 'aarch64 / arm64',
-    archive: 'shae-v0.4.0-linux-aarch64.tar.gz',
+    archive: 'shae-v0.6.0-linux-aarch64.tar.gz',
     size: '7.6 MB',
     format: '.tar.gz',
-    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-aarch64.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.6.0/shae-v0.6.0-linux-aarch64.tar.gz',
     recommended: false
   },
   {
     os: 'macOS',
     distro: 'Apple Silicon (M1 / M2 / M3 / M4)',
     arch: 'arm64',
-    archive: 'shae-v0.4.0-macos-arm64.tar.gz',
+    archive: 'shae-v0.6.0-macos-arm64.tar.gz',
     size: '8.1 MB',
     format: '.tar.gz',
-    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-macos-arm64.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.6.0/shae-v0.6.0-macos-arm64.tar.gz',
     recommended: true
   },
   {
     os: 'macOS',
     distro: 'Intel Core (Legacy x86_64 Macs)',
     arch: 'x86_64',
-    archive: 'shae-v0.4.0-macos-x86_64.tar.gz',
+    archive: 'shae-v0.6.0-macos-x86_64.tar.gz',
     size: '8.3 MB',
     format: '.tar.gz',
-    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-macos-x86_64.tar.gz',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.6.0/shae-v0.6.0-macos-x86_64.tar.gz',
     recommended: false
   },
   {
     os: 'Windows',
     distro: 'Windows 10 / 11 (Standalone zip)',
     arch: 'x86_64',
-    archive: 'shae-v0.4.0-windows-x86_64.zip',
+    archive: 'shae-v0.6.0-windows-x86_64.zip',
     size: '9.2 MB',
     format: '.zip',
-    url: 'https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-windows-x86_64.zip',
+    url: 'https://github.com/spdedsec/shae/releases/download/v0.6.0/shae-v0.6.0-windows-x86_64.zip',
     recommended: false
   }
 ];
@@ -103,8 +103,8 @@ const vscodeFeatures = [
 const installEnvVars = [
   {
     name: 'SHAE_VERSION',
-    default: 'Latest (v0.4.0)',
-    example: 'SHAE_VERSION=v0.4.0',
+    default: 'Latest (v0.6.0)',
+    example: 'SHAE_VERSION=v0.6.0',
     desc: 'Explicitly pin a release version instead of querying GitHub releases API.'
   },
   {
@@ -124,13 +124,13 @@ const installEnvVars = [
 
 <Layout
   title="Download & Installation — Shae"
-  description="Single-line universal installer, cross-platform prebuilt binaries, SHA-256 verification, and official VS Code tooling for Shae v0.4.0."
+  description="Single-line universal installer, cross-platform prebuilt binaries, SHA-256 verification, and official VS Code tooling for Shae v0.6.0."
 >
   <!-- Page Header -->
   <header class="page-header">
     <div class="container">
       <div class="animate-fade-up">
-        <span class="badge badge-red">OFFICIAL DISTRIBUTION // RELEASE v0.4.0</span>
+        <span class="badge badge-red">OFFICIAL DISTRIBUTION // RELEASE v0.6.0</span>
         <h1 class="header-title">Download &amp; Installation</h1>
         <p class="header-subtitle">
           Standalone, zero-dependency pre-compiled binaries for Linux, macOS, and Windows. 
@@ -207,7 +207,7 @@ const installEnvVars = [
     <section class="content-block animate-fade-up stagger-2" id="binaries">
       <div class="sec-heading">
         <span class="badge">MANUAL DOWNLOADS</span>
-        <h2 class="block-title">Pre-Built Platform Binaries (v0.4.0)</h2>
+        <h2 class="block-title">Pre-Built Platform Binaries (v0.6.0)</h2>
         <p class="block-desc">
           Direct standalone archive downloads. No package managers or system runtimes required. 
           Extract the archive and run the executable binary immediately.
@@ -274,8 +274,8 @@ const installEnvVars = [
             <h3>Download Asset &amp; Manifest</h3>
             <div class="terminal-window mini-term">
               <div class="terminal-body font-mono">
-                <div>curl -fsSLO https://github.com/spdedsec/shae/releases/download/v0.4.0/shae-v0.4.0-linux-x86_64.tar.gz</div>
-                <div>curl -fsSLO https://github.com/spdedsec/shae/releases/download/v0.4.0/SHA256SUMS.txt</div>
+                <div>curl -fsSLO https://github.com/spdedsec/shae/releases/download/v0.6.0/shae-v0.6.0-linux-x86_64.tar.gz</div>
+                <div>curl -fsSLO https://github.com/spdedsec/shae/releases/download/v0.6.0/SHA256SUMS.txt</div>
               </div>
             </div>
           </div>
@@ -307,16 +307,16 @@ const installEnvVars = [
               First-class language tooling for VS Code and VSCodium powered directly by the <code>shae lsp</code> daemon.
             </p>
           </div>
-          <span class="badge badge-dark">v0.4.0 Extension</span>
+          <span class="badge badge-dark">v0.6.0 Extension</span>
         </div>
 
         <!-- Extension Quick Install -->
         <div class="vscode-install-box">
           <div class="install-prompt-area">
             <span class="prompt-label">Install via VS Code CLI:</span>
-            <code class="font-mono">code --install-extension editors/vscode/shae-vscode-0.4.0.vsix</code>
+            <code class="font-mono">code --install-extension editors/vscode/shae-vscode-0.6.0.vsix</code>
           </div>
-          <button class="btn btn-secondary copy-cmd-btn btn-sm" data-copy="code --install-extension editors/vscode/shae-vscode-0.4.0.vsix">
+          <button class="btn btn-secondary copy-cmd-btn btn-sm" data-copy="code --install-extension editors/vscode/shae-vscode-0.6.0.vsix">
             Copy
           </button>
         </div>
@@ -370,7 +370,7 @@ const installEnvVars = [
           </div>
           <div class="step-code">
             <code class="font-mono">shae --version</code>
-            <span class="step-expected">Expected: <code>shae 0.4.0</code></span>
+            <span class="step-expected">Expected: <code>shae 0.6.0</code></span>
           </div>
         </div>
 
