@@ -3,11 +3,67 @@ import Layout from '../layouts/Layout.astro';
 
 const codeExamples = [
   {
+    id: 'gradual-typing',
+    label: 'Gradual Typing',
+    badge: 'Milestone 1 / Chunk 32',
+    filename: 'typed_service.shae',
+    description:
+      'Opt-in gradual static typing with syntax annotations, nullable unions, and compile-time diagnostics via shae check.',
+    code: `// Gradual Type System: syntax annotations with nullable unions
+fn calculate_tax(subtotal: float, rate: float | null) -> float {
+    let effective_rate: float = rate ?? 0.08
+    return subtotal * effective_rate
+}
+
+fn fetch_user_id(username: string) -> int | null {
+    if username == "admin" { return 1 }
+    return null
+}
+
+// Static analysis catches type violations before execution:
+// $ shae check typed_service.shae
+// [OK] All 2 typed function signatures and return bounds verified.
+
+let tax: float = calculate_tax(149.99, 0.05)
+print("Computed tax: {tax}")`,
+  },
+  {
+    id: 'space-invaders',
+    label: 'Creative Engine',
+    badge: 'Milestone 3 / Chunk 34',
+    filename: 'retro_arcade.shae',
+    description:
+      'Unified creative suite with ANSI TrueColor graphics, waveform audio synthesis, and immediate arcade widgets.',
+    code: `use { init, clear, draw_sprite, render, is_key_down } from "std:gui"
+use { play_sound, play_tone } from "std:audio"
+use { draw_hud, draw_score } from "std:ui"
+
+// Initialize ANSI TrueColor retro display (60x30 virtual matrix)
+let screen = init(60, 30, "Space Invaders 2D")
+let player_x = 28
+let score = 420
+
+// Game loop with 60 FPS frame timing
+fn update() {
+    clear(screen, 0x000000)
+    if is_key_down("Left")  { player_x = player_x - 1 }
+    if is_key_down("Right") { player_x = player_x + 1 }
+    if is_key_down("Space") {
+        play_sound("shoot") // Real-time square-wave synth
+    }
+
+    draw_hud(screen, score, 3, 1)
+    draw_sprite(screen, player_x, 26, "player_cannon", 0x33FF33)
+    render(screen)
+}`,
+  },
+  {
     id: 'jit-ssa',
     label: 'JIT SSA',
     badge: 'Chunk 28 & Cranelift',
     filename: 'fibonacci_jit.shae',
-    description: 'Cranelift JIT SSA compiler detects hot execution loops at invocation threshold and generates native machine code on the fly.',
+    description:
+      'Cranelift JIT SSA compiler detects hot execution loops at invocation threshold and generates native machine code on the fly.',
     code: `// Cranelift JIT SSA: Compiles hot loops into native machine code
 fn fibonacci(n) {
     if n <= 1 { return n }
@@ -21,14 +77,15 @@ print("Computed fib(35) in native SSA tier: {result}")
 
 // Direct LLVM 18 SSA IR emission is also built-in:
 // $ shae llvm fibonacci_jit.shae -c -o fib_native
-// $ ./fib_native  # Standalone zero-dependency executable`
+// $ ./fib_native  # Standalone zero-dependency executable`,
   },
   {
     id: 'actor-reload',
     label: 'Actor Hot-Reload',
     badge: 'Chunk 30',
     filename: 'vault_daemon.shae',
-    description: 'Lightweight actor threads with unbounded FIFO mailboxes and zero-downtime hot-code swapping without dropping state or messages.',
+    description:
+      'Lightweight actor threads with unbounded FIFO mailboxes and zero-downtime hot-code swapping without dropping state or messages.',
     code: `use { spawn_actor, ask } from "std:actor"
 
 // V1 Actor: Processing banking transactions with persistent state
@@ -52,14 +109,15 @@ vault.reload(fn(state, msg) {
     }
 })
 
-let audited = vault.ask({ type: "audit" })`
+let audited = vault.ask({ type: "audit" })`,
   },
   {
     id: 'zero-copy',
     label: 'Zero-Copy Buffer',
     badge: 'Chunk 29',
     filename: 'packet_codec.shae',
-    description: 'Typed memory buffers sharing Arc storage without heap copying, with endian binary I/O and C-struct packing.',
+    description:
+      'Typed memory buffers sharing Arc storage without heap copying, with endian binary I/O and C-struct packing.',
     code: `use { ByteBuffer, pack, unpack } from "std:buffer"
 
 // Allocate raw contiguous memory buffer
@@ -73,14 +131,15 @@ let header_slice = packet.slice(0, 4)
 let magic = header_slice.read_u32_le(0)
 
 print("Decoded magic header: 0x{magic:X}") // 0xDEADBEEF
-print("Backing memory refcount: 2 (zero heap allocations)")`
+print("Backing memory refcount: 2 (zero heap allocations)")`,
   },
   {
     id: 'tls-mesh',
     label: 'TLS Mesh',
     badge: 'Chunk 21',
     filename: 'cluster_mesh.shae',
-    description: 'Encrypted distributed actor clustering over Rustls 0.23 with mutual TLS (mTLS), cookie handshake, and bully leader election.',
+    description:
+      'Encrypted distributed actor clustering over Rustls 0.23 with mutual TLS (mTLS), cookie handshake, and bully leader election.',
     code: `use { ClusterNode } from "std:actor:cluster"
 
 // Initialize encrypted TLS node in cluster mesh
@@ -99,14 +158,15 @@ node.connect("worker_beta@10.0.0.2:9001")
 let remote_worker = node.actor("pricing_worker@worker_beta")
 let quote = await remote_worker.ask({ symbol: "EURUSD", volume: 100000 })
 
-print("Received encrypted cluster quote: {quote.price}")`
+print("Received encrypted cluster quote: {quote.price}")`,
   },
   {
     id: 'async-pipe',
     label: 'Async Coroutines',
     badge: 'Chunk 22',
     filename: 'async_pipeline.shae',
-    description: 'First-class asynchronous tasks with cooperative scheduling, combinators, and functional Elixir-style pipe operators.',
+    description:
+      'First-class asynchronous tasks with cooperative scheduling, combinators, and functional Elixir-style pipe operators.',
     code: `use { spawn, all, sleep } from "std:async"
 
 // First-class coroutines with cooperative task scheduling
@@ -123,17 +183,37 @@ let top_scores = batch1.concat(batch2)
     |> sort()
     |> reverse()
 
-print("Top normalized scores: {top_scores}")`
-  }
+print("Top normalized scores: {top_scores}")`,
+  },
 ];
 
 const architecturalMetrics = [
-  { value: '3 ms', label: 'Cold Startup', note: '11.6x faster than Python 3.12, 21.6x faster than Node.js' },
+  {
+    value: '3 ms',
+    label: 'Cold Startup',
+    note: '11.6x faster than Python 3.12, 21.6x faster than Node.js',
+  },
   { value: '4.2 MB', label: 'Base Memory', note: 'Stack VM with mark-and-sweep GC root tracing' },
-  { value: '138k', label: 'Slices / Sec', note: 'Zero-copy Arc buffer slicing throughput (Chunk 29)' },
-  { value: '20.8k', label: 'Messages / Sec', note: 'Multi-threaded actor mailbox throughput (Chunk 14)' },
-  { value: '14 Modules', label: 'Self-Hosting', note: 'Pure-Shae compiler suite emitting ELF, PE, Wasm & LLVM' },
-  { value: 'LLVM 18', label: 'Native Backend', note: 'Direct SSA IR generation with Clang -O2 standalone binaries' }
+  {
+    value: '138k',
+    label: 'Slices / Sec',
+    note: 'Zero-copy Arc buffer slicing throughput (Chunk 29)',
+  },
+  {
+    value: '20.8k',
+    label: 'Messages / Sec',
+    note: 'Multi-threaded actor mailbox throughput (Chunk 14)',
+  },
+  {
+    value: '14 Modules',
+    label: 'Self-Hosting',
+    note: 'Pure-Shae compiler suite emitting ELF, PE, Wasm & LLVM',
+  },
+  {
+    value: 'LLVM 18',
+    label: 'Native Backend',
+    note: 'Direct SSA IR generation with Clang -O2 standalone binaries',
+  },
 ];
 
 const comparisons = [
@@ -141,26 +221,30 @@ const comparisons = [
     lang: 'Python',
     verdict: 'GIL & Startup Latency',
     flaw: 'Clean syntax, but real threads are constrained by the Global Interpreter Lock, cold startup averages 35ms, and dependency resolution often breaks across environments.',
-    shaeAdvantage: 'Shae boots in 3ms with genuine OS threads and lightweight actors, zero venv requirements, and single-binary packaging.'
+    shaeAdvantage:
+      'Shae boots in 3ms with genuine OS threads and lightweight actors, zero venv requirements, and single-binary packaging.',
   },
   {
     lang: 'JavaScript',
     verdict: 'Tooling & Memory Bloat',
     flaw: 'Runs everywhere, but single-threaded event loop blocking degrades CPU tasks, type coercion produces subtle bugs, and small projects require hundreds of megabytes in dependencies.',
-    shaeAdvantage: 'Zero external node_modules needed. Web servers, cryptographic ciphers, SQLite, and regex engines are natively compiled into the runtime.'
+    shaeAdvantage:
+      'Zero external node_modules needed. Web servers, cryptographic ciphers, SQLite, and regex engines are natively compiled into the runtime.',
   },
   {
     lang: 'Rust',
     verdict: 'Borrow Friction in Scripts',
     flaw: 'Unbeatable performance and memory safety, but writing rapid pipelines, dynamic configurations, or prototypes requires wrestling with lifetimes and complex traits.',
-    shaeAdvantage: 'Instant iteration without lifetime friction. When maximum raw performance is required, direct LLVM SSA compilation produces standalone binaries.'
+    shaeAdvantage:
+      'Instant iteration without lifetime friction. When maximum raw performance is required, direct LLVM SSA compilation produces standalone binaries.',
   },
   {
     lang: 'Go',
     verdict: 'Repetitive Error Boilerplate',
     flaw: 'Clean concurrent channels, but codebases suffer from repetitive error-handling boilerplate, lack pattern matching with guards, and offer no functional pipe transformations.',
-    shaeAdvantage: 'Expressive pattern matching with guards, structured try/catch exception frames with preserved stacks, and first-class functional pipelines (|).'
-  }
+    shaeAdvantage:
+      'Expressive pattern matching with guards, structured try/catch exception frames with preserved stacks, and first-class functional pipelines (|).',
+  },
 ];
 ---
 
@@ -176,14 +260,15 @@ const comparisons = [
           <span class="eyebrow animate-fade-up">Systems scripting language / v0.4.0</span>
 
           <h1 class="hero-title animate-fade-up delay-100">
-            A modern systems scripting language.<br />
+            A modern systems scripting language.
+            <br />
             <span class="hero-accent">Strict, expressive, fast as silicon.</span>
           </h1>
 
           <p class="hero-subtitle animate-fade-up delay-200">
-            Built from first principles with zero external dependencies. A dual-engine runtime with a stack
-            bytecode VM, Cranelift JIT compilation, direct LLVM 18 SSA generation, zero-copy memory buffers,
-            and a fault-tolerant actor mesh.
+            Built from first principles with zero external dependencies. A dual-engine runtime with
+            a stack bytecode VM, Cranelift JIT compilation, direct LLVM 18 SSA generation, zero-copy
+            memory buffers, and a fault-tolerant actor mesh.
           </p>
 
           <div class="hero-actions animate-fade-up delay-300">
@@ -207,12 +292,30 @@ const comparisons = [
             <span>SHAE / 04</span>
           </div>
           <dl class="dossier-list">
-            <div><dt>Version</dt><dd>0.4.0</dd></div>
-            <div><dt>Runtime</dt><dd>Bytecode VM + AST</dd></div>
-            <div><dt>Native</dt><dd>Cranelift / LLVM 18</dd></div>
-            <div><dt>Tests</dt><dd>290+ passing</dd></div>
-            <div><dt>Chunks</dt><dd>1—31</dd></div>
-            <div><dt>License</dt><dd>MIT</dd></div>
+            <div>
+              <dt>Version</dt>
+              <dd>0.4.0</dd>
+            </div>
+            <div>
+              <dt>Runtime</dt>
+              <dd>Bytecode VM + AST</dd>
+            </div>
+            <div>
+              <dt>Native</dt>
+              <dd>Cranelift / LLVM 18</dd>
+            </div>
+            <div>
+              <dt>Tests</dt>
+              <dd>320+ passing</dd>
+            </div>
+            <div>
+              <dt>Chunks</dt>
+              <dd>1—34</dd>
+            </div>
+            <div>
+              <dt>License</dt>
+              <dd>MIT</dd>
+            </div>
           </dl>
           <a class="dossier-link" href="/download">
             <span>Install the binary</span>
@@ -236,15 +339,28 @@ const comparisons = [
           <div class="terminal-body quickstart-body">
             <div class="command-row">
               <span class="prompt-symbol">$</span>
-              <span class="command-text" id="install-command">curl -fsSL https://shae-site.vercel.app/install.sh | bash</span>
-              <button class="copy-terminal-btn" id="copy-quickstart-btn" title="Copy to clipboard" aria-label="Copy install command">
-                <span class="btn-text" id="copy-btn-text">COPY</span>
+              <span class="command-text" id="install-command">
+                curl -fsSL https://shae-site.vercel.app/install.sh | bash
+              </span>
+              <button
+                class="copy-terminal-btn"
+                id="copy-quickstart-btn"
+                title="Copy to clipboard"
+                aria-label="Copy install command"
+              >
+                <span class="btn-text" id="copy-btn-text">
+                  COPY
+                </span>
               </button>
             </div>
             <div class="terminal-feedback">
-              <span class="comment-line"># Installs standalone binary, standard libraries, and VS Code extension</span>
+              <span class="comment-line">
+                # Installs standalone binary, standard libraries, and VS Code extension
+              </span>
               <span class="comment-line"># Then run your first program:</span>
-              <span class="exec-line"><span class="prompt-symbol">$</span> shae run hello.shae</span>
+              <span class="exec-line">
+                <span class="prompt-symbol">$</span> shae run hello.shae
+              </span>
             </div>
           </div>
         </div>
@@ -262,7 +378,8 @@ const comparisons = [
         </div>
         <h2 class="section-heading">Systems capabilities in modern syntax</h2>
         <p class="section-desc">
-          Explore Shae's native features across JIT compilation, actor hot-reloading, zero-copy buffers, encrypted clusters, and coroutines.
+          Explore Shae's native features across JIT compilation, actor hot-reloading, zero-copy
+          buffers, encrypted clusters, and coroutines.
         </p>
       </div>
 
@@ -327,7 +444,8 @@ const comparisons = [
         </div>
         <h2 class="section-heading">Architectural metrics &amp; performance telemetry</h2>
         <p class="section-desc">
-          Measured with <code>shae bench</code> on release builds. Zero startup overhead, minimal memory consumption, and wire-speed throughput.
+          Measured with <code>shae bench</code> on release builds. Zero startup overhead, minimal
+          memory consumption, and wire-speed throughput.
         </p>
       </div>
 
@@ -360,7 +478,8 @@ const comparisons = [
         </div>
         <h2 class="section-heading">Why Shae?</h2>
         <p class="section-desc">
-          Modern systems engineering has accumulated friction. Shae is engineered to restore balance between expressive ergonomics and machine reality.
+          Modern systems engineering has accumulated friction. Shae is engineered to restore balance
+          between expressive ergonomics and machine reality.
         </p>
       </div>
 
@@ -383,18 +502,25 @@ const comparisons = [
 
       <!-- Feature Deep Dive Link Banner -->
       <div class="deepdive-banner">
-        <span class="deepdive-mark" aria-hidden="true">04</span>
+        <span class="deepdive-mark" aria-hidden="true">
+          04
+        </span>
         <div class="deepdive-content">
-          <span class="index-mark">Chunks 1–31 verified</span>
+          <span class="index-mark">Chunks 1–34 verified</span>
           <h3 class="deepdive-title">Explore the complete engineering pipeline</h3>
           <p class="deepdive-text">
-            From the Pratt parser and AST evaluator to the Cranelift JIT, zero-copy <code>std:buffer</code>,
-            Rustls TLS cluster mesh, and pure-Shae self-hosting compiler suite.
+            From the Pratt parser and AST evaluator to the Cranelift JIT, zero-copy{' '}
+            <code>std:buffer</code>, Rustls TLS cluster mesh, and pure-Shae self-hosting compiler
+            suite.
           </p>
         </div>
         <div class="deepdive-actions">
-          <a href="/features" class="btn btn-primary">Features &amp; architecture →</a>
-          <a href="/docs" class="btn btn-secondary">Read the 42-page guide</a>
+          <a href="/features" class="btn btn-primary">
+            Features &amp; architecture →
+          </a>
+          <a href="/docs" class="btn btn-secondary">
+            Read the 42-page guide
+          </a>
         </div>
       </div>
     </div>
@@ -467,7 +593,9 @@ const comparisons = [
     text-decoration: none;
     padding: 0.5rem 0.25rem;
     border-bottom: 1px solid var(--border-bright);
-    transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+    transition:
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease;
   }
 
   .hero-text-link:hover {
@@ -549,7 +677,9 @@ const comparisons = [
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+    transition:
+      background-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
   }
 
   .dossier-link:hover {
@@ -601,7 +731,9 @@ const comparisons = [
     padding: 0.35rem 0.65rem;
     border-radius: 0;
     cursor: pointer;
-    transition: background-color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+    transition:
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease;
     flex-shrink: 0;
   }
 
@@ -724,7 +856,9 @@ const comparisons = [
     text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
-    transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+    transition:
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease;
   }
 
   .showcase-tab:hover {
@@ -807,7 +941,9 @@ const comparisons = [
     padding: 0.3rem 0.6rem;
     border-radius: 0;
     cursor: pointer;
-    transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease;
+    transition:
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
   }
 
   .panel-copy-btn:hover {
@@ -1114,16 +1250,19 @@ const comparisons = [
     if (copyQuickBtn && copyBtnText && installCmd) {
       copyQuickBtn.onclick = () => {
         const textToCopy = installCmd.innerText.trim();
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          copyBtnText.innerText = 'COPIED ✓';
-          copyQuickBtn.classList.add('copied');
-          setTimeout(() => {
-            copyBtnText.innerText = 'COPY';
-            copyQuickBtn.classList.remove('copied');
-          }, 2000);
-        }).catch(() => {
-          copyBtnText.innerText = 'ERROR';
-        });
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            copyBtnText.innerText = 'COPIED ✓';
+            copyQuickBtn.classList.add('copied');
+            setTimeout(() => {
+              copyBtnText.innerText = 'COPY';
+              copyQuickBtn.classList.remove('copied');
+            }, 2000);
+          })
+          .catch(() => {
+            copyBtnText.innerText = 'ERROR';
+          });
       };
     }
 
@@ -1178,20 +1317,23 @@ const comparisons = [
       btn.onclick = () => {
         const snippet = btn.getAttribute('data-snippet') || '';
         const label = btn.querySelector('.panel-copy-label');
-        navigator.clipboard.writeText(snippet).then(() => {
-          if (label) label.textContent = 'COPIED';
-          btn.classList.add('copied');
-          setTimeout(() => {
-            if (label) label.textContent = 'COPY CODE';
-            btn.classList.remove('copied');
-          }, 2000);
-        }).catch((err) => {
-          console.warn('Clipboard copy denied or failed:', err);
-          if (label) label.textContent = 'COPY FAILED';
-          setTimeout(() => {
-            if (label) label.textContent = 'COPY CODE';
-          }, 2000);
-        });
+        navigator.clipboard
+          .writeText(snippet)
+          .then(() => {
+            if (label) label.textContent = 'COPIED';
+            btn.classList.add('copied');
+            setTimeout(() => {
+              if (label) label.textContent = 'COPY CODE';
+              btn.classList.remove('copied');
+            }, 2000);
+          })
+          .catch((err) => {
+            console.warn('Clipboard copy denied or failed:', err);
+            if (label) label.textContent = 'COPY FAILED';
+            setTimeout(() => {
+              if (label) label.textContent = 'COPY CODE';
+            }, 2000);
+          });
       };
     });
   }

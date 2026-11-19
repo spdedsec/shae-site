@@ -14,13 +14,17 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <div class="topbar-controls">
-        <label for="sample-select" class="sample-label">Examples:</label>
+        <label for="sample-select" class="sample-label">
+          Examples:
+        </label>
         <select id="sample-select" class="sample-select">
           <option value="fib">Fibonacci Sequence</option>
           <option value="pipeline">Data Pipeline (|&gt;)</option>
           <option value="safe_prop">Safe Navigation &amp; Nulls</option>
           <option value="concurrency">Background Tasks (spawn)</option>
           <option value="typo_lint">Linter Typo Hint Simulation</option>
+          <option value="gradual_types">Gradual Type Annotations</option>
+          <option value="space_invaders">Space Invaders 2D Arcade</option>
         </select>
         <button id="run-btn" class="btn btn-primary btn-run">
           <span class="play-icon">▶</span>
@@ -36,14 +40,21 @@ import Layout from '../layouts/Layout.astro';
           <span class="pane-title">main.shae</span>
           <span class="key-hint">Press Ctrl+Enter to execute</span>
         </div>
-        <textarea id="code-editor" class="code-textarea" spellcheck="false" aria-label="Shae source code"></textarea>
+        <textarea
+          id="code-editor"
+          class="code-textarea"
+          spellcheck="false"
+          aria-label="Shae source code"
+        ></textarea>
       </div>
 
       <!-- Output Pane -->
       <div class="workspace-pane output-pane">
         <div class="pane-header">
           <span class="pane-title">Terminal Console</span>
-          <button id="clear-btn" class="clear-btn">Clear</button>
+          <button id="clear-btn" class="clear-btn">
+            Clear
+          </button>
         </div>
         <div id="terminal-output" class="terminal-output">
           <div class="term-line term-dim">Shae Web REPL v0.2.0 initialized.</div>
@@ -349,10 +360,18 @@ import Layout from '../layouts/Layout.astro';
     color: #9a958a;
   }
 
-  .term-green { color: #9ec49a; }
-  .term-amber { color: #e0b264; }
-  .term-cyan { color: #8cc6cc; }
-  .term-red { color: #e08a72; }
+  .term-green {
+    color: #9ec49a;
+  }
+  .term-amber {
+    color: #e0b264;
+  }
+  .term-cyan {
+    color: #8cc6cc;
+  }
+  .term-red {
+    color: #e08a72;
+  }
 
   @media (max-width: 860px) {
     .repl-container {
@@ -361,11 +380,53 @@ import Layout from '../layouts/Layout.astro';
       padding-top: 2rem;
     }
   }
-
 </style>
 
 <script>
   const SAMPLES: Record<string, string> = {
+    gradual_types: `// Gradual Type Annotations & Type Checking
+fn calculate_bonus(salary: float, performance_multiplier: float | null) -> float {
+    let multiplier: float = performance_multiplier ?? 1.10
+    return salary * multiplier
+}
+
+fn get_employee_title(level: int) -> string {
+    match level {
+        1 => "Junior Engineer",
+        2 => "Senior Engineer",
+        3 => "Staff Architect",
+        _ => "Fellow"
+    }
+}
+
+let bonus: float = calculate_bonus(85000.0, 1.25)
+let title: string = get_employee_title(3)
+
+print("Title: {title}")
+print("Calculated Bonus: $" + bonus)`,
+
+    space_invaders: `// Space Invaders 2D Showcase (std:gui, std:audio, std:ui)
+use { init, clear, draw_sprite, render, is_key_down } from "std:gui"
+use { play_sound } from "std:audio"
+use { draw_hud } from "std:ui"
+
+print("Booting Space Invaders 2D retro engine...")
+let screen = init(60, 30, "Space Invaders 2D")
+let score = 750
+let lives = 3
+let wave = 2
+
+// Play retro sound effect
+play_sound("shoot")
+print("[Audio] Synthesized square-wave retro pulse: 440Hz -> 880Hz")
+
+// Render retro arcade frame
+clear(screen, 0x000000)
+draw_hud(screen, score, lives, wave)
+draw_sprite(screen, 28, 26, "player_cannon", 0x33FF33)
+render(screen)
+print("[GUI] Frame rendered to ANSI TrueColor 60x30 matrix at 60 FPS")`,
+
     fib: `// Recursive Fibonacci with memo-free tree walking
 fn fib(n) {
     if n <= 1 {
@@ -433,7 +494,7 @@ let counter = 100
 let max_limit = 500
 
 // Oops, typo in variable name:
-print("Current value: {countr}")`
+print("Current value: {countr}")`,
   };
 
   function setupRepl() {
@@ -487,39 +548,58 @@ print("Current value: {countr}")`
         }
 
         if (src.includes('fib(n)')) {
-          appendLine("Computing Fibonacci terms:");
+          appendLine('Computing Fibonacci terms:');
           const fibs = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
           fibs.forEach((val, idx) => {
             appendLine(`fib(${idx + 1}) = ${val}`);
           });
-          appendLine("Finished in 0.002s (2ms)", 'term-dim');
+          appendLine('Finished in 0.002s (2ms)', 'term-dim');
           return;
         }
 
         if (src.includes('raw_data')) {
-          appendLine("Original: [15, 42, 8, 99, 104, 23, 77]");
-          appendLine("Filtered & Doubled: [46, 84, 154, 198, 208]", 'term-green');
-          appendLine("Finished in 0.001s (1ms)", 'term-dim');
+          appendLine('Original: [15, 42, 8, 99, 104, 23, 77]');
+          appendLine('Filtered & Doubled: [46, 84, 154, 198, 208]', 'term-green');
+          appendLine('Finished in 0.001s (1ms)', 'term-dim');
           return;
         }
 
         if (src.includes('Alex')) {
-          appendLine("User: Alex");
-          appendLine("Role: Architect");
-          appendLine("Safe bio lookup: null");
-          appendLine("Resolved bio: No public biography provided.", 'term-green');
-          appendLine("Finished in 0.001s (1ms)", 'term-dim');
+          appendLine('User: Alex');
+          appendLine('Role: Architect');
+          appendLine('Safe bio lookup: null');
+          appendLine('Resolved bio: No public biography provided.', 'term-green');
+          appendLine('Finished in 0.001s (1ms)', 'term-dim');
+          return;
+        }
+
+        if (src.includes('calculate_bonus')) {
+          appendLine('Running static type checker on main.shae...', 'term-dim');
+          appendLine('[OK] 2 typed signatures verified with 0 type errors.', 'term-green');
+          appendLine('Title: Staff Architect');
+          appendLine('Calculated Bonus: $106250', 'term-green');
+          appendLine('Finished in 0.002s (2ms)', 'term-dim');
+          return;
+        }
+
+        if (src.includes('Space Invaders 2D')) {
+          appendLine('Booting Space Invaders 2D retro engine...');
+          appendLine('[Audio] Synthesized square-wave retro pulse: 440Hz -> 880Hz', 'term-amber');
+          appendLine('[GUI] Frame rendered to ANSI TrueColor 60x30 matrix at 60 FPS', 'term-green');
+          appendLine('HUD: SCORE: 000750 | LIVES: 3 | WAVE: 2', 'term-cyan');
+          appendLine('Alien fleet matrix: 5x11 active invaders', 'term-dim');
+          appendLine('Finished in 0.003s (3ms)', 'term-dim');
           return;
         }
 
         if (src.includes('spawn')) {
-          appendLine("[Main] Spawning task 1...", 'term-dim');
-          appendLine("[Task 1] Processing dataset in background...", 'term-amber');
-          appendLine("[Main] Spawning task 2...", 'term-dim');
-          appendLine("[Task 2] Connecting to socket...", 'term-amber');
-          appendLine("[Main] Joining workers...", 'term-dim');
-          appendLine("[Main] All workers finished: task1=1337, task2=Connected OK", 'term-green');
-          appendLine("Finished in 0.004s (4ms)", 'term-dim');
+          appendLine('[Main] Spawning task 1...', 'term-dim');
+          appendLine('[Task 1] Processing dataset in background...', 'term-amber');
+          appendLine('[Main] Spawning task 2...', 'term-dim');
+          appendLine('[Task 2] Connecting to socket...', 'term-amber');
+          appendLine('[Main] Joining workers...', 'term-dim');
+          appendLine('[Main] All workers finished: task1=1337, task2=Connected OK', 'term-green');
+          appendLine('Finished in 0.004s (4ms)', 'term-dim');
           return;
         }
 
@@ -530,13 +610,13 @@ print("Current value: {countr}")`
           const m = line.match(/print\((?:"(.*)"|(.*))\)/);
           if (m) {
             printed = true;
-            appendLine(m[1] || m[2] || "");
+            appendLine(m[1] || m[2] || '');
           }
         }
         if (!printed) {
-          appendLine("Program finished with return: null", 'term-dim');
+          appendLine('Program finished with return: null', 'term-dim');
         } else {
-          appendLine("Finished in 0.002s (2ms)", 'term-dim');
+          appendLine('Finished in 0.002s (2ms)', 'term-dim');
         }
       } catch (err: unknown) {
         appendLine(`Runtime Error: ${String(err)}`, 'term-red');

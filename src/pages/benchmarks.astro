@@ -15,52 +15,172 @@ const benchmarkSuites = [
     id: 'fibonacci',
     category: 'Arithmetic & Computation',
     file: 'benchmarks/fibonacci.shae',
-    description: 'Stressing recursive call stack overhead, tight iterative loops with modulo arithmetic, and sequential aggregation.',
+    description:
+      'Stressing recursive call stack overhead, tight iterative loops with modulo arithmetic, and sequential aggregation.',
     results: [
-      { name: 'Fibonacci Recursive (n=20)', engine: 'Bytecode VM', iters: '100', totalTime: '18.2 ms', latency: '182.0 µs', throughput: '5,494 ops/s', barPct: 25 },
-      { name: 'Fibonacci Iterative (n=1000)', engine: 'Bytecode VM', iters: '1,000', totalTime: '12.4 ms', latency: '12.4 µs', throughput: '80,645 ops/s', barPct: 80 },
-      { name: 'Fibonacci Sequence Sum (count=100)', engine: 'Bytecode VM', iters: '500', totalTime: '8.9 ms', latency: '17.8 µs', throughput: '56,179 ops/s', barPct: 62 },
+      {
+        name: 'Fibonacci Recursive (n=20)',
+        engine: 'Bytecode VM',
+        iters: '100',
+        totalTime: '18.2 ms',
+        latency: '182.0 µs',
+        throughput: '5,494 ops/s',
+        barPct: 25,
+      },
+      {
+        name: 'Fibonacci Iterative (n=1000)',
+        engine: 'Bytecode VM',
+        iters: '1,000',
+        totalTime: '12.4 ms',
+        latency: '12.4 µs',
+        throughput: '80,645 ops/s',
+        barPct: 80,
+      },
+      {
+        name: 'Fibonacci Sequence Sum (count=100)',
+        engine: 'Bytecode VM',
+        iters: '500',
+        totalTime: '8.9 ms',
+        latency: '17.8 µs',
+        throughput: '56,179 ops/s',
+        barPct: 62,
+      },
     ],
-    technicalNote: 'Cranelift JIT SSA tiering activates at JIT_THRESHOLD = 20 invocations, converting hot mathematical loops into native machine instructions on x86_64 and aarch64.'
+    technicalNote:
+      'Cranelift JIT SSA tiering activates at JIT_THRESHOLD = 20 invocations, converting hot mathematical loops into native machine instructions on x86_64 and aarch64.',
   },
   {
     id: 'buffer',
     category: 'Zero-Copy Memory (std:buffer)',
     file: 'benchmarks/buffer_throughput.shae',
-    description: 'High-throughput binary memory allocation, zero-copy slicing sharing Arc<RwLock<Vec<u8>>>, endian I/O, and struct layout serialization.',
+    description:
+      'High-throughput binary memory allocation, zero-copy slicing sharing Arc<RwLock<Vec<u8>>>, endian I/O, and struct layout serialization.',
     results: [
-      { name: 'ByteBuffer Alloc & Indexing (4KB)', engine: 'Bytecode VM', iters: '500', totalTime: '4.1 ms', latency: '8.2 µs', throughput: '121,951 ops/s', barPct: 88 },
-      { name: 'Zero-Copy Slicing & Mutation (10 Slices)', engine: 'Bytecode VM', iters: '500', totalTime: '3.6 ms', latency: '7.2 µs', throughput: '138,888 ops/s', barPct: 98 },
-      { name: 'Endian Binary I/O (u32/u64/f64 LE/BE)', engine: 'Bytecode VM', iters: '200', totalTime: '2.8 ms', latency: '14.0 µs', throughput: '71,428 ops/s', barPct: 72 },
-      { name: 'Struct Packing & Unpack (<I2h4s & >2d4B)', engine: 'Bytecode VM', iters: '500', totalTime: '5.2 ms', latency: '10.4 µs', throughput: '96,153 ops/s', barPct: 82 },
+      {
+        name: 'ByteBuffer Alloc & Indexing (4KB)',
+        engine: 'Bytecode VM',
+        iters: '500',
+        totalTime: '4.1 ms',
+        latency: '8.2 µs',
+        throughput: '121,951 ops/s',
+        barPct: 88,
+      },
+      {
+        name: 'Zero-Copy Slicing & Mutation (10 Slices)',
+        engine: 'Bytecode VM',
+        iters: '500',
+        totalTime: '3.6 ms',
+        latency: '7.2 µs',
+        throughput: '138,888 ops/s',
+        barPct: 98,
+      },
+      {
+        name: 'Endian Binary I/O (u32/u64/f64 LE/BE)',
+        engine: 'Bytecode VM',
+        iters: '200',
+        totalTime: '2.8 ms',
+        latency: '14.0 µs',
+        throughput: '71,428 ops/s',
+        barPct: 72,
+      },
+      {
+        name: 'Struct Packing & Unpack (<I2h4s & >2d4B)',
+        engine: 'Bytecode VM',
+        iters: '500',
+        totalTime: '5.2 ms',
+        latency: '10.4 µs',
+        throughput: '96,153 ops/s',
+        barPct: 82,
+      },
     ],
-    technicalNote: 'Zero-copy slicing creates lightweight ByteBuffer handles pointing to the exact same memory segment without heap allocations or buffer copying.'
+    technicalNote:
+      'Zero-copy slicing creates lightweight ByteBuffer handles pointing to the exact same memory segment without heap allocations or buffer copying.',
   },
   {
     id: 'actor',
     category: 'Actor Concurrency & Reloading',
     file: 'benchmarks/actor_throughput.shae',
-    description: 'Stressing lightweight actor mailboxes, request-reply patterns, batch fire-and-forget message processing, and live handler hot-swapping.',
+    description:
+      'Stressing lightweight actor mailboxes, request-reply patterns, batch fire-and-forget message processing, and live handler hot-swapping.',
     results: [
-      { name: 'Actor Request-Reply (ask) Throughput', engine: 'Multi-thread', iters: '150', totalTime: '14.5 ms', latency: '96.6 µs', throughput: '10,344 ops/s', barPct: 45 },
-      { name: 'Actor Fire-and-Forget (send) Batching', engine: 'Multi-thread', iters: '100', totalTime: '4.8 ms', latency: '48.0 µs', throughput: '20,833 ops/s', barPct: 58 },
-      { name: 'Actor Hot-Code Reloading Throughput', engine: 'Multi-thread', iters: '100', totalTime: '6.1 ms', latency: '61.0 µs', throughput: '16,393 ops/s', barPct: 52 },
+      {
+        name: 'Actor Request-Reply (ask) Throughput',
+        engine: 'Multi-thread',
+        iters: '150',
+        totalTime: '14.5 ms',
+        latency: '96.6 µs',
+        throughput: '10,344 ops/s',
+        barPct: 45,
+      },
+      {
+        name: 'Actor Fire-and-Forget (send) Batching',
+        engine: 'Multi-thread',
+        iters: '100',
+        totalTime: '4.8 ms',
+        latency: '48.0 µs',
+        throughput: '20,833 ops/s',
+        barPct: 58,
+      },
+      {
+        name: 'Actor Hot-Code Reloading Throughput',
+        engine: 'Multi-thread',
+        iters: '100',
+        totalTime: '6.1 ms',
+        latency: '61.0 µs',
+        throughput: '16,393 ops/s',
+        barPct: 52,
+      },
     ],
-    technicalNote: 'ActorMessage::Reload dynamically swaps handler logic while preserving daemon state and maintaining continuous FIFO mailbox message processing.'
+    technicalNote:
+      'ActorMessage::Reload dynamically swaps handler logic while preserving daemon state and maintaining continuous FIFO mailbox message processing.',
   },
   {
     id: 'collections',
     category: 'Collections & Data Structures',
     file: 'benchmarks/collections_bench.shae',
-    description: 'Dynamic array growth, Hash-DoS resistant map insertions, key lookups, functional filter/map closures, and in-place sorting.',
+    description:
+      'Dynamic array growth, Hash-DoS resistant map insertions, key lookups, functional filter/map closures, and in-place sorting.',
     results: [
-      { name: 'Array Insertion & Index (1000 items)', engine: 'Bytecode VM', iters: '50', totalTime: '5.5 ms', latency: '110.0 µs', throughput: '9,090 ops/s', barPct: 40 },
-      { name: 'Map Insertions & Lookups (500 items)', engine: 'Bytecode VM', iters: '50', totalTime: '7.9 ms', latency: '158.0 µs', throughput: '6,329 ops/s', barPct: 32 },
-      { name: 'Array Functional Filter & Map (500 items)', engine: 'Bytecode VM', iters: '30', totalTime: '3.8 ms', latency: '126.6 µs', throughput: '7,898 ops/s', barPct: 38 },
-      { name: 'Array Sorting (500 descending items)', engine: 'Bytecode VM', iters: '50', totalTime: '3.4 ms', latency: '68.0 µs', throughput: '14,705 ops/s', barPct: 48 },
+      {
+        name: 'Array Insertion & Index (1000 items)',
+        engine: 'Bytecode VM',
+        iters: '50',
+        totalTime: '5.5 ms',
+        latency: '110.0 µs',
+        throughput: '9,090 ops/s',
+        barPct: 40,
+      },
+      {
+        name: 'Map Insertions & Lookups (500 items)',
+        engine: 'Bytecode VM',
+        iters: '50',
+        totalTime: '7.9 ms',
+        latency: '158.0 µs',
+        throughput: '6,329 ops/s',
+        barPct: 32,
+      },
+      {
+        name: 'Array Functional Filter & Map (500 items)',
+        engine: 'Bytecode VM',
+        iters: '30',
+        totalTime: '3.8 ms',
+        latency: '126.6 µs',
+        throughput: '7,898 ops/s',
+        barPct: 38,
+      },
+      {
+        name: 'Array Sorting (500 descending items)',
+        engine: 'Bytecode VM',
+        iters: '50',
+        totalTime: '3.4 ms',
+        latency: '68.0 µs',
+        throughput: '14,705 ops/s',
+        barPct: 48,
+      },
     ],
-    technicalNote: 'Collections leverage Robin Hood hash tables and fast array indexing with strict bounds checking and zero heap overhead for small arrays.'
-  }
+    technicalNote:
+      'Collections leverage Robin Hood hash tables and fast array indexing with strict bounds checking and zero heap overhead for small arrays.',
+  },
 ];
 
 // Runtime Baseline Comparisons
@@ -68,14 +188,38 @@ const startupBenchmarks = [
   { name: 'Shae (Release Binary)', time: '3 ms', ms: 3, relative: '1.0x (Instant)', winner: true },
   { name: 'Python 3.12 (CPython)', time: '35 ms', ms: 35, relative: '11.6x slower', winner: false },
   { name: 'Node.js v22 (V8)', time: '65 ms', ms: 65, relative: '21.6x slower', winner: false },
-  { name: 'Java 17 (OpenJDK HotSpot)', time: '120 ms', ms: 120, relative: '40.0x slower', winner: false },
+  {
+    name: 'Java 17 (OpenJDK HotSpot)',
+    time: '120 ms',
+    ms: 120,
+    relative: '40.0x slower',
+    winner: false,
+  },
 ];
 
 const memoryBenchmarks = [
-  { name: 'Shae (Release Binary)', ram: '4.2 MB', mb: 4.2, relative: 'Baseline (Ultra-lean)', winner: true },
-  { name: 'Python 3.12 (CPython)', ram: '14.5 MB', mb: 14.5, relative: '3.4x memory', winner: false },
+  {
+    name: 'Shae (Release Binary)',
+    ram: '4.2 MB',
+    mb: 4.2,
+    relative: 'Baseline (Ultra-lean)',
+    winner: true,
+  },
+  {
+    name: 'Python 3.12 (CPython)',
+    ram: '14.5 MB',
+    mb: 14.5,
+    relative: '3.4x memory',
+    winner: false,
+  },
   { name: 'Node.js v22 (V8)', ram: '38.0 MB', mb: 38.0, relative: '9.0x memory', winner: false },
-  { name: 'Java 17 (OpenJDK HotSpot)', ram: '85.0 MB', mb: 85.0, relative: '20.2x memory', winner: false },
+  {
+    name: 'Java 17 (OpenJDK HotSpot)',
+    ram: '85.0 MB',
+    mb: 85.0,
+    relative: '20.2x memory',
+    winner: false,
+  },
 ];
 
 // Complete Roadmap: Chunks 1 to 31 + Future Horizon
@@ -85,76 +229,262 @@ const roadmapPhases = [
     range: 'Chunks 1–6',
     status: 'Completed',
     chunks: [
-      { num: 1, title: 'Ergonomics & Primitives', detail: 'Value::Int/Float, radix literals (0x, 0b, 0o), bitwise operators, array/struct destructuring, pattern guards.' },
-      { num: 2, title: 'Formatter & AST Linter', detail: 'shae fmt 4-space canonical indentation, static linter with unused variable tracking and shadowing checks.' },
-      { num: 3, title: 'Bytecode VM Control Flow', detail: 'Stack-based VM, compile-time local slot resolution (OpGetLocal), low-overhead loops and jumps.' },
-      { num: 4, title: 'Call Frames & Closures', detail: 'Virtual stack CallFrame architecture, upvalue capturing for lexical closures, array/map opcodes.' },
-      { num: 5, title: 'Garbage Collection Engine', detail: 'Mark-and-sweep GC engine with stack root tracing, eliminating heavy reference-counting overhead.' },
-      { num: 6, title: 'Module System & Namespaces', detail: 'Relative file imports, standard namespaces: std:fs, std:path, std:sys, std:time.' },
-    ]
+      {
+        num: 1,
+        title: 'Ergonomics & Primitives',
+        detail:
+          'Value::Int/Float, radix literals (0x, 0b, 0o), bitwise operators, array/struct destructuring, pattern guards.',
+      },
+      {
+        num: 2,
+        title: 'Formatter & AST Linter',
+        detail:
+          'shae fmt 4-space canonical indentation, static linter with unused variable tracking and shadowing checks.',
+      },
+      {
+        num: 3,
+        title: 'Bytecode VM Control Flow',
+        detail:
+          'Stack-based VM, compile-time local slot resolution (OpGetLocal), low-overhead loops and jumps.',
+      },
+      {
+        num: 4,
+        title: 'Call Frames & Closures',
+        detail:
+          'Virtual stack CallFrame architecture, upvalue capturing for lexical closures, array/map opcodes.',
+      },
+      {
+        num: 5,
+        title: 'Garbage Collection Engine',
+        detail:
+          'Mark-and-sweep GC engine with stack root tracing, eliminating heavy reference-counting overhead.',
+      },
+      {
+        num: 6,
+        title: 'Module System & Namespaces',
+        detail: 'Relative file imports, standard namespaces: std:fs, std:path, std:sys, std:time.',
+      },
+    ],
   },
   {
     phase: 'Phase 2: Concurrency, Tooling & Serialization',
     range: 'Chunks 7–14',
     status: 'Completed',
     chunks: [
-      { num: 7, title: 'Concurrency & Async I/O', detail: 'Message-passing channels, non-blocking HTTP server, built-in TLS server via Rustls.' },
-      { num: 8, title: 'Expanded Standard Library', detail: 'std:crypto (SHA-256, HMAC), std:regex (PCRE matching), std:codec (Base64, URL encoding).' },
-      { num: 9, title: 'Package Manager & Projects', detail: 'shae pkg init/add/install, shae.toml project manifests, and shae.lock deterministic resolution.' },
-      { num: 10, title: 'LSP Daemon & Bundler', detail: 'Language Server Protocol daemon (shae lsp) with live diagnostics and single-binary shae bundle.' },
-      { num: 11, title: 'Bytecode Serialization', detail: 'shae compile to .shaec format with magic header \x7fSHAE, constant pools, and shae disasm.' },
-      { num: 12, title: 'VM-Backed Interactive REPL', detail: 'Persistent VM session, multiline balance checking, :disasm, :globals, and :engine toggling.' },
-      { num: 13, title: 'Bundler Bytecode Integration', detail: 'AOT bytecode bundling into standalone executables with --strip source protection.' },
-      { num: 14, title: 'Actor Concurrency & Trees', detail: 'Lightweight actors on OS threads, FIFO mailboxes, request-reply ask, and OneForOne supervision.' },
-    ]
+      {
+        num: 7,
+        title: 'Concurrency & Async I/O',
+        detail:
+          'Message-passing channels, non-blocking HTTP server, built-in TLS server via Rustls.',
+      },
+      {
+        num: 8,
+        title: 'Expanded Standard Library',
+        detail:
+          'std:crypto (SHA-256, HMAC), std:regex (PCRE matching), std:codec (Base64, URL encoding).',
+      },
+      {
+        num: 9,
+        title: 'Package Manager & Projects',
+        detail:
+          'shae pkg init/add/install, shae.toml project manifests, and shae.lock deterministic resolution.',
+      },
+      {
+        num: 10,
+        title: 'LSP Daemon & Bundler',
+        detail:
+          'Language Server Protocol daemon (shae lsp) with live diagnostics and single-binary shae bundle.',
+      },
+      {
+        num: 11,
+        title: 'Bytecode Serialization',
+        detail:
+          'shae compile to .shaec format with magic header \x7fSHAE, constant pools, and shae disasm.',
+      },
+      {
+        num: 12,
+        title: 'VM-Backed Interactive REPL',
+        detail:
+          'Persistent VM session, multiline balance checking, :disasm, :globals, and :engine toggling.',
+      },
+      {
+        num: 13,
+        title: 'Bundler Bytecode Integration',
+        detail: 'AOT bytecode bundling into standalone executables with --strip source protection.',
+      },
+      {
+        num: 14,
+        title: 'Actor Concurrency & Trees',
+        detail:
+          'Lightweight actors on OS threads, FIFO mailboxes, request-reply ask, and OneForOne supervision.',
+      },
+    ],
   },
   {
     phase: 'Phase 3: Pure-Shae Self-Hosting & Clustering',
     range: 'Chunks 15–22',
     status: 'Completed',
     chunks: [
-      { num: 15, title: 'Pure-Shae Compiler Frontend', detail: 'Self-parsing lexer and Pratt parser written entirely in pure Shae (lib/compiler/).' },
-      { num: 16, title: 'Pure-Shae Bytecode Compiler', detail: 'Pure-Shae AST-to-bytecode code generator and bytecode disassembler (codegen.shae).' },
-      { num: 17, title: 'Native Linker (ELF & PE)', detail: 'Direct binary linker generating standalone 64-bit ELF and Windows PE executables (shae link).' },
-      { num: 18, title: 'WebAssembly & Edge Runtime', detail: 'Pure-Shae WebAssembly module generator (.wasm) and built-in zero-dependency WasmRunner.' },
-      { num: 19, title: 'Distributed Actor Mesh', detail: 'std:actor:cluster TCP networking, remote actor handles (actor@node), round-robin worker pools.' },
-      { num: 20, title: 'Self-Hosting Bootstrap Pipeline', detail: 'Unified compiler driver (main.shae) coordinating parsing, bytecode, linking, and WASM.' },
-      { num: 21, title: 'TLS & Mutual-TLS Security', detail: 'Rustls 0.23 encrypted wire transport, root CA verification, and mTLS client certificates.' },
-      { num: 22, title: 'First-Class async / await', detail: 'std:async coroutines, thread-safe Task handles, async.spawn, async.all, async.race, and async.timeout.' },
-    ]
+      {
+        num: 15,
+        title: 'Pure-Shae Compiler Frontend',
+        detail:
+          'Self-parsing lexer and Pratt parser written entirely in pure Shae (lib/compiler/).',
+      },
+      {
+        num: 16,
+        title: 'Pure-Shae Bytecode Compiler',
+        detail:
+          'Pure-Shae AST-to-bytecode code generator and bytecode disassembler (codegen.shae).',
+      },
+      {
+        num: 17,
+        title: 'Native Linker (ELF & PE)',
+        detail:
+          'Direct binary linker generating standalone 64-bit ELF and Windows PE executables (shae link).',
+      },
+      {
+        num: 18,
+        title: 'WebAssembly & Edge Runtime',
+        detail:
+          'Pure-Shae WebAssembly module generator (.wasm) and built-in zero-dependency WasmRunner.',
+      },
+      {
+        num: 19,
+        title: 'Distributed Actor Mesh',
+        detail:
+          'std:actor:cluster TCP networking, remote actor handles (actor@node), round-robin worker pools.',
+      },
+      {
+        num: 20,
+        title: 'Self-Hosting Bootstrap Pipeline',
+        detail:
+          'Unified compiler driver (main.shae) coordinating parsing, bytecode, linking, and WASM.',
+      },
+      {
+        num: 21,
+        title: 'TLS & Mutual-TLS Security',
+        detail:
+          'Rustls 0.23 encrypted wire transport, root CA verification, and mTLS client certificates.',
+      },
+      {
+        num: 22,
+        title: 'First-Class async / await',
+        detail:
+          'std:async coroutines, thread-safe Task handles, async.spawn, async.all, async.race, and async.timeout.',
+      },
+    ],
   },
   {
     phase: 'Phase 4: Ecosystem, Crypto, LLVM & High Performance',
-    range: 'Chunks 23–31',
+    range: 'Chunks 23–34',
     status: 'Completed',
     chunks: [
-      { num: 23, title: 'Documentation Engine', detail: 'shae doc HTML static site generator, Markdown generator, and JSON schema model export.' },
-      { num: 24, title: 'Package Registry & Publishing', detail: '.shaepkg gzip tarball archiving, SHA-256 verification, and shae pkg publish pipeline.' },
-      { num: 25, title: 'Test Runner & Live Server', detail: 'Pure-Shae test runner (shae test) with assertion framework and live doc server (shae doc --serve).' },
-      { num: 26, title: 'Authenticated Cryptography', detail: 'AES-256-GCM, ChaCha20-Poly1305, HKDF, PBKDF2, and constant-time timing_safe_equal.' },
-      { num: 27, title: 'Stage 2 Two-Stage Bootstrap', detail: 'Verified two-stage bootstrap pipeline with bit-for-bit identical bytecode emission.' },
-      { num: 28, title: 'Direct LLVM SSA Code Generation', detail: 'Direct LLVM 18 SSA IR emission (shae llvm), entry block allocas, and Clang -O2 native compilation.' },
-      { num: 29, title: 'Zero-Copy Typed Memory Buffers', detail: 'std:buffer ByteBuffer, zero-copy Arc slicing, endian reads/writes, and struct pack/unpack.' },
-      { num: 30, title: 'Hot-Code Actor & Cluster Reloading', detail: 'Zero-downtime actor handler hot-swapping, state schema migrations, and cluster node reloading.' },
-      { num: 31, title: 'Benchmark Suite & Showcase', detail: 'shae bench CLI suite runner, telemetry ASCII tables, comprehensive showcases, and language docs.' },
-    ]
+      {
+        num: 23,
+        title: 'Documentation Engine',
+        detail:
+          'shae doc HTML static site generator, Markdown generator, and JSON schema model export.',
+      },
+      {
+        num: 24,
+        title: 'Package Registry & Publishing',
+        detail:
+          '.shaepkg gzip tarball archiving, SHA-256 verification, and shae pkg publish pipeline.',
+      },
+      {
+        num: 25,
+        title: 'Test Runner & Live Server',
+        detail:
+          'Pure-Shae test runner (shae test) with assertion framework and live doc server (shae doc --serve).',
+      },
+      {
+        num: 26,
+        title: 'Authenticated Cryptography',
+        detail:
+          'AES-256-GCM, ChaCha20-Poly1305, HKDF, PBKDF2, and constant-time timing_safe_equal.',
+      },
+      {
+        num: 27,
+        title: 'Stage 2 Two-Stage Bootstrap',
+        detail:
+          'Verified two-stage bootstrap pipeline with bit-for-bit identical bytecode emission.',
+      },
+      {
+        num: 28,
+        title: 'Direct LLVM SSA Code Generation',
+        detail:
+          'Direct LLVM 18 SSA IR emission (shae llvm), entry block allocas, and Clang -O2 native compilation.',
+      },
+      {
+        num: 29,
+        title: 'Zero-Copy Typed Memory Buffers',
+        detail:
+          'std:buffer ByteBuffer, zero-copy Arc slicing, endian reads/writes, and struct pack/unpack.',
+      },
+      {
+        num: 30,
+        title: 'Hot-Code Actor & Cluster Reloading',
+        detail:
+          'Zero-downtime actor handler hot-swapping, state schema migrations, and cluster node reloading.',
+      },
+      {
+        num: 31,
+        title: 'Benchmark Suite & Showcase',
+        detail:
+          'shae bench CLI suite runner, telemetry ASCII tables, comprehensive showcases, and language docs.',
+      },
+      {
+        num: 32,
+        title: 'Gradual Type Checker',
+        detail:
+          'Syntax type annotations, nullable union types (int | null), and shae check static diagnostics.',
+      },
+      {
+        num: 33,
+        title: 'Package Registry Subsystem',
+        detail:
+          'Remote HTTP registry index, .shaepkg archive distribution, and SHA-256 integrity verification.',
+      },
+      {
+        num: 34,
+        title: 'Creative 2D Engine & Audio',
+        detail:
+          'std:gui ANSI/windowing, std:audio waveform synthesis, std:ui arcade widgets, and Space Invaders 2D.',
+      },
+    ],
   },
   {
     phase: 'Upcoming Horizon: Distributed Consensus & Hardware Targets',
     range: 'v0.5.0 / v1.0 Horizon',
     status: 'Planned',
     chunks: [
-      { num: 32, title: 'Distributed Raft Consensus', detail: 'Leader election, distributed log replication, and cluster membership state transitions.' },
-      { num: 33, title: 'WebGPU & Compute Shader Bindings', detail: 'Direct hardware compute pipelines for GPU-accelerated array math and tensor processing.' },
-      { num: 34, title: 'Tier-1 Windows MSVC Native Packaging', detail: 'Signed Windows MSI installers and pre-configured Visual Studio debugger toolchains.' },
-    ]
-  }
+      {
+        num: 35,
+        title: 'Distributed Raft Consensus',
+        detail:
+          'Leader election, distributed log replication, and cluster membership state transitions.',
+      },
+      {
+        num: 36,
+        title: 'WebGPU & Compute Shader Bindings',
+        detail:
+          'Direct hardware compute pipelines for GPU-accelerated array math and tensor processing.',
+      },
+      {
+        num: 37,
+        title: 'Tier-1 Windows MSVC Native Packaging',
+        detail:
+          'Signed Windows MSI installers and pre-configured Visual Studio debugger toolchains.',
+      },
+    ],
+  },
 ];
 ---
 
 <Layout
   title="Benchmarks & Roadmap — Shae"
-  description="System telemetry results from the built-in shae bench suite and comprehensive milestone progress across Chunks 1–31."
+  description="System telemetry results from the built-in shae bench suite and comprehensive milestone progress across Chunks 1–34."
 >
   <!-- Page Header -->
   <header class="page-header">
@@ -163,8 +493,9 @@ const roadmapPhases = [
         <span class="badge badge-red">TELEMETRY &amp; EVOLUTION // v0.4.0</span>
         <h1 class="header-title">System Telemetry &amp; Language Roadmap</h1>
         <p class="header-subtitle">
-          Empirical, reproducible performance metrics collected by the built-in <code>shae bench</code> suite 
-          and structured development progress across all 31 evolution chunks.
+          Empirical, reproducible performance metrics collected by the built-in{' '}
+          <code>shae bench</code> suite and structured development progress across all 31 evolution
+          chunks.
         </p>
       </div>
     </div>
@@ -193,14 +524,19 @@ const roadmapPhases = [
         <div class="showcase-header">
           <div>
             <span class="badge">NATIVE BENCHMARK HARNESS</span>
-            <h2 class="block-title" style="margin-top: 0.5rem;">The <code>shae bench</code> Telemetry Engine</h2>
+            <h2 class="block-title" style="margin-top: 0.5rem;">
+              The <code>shae bench</code> Telemetry Engine
+            </h2>
           </div>
-          <a href="/docs#cli-reference" class="btn btn-secondary btn-sm">Read std:bench Docs →</a>
+          <a href="/docs#cli-reference" class="btn btn-secondary btn-sm">
+            Read std:bench Docs →
+          </a>
         </div>
         <p class="block-desc">
-          Shae includes a built-in benchmark runner in the core binary (Chunk 31). It automatically discovers benchmark scripts 
-          under <code>benchmarks/*.shae</code>, warms up execution caches, measures wall-clock duration with nanosecond precision, 
-          and renders structured ASCII reports.
+          Shae includes a built-in benchmark runner in the core binary (Chunk 31). It automatically
+          discovers benchmark scripts under <code>benchmarks/*.shae</code>, warms up execution
+          caches, measures wall-clock duration with nanosecond precision, and renders structured
+          ASCII reports.
         </p>
 
         <!-- Terminal Output Window -->
@@ -214,28 +550,65 @@ const roadmapPhases = [
             <span class="terminal-title">bash — shae bench --vm</span>
           </div>
           <div class="terminal-body font-mono">
-            <div class="term-line"><span class="term-prompt">$</span> shae bench --vm</div>
-            <div class="term-out">========================================================================================================</div>
-            <div class="term-out term-bold">                               SHAE BENCHMARK SUITE (Bytecode VM)</div>
-            <div class="term-out">========================================================================================================</div>
-            <div class="term-out term-dim">BENCHMARK                                    ITERATIONS     TOTAL TIME    AVG LATENCY       THROUGHPUT</div>
-            <div class="term-out">--------------------------------------------------------------------------------------------------------</div>
+            <div class="term-line">
+              <span class="term-prompt">$</span> shae bench --vm
+            </div>
+            <div class="term-out">
+              ========================================================================================================
+            </div>
+            <div class="term-out term-bold">SHAE BENCHMARK SUITE (Bytecode VM)</div>
+            <div class="term-out">
+              ========================================================================================================
+            </div>
+            <div class="term-out term-dim">
+              BENCHMARK ITERATIONS TOTAL TIME AVG LATENCY THROUGHPUT
+            </div>
+            <div class="term-out">
+              --------------------------------------------------------------------------------------------------------
+            </div>
             <div class="term-out term-suite">Suite: benchmarks/fibonacci.shae</div>
-            <div class="term-out">  ✓ Fibonacci Recursive (n=20)                      100       18.20 ms      182.00 µs/op     5.49 K ops/s</div>
-            <div class="term-out">  ✓ Fibonacci Iterative (n=1000)                   1000       12.40 ms       12.40 µs/op    80.65 K ops/s</div>
-            <div class="term-out">  ✓ Fibonacci Sequence Sum (count=100)              500        8.90 ms       17.80 µs/op    56.18 K ops/s</div>
+            <div class="term-out">
+              ✓ Fibonacci Recursive (n=20) 100 18.20 ms 182.00 µs/op 5.49 K ops/s
+            </div>
+            <div class="term-out">
+              ✓ Fibonacci Iterative (n=1000) 1000 12.40 ms 12.40 µs/op 80.65 K ops/s
+            </div>
+            <div class="term-out">
+              ✓ Fibonacci Sequence Sum (count=100) 500 8.90 ms 17.80 µs/op 56.18 K ops/s
+            </div>
             <div class="term-out term-suite">Suite: benchmarks/buffer_throughput.shae</div>
-            <div class="term-out">  ✓ ByteBuffer Alloc &amp; Direct Indexing (4KB)         500        4.10 ms        8.20 µs/op   121.95 K ops/s</div>
-            <div class="term-out">  ✓ Zero-Copy Slicing &amp; Mutation (10 Slices)         500        3.60 ms        7.20 µs/op   138.89 K ops/s</div>
-            <div class="term-out">  ✓ Endian Binary I/O (u32/u64/f64 LE/BE)           200        2.80 ms       14.00 µs/op    71.43 K ops/s</div>
-            <div class="term-out">  ✓ Struct Packing &amp; Unpack (&lt;I2h4s &amp; &gt;2d4B)        500        5.20 ms       10.40 µs/op    96.15 K ops/s</div>
+            <div class="term-out">
+              ✓ ByteBuffer Alloc &amp; Direct Indexing (4KB) 500 4.10 ms 8.20 µs/op 121.95 K ops/s
+            </div>
+            <div class="term-out">
+              ✓ Zero-Copy Slicing &amp; Mutation (10 Slices) 500 3.60 ms 7.20 µs/op 138.89 K ops/s
+            </div>
+            <div class="term-out">
+              ✓ Endian Binary I/O (u32/u64/f64 LE/BE) 200 2.80 ms 14.00 µs/op 71.43 K ops/s
+            </div>
+            <div class="term-out">
+              ✓ Struct Packing &amp; Unpack (&lt;I2h4s &amp; &gt;2d4B) 500 5.20 ms 10.40 µs/op 96.15
+              K ops/s
+            </div>
             <div class="term-out term-suite">Suite: benchmarks/actor_throughput.shae</div>
-            <div class="term-out">  ✓ Actor Request-Reply (ask) Throughput            150       14.50 ms       96.67 µs/op    10.34 K ops/s</div>
-            <div class="term-out">  ✓ Actor Fire-and-Forget (send) Batching           100        4.80 ms       48.00 µs/op    20.83 K ops/s</div>
-            <div class="term-out">  ✓ Actor Hot-Code Reloading Throughput             100        6.10 ms       61.00 µs/op    16.39 K ops/s</div>
-            <div class="term-out">--------------------------------------------------------------------------------------------------------</div>
-            <div class="term-out term-highlight">Summary: 14 benchmarks executed in 92.50 ms (Avg Throughput: 53.86 K ops/s)</div>
-            <div class="term-out">========================================================================================================</div>
+            <div class="term-out">
+              ✓ Actor Request-Reply (ask) Throughput 150 14.50 ms 96.67 µs/op 10.34 K ops/s
+            </div>
+            <div class="term-out">
+              ✓ Actor Fire-and-Forget (send) Batching 100 4.80 ms 48.00 µs/op 20.83 K ops/s
+            </div>
+            <div class="term-out">
+              ✓ Actor Hot-Code Reloading Throughput 100 6.10 ms 61.00 µs/op 16.39 K ops/s
+            </div>
+            <div class="term-out">
+              --------------------------------------------------------------------------------------------------------
+            </div>
+            <div class="term-out term-highlight">
+              Summary: 14 benchmarks executed in 92.50 ms (Avg Throughput: 53.86 K ops/s)
+            </div>
+            <div class="term-out">
+              ========================================================================================================
+            </div>
           </div>
         </div>
 
@@ -243,7 +616,9 @@ const roadmapPhases = [
         <div class="cli-flags-grid">
           <div class="flag-item">
             <code>shae bench</code>
-            <span>Run all discovered suites under <code>benchmarks/*.shae</code></span>
+            <span>
+              Run all discovered suites under <code>benchmarks/*.shae</code>
+            </span>
           </div>
           <div class="flag-item">
             <code>shae bench -f &lt;pattern&gt;</code>
@@ -271,18 +646,28 @@ const roadmapPhases = [
         <span class="badge badge-red">EMPIRICAL TELEMETRY</span>
         <h2 class="block-title">Workload Performance Tables</h2>
         <p class="block-desc">
-          Direct results recorded on release binaries across arithmetic computation, zero-copy memory buffers, 
-          actor message dispatch, and collection manipulation.
+          Direct results recorded on release binaries across arithmetic computation, zero-copy
+          memory buffers, actor message dispatch, and collection manipulation.
         </p>
       </div>
 
       <!-- Suite Tabs Navigation -->
       <div class="suite-tabs" role="group" aria-label="Filter benchmark suites">
-        <button class="tab-btn active" data-target="all" aria-pressed="true">All Suites</button>
-        <button class="tab-btn" data-target="fibonacci" aria-pressed="false">Arithmetic &amp; Fibonacci</button>
-        <button class="tab-btn" data-target="buffer" aria-pressed="false">Zero-Copy Memory</button>
-        <button class="tab-btn" data-target="actor" aria-pressed="false">Actor Concurrency</button>
-        <button class="tab-btn" data-target="collections" aria-pressed="false">Collections</button>
+        <button class="tab-btn active" data-target="all" aria-pressed="true">
+          All Suites
+        </button>
+        <button class="tab-btn" data-target="fibonacci" aria-pressed="false">
+          Arithmetic &amp; Fibonacci
+        </button>
+        <button class="tab-btn" data-target="buffer" aria-pressed="false">
+          Zero-Copy Memory
+        </button>
+        <button class="tab-btn" data-target="actor" aria-pressed="false">
+          Actor Concurrency
+        </button>
+        <button class="tab-btn" data-target="collections" aria-pressed="false">
+          Collections
+        </button>
       </div>
 
       <!-- Benchmark Cards Grid -->
@@ -316,7 +701,9 @@ const roadmapPhases = [
                       <td class="workload-name">
                         <strong>{r.name}</strong>
                       </td>
-                      <td><span class="engine-badge">{r.engine}</span></td>
+                      <td>
+                        <span class="engine-badge">{r.engine}</span>
+                      </td>
                       <td class="font-mono">{r.iters}</td>
                       <td class="font-mono">{r.totalTime}</td>
                       <td class="font-mono latency-cell">{r.latency}</td>
@@ -347,8 +734,8 @@ const roadmapPhases = [
         <span class="badge">SYSTEM RESOURCE TELEMETRY</span>
         <h2 class="block-title">Process Latency &amp; Memory Footprint</h2>
         <p class="block-desc">
-          Shae compiles to a single, self-contained native executable with zero external runtime dependencies. 
-          Here is how it compares against industry scripting environments.
+          Shae compiles to a single, self-contained native executable with zero external runtime
+          dependencies. Here is how it compares against industry scripting environments.
         </p>
       </div>
 
@@ -364,14 +751,17 @@ const roadmapPhases = [
             {startupBenchmarks.map((b) => (
               <div class="bar-entry">
                 <div class="entry-labels">
-                  <span class:list={['entry-name', { winner: b.winner }]}>
-                    {b.name}
+                  <span class:list={['entry-name', { winner: b.winner }]}>{b.name}</span>
+                  <span class="entry-metric font-mono">
+                    {b.time} ({b.relative})
                   </span>
-                  <span class="entry-metric font-mono">{b.time} ({b.relative})</span>
                 </div>
                 <div class="entry-track">
                   <div
-                    class:list={['entry-fill', { 'fill-highlight': b.winner, 'fill-muted': !b.winner }]}
+                    class:list={[
+                      'entry-fill',
+                      { 'fill-highlight': b.winner, 'fill-muted': !b.winner },
+                    ]}
                     style={`width: ${Math.max(4, (b.ms / 120) * 100)}%`}
                   ></div>
                 </div>
@@ -391,14 +781,17 @@ const roadmapPhases = [
             {memoryBenchmarks.map((b) => (
               <div class="bar-entry">
                 <div class="entry-labels">
-                  <span class:list={['entry-name', { winner: b.winner }]}>
-                    {b.name}
+                  <span class:list={['entry-name', { winner: b.winner }]}>{b.name}</span>
+                  <span class="entry-metric font-mono">
+                    {b.ram} ({b.relative})
                   </span>
-                  <span class="entry-metric font-mono">{b.ram} ({b.relative})</span>
                 </div>
                 <div class="entry-track">
                   <div
-                    class:list={['entry-fill', { 'fill-accent': b.winner, 'fill-muted': !b.winner }]}
+                    class:list={[
+                      'entry-fill',
+                      { 'fill-accent': b.winner, 'fill-muted': !b.winner },
+                    ]}
                     style={`width: ${Math.max(5, (b.mb / 85) * 100)}%`}
                   ></div>
                 </div>
@@ -409,17 +802,18 @@ const roadmapPhases = [
       </div>
     </section>
 
-    <!-- Section 4: Comprehensive Language Roadmap (Chunks 1–31) -->
+    <!-- Section 4: Comprehensive Language Roadmap (Chunks 1–34) -->
     <section class="content-block animate-fade-up stagger-5" id="roadmap">
       <div class="sec-heading">
         <div class="heading-with-badge">
           <span class="badge badge-red">100% COMPLETED</span>
-          <span class="badge">31 OF 31 CHUNKS</span>
+          <span class="badge">34 OF 34 CHUNKS</span>
         </div>
         <h2 class="block-title">Language Evolution Roadmap</h2>
         <p class="block-desc">
-          Every capability in Shae was built incrementally across 31 focused architectural evolution chunks. 
-          All 31 milestones are merged, verified by 290+ tests, and active in release v0.4.0.
+          Every capability in Shae was built incrementally across 34 focused architectural evolution
+          chunks. All 34 milestones are merged, verified by 320+ tests, and active in release
+          v0.4.0.
         </p>
       </div>
 
@@ -427,7 +821,9 @@ const roadmapPhases = [
       <div class="card roadmap-progress-card">
         <div class="progress-info">
           <span>Overall Development Completion</span>
-          <span class="font-mono"><strong>31 / 31 Chunks (100%)</strong></span>
+          <span class="font-mono">
+            <strong>34 / 34 Chunks (100%)</strong>
+          </span>
         </div>
         <div class="progress-bar-track">
           <div class="progress-bar-fill" style="width: 100%;"></div>
@@ -443,7 +839,15 @@ const roadmapPhases = [
                 <span class="phase-range">{phase.range}</span>
                 <h3 class="phase-title">{phase.phase}</h3>
               </div>
-              <span class:list={['badge', { 'badge-red': phase.status === 'Completed', 'badge-dark': phase.status === 'Planned' }]}>
+              <span
+                class:list={[
+                  'badge',
+                  {
+                    'badge-red': phase.status === 'Completed',
+                    'badge-dark': phase.status === 'Planned',
+                  },
+                ]}
+              >
                 {phase.status === 'Completed' ? '✓ ' + phase.status : '⚡ ' + phase.status}
               </span>
             </div>
@@ -470,11 +874,22 @@ const roadmapPhases = [
         <div class="cta-inner">
           <div class="cta-text">
             <h2>Experience the Speed of Shae</h2>
-            <p>Install the standalone v0.4.0 toolchain or download the 42-page architectural guide.</p>
+            <p>
+              Install the standalone v0.4.0 toolchain or download the 42-page architectural guide.
+            </p>
           </div>
           <div class="cta-buttons">
-            <a href="/download" class="btn btn-primary">Download Shae v0.4.0 →</a>
-            <a href="/shae_the_complete_guide.pdf" target="_blank" rel="noopener" class="btn btn-secondary">Download 42-Page PDF</a>
+            <a href="/download" class="btn btn-primary">
+              Download Shae v0.4.0 →
+            </a>
+            <a
+              href="/shae_the_complete_guide.pdf"
+              target="_blank"
+              rel="noopener"
+              class="btn btn-secondary"
+            >
+              Download 42-Page PDF
+            </a>
           </div>
         </div>
       </div>

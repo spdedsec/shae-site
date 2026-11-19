@@ -16,18 +16,19 @@ interface ChunkItem {
 const chunks: ChunkItem[] = [
   {
     id: 1,
-    name: "Language Ergonomics & Core Primitives",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/value.rs", "src/eval.rs", "src/ast.rs"],
-    summary: "Foundational data types, 64-bit integer and floating-point math, radix literals, destructuring, and pattern matching.",
+    name: 'Language Ergonomics & Core Primitives',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/value.rs', 'src/eval.rs', 'src/ast.rs'],
+    summary:
+      'Foundational data types, 64-bit integer and floating-point math, radix literals, destructuring, and pattern matching.',
     highlights: [
-      "Distinct Value::Int(i64) and Value::Float(f64) primitives",
-      "Radix literals: Hex (0xFF), Binary (0b1010), Octal (0o755), and numeric underscores (1_000_000)",
-      "Bitwise operators: &, |, ^, ~, <<, >>",
-      "Array & struct destructuring: let [a, b, ..rest], let { name, ..extra }",
-      "Pattern matching with arm guards (case p if cond => ...) and ranges (0..10, 1..=10)",
-      "Comprehensive array & string method suites (find, some, flat, pad_start, lines)"
+      'Distinct Value::Int(i64) and Value::Float(f64) primitives',
+      'Radix literals: Hex (0xFF), Binary (0b1010), Octal (0o755), and numeric underscores (1_000_000)',
+      'Bitwise operators: &, |, ^, ~, <<, >>',
+      'Array & struct destructuring: let [a, b, ..rest], let { name, ..extra }',
+      'Pattern matching with arm guards (case p if cond => ...) and ranges (0..10, 1..=10)',
+      'Comprehensive array & string method suites (find, some, flat, pad_start, lines)',
     ],
     codeSample: `// Pattern matching with guards and range conditions
 fn classify(val) {
@@ -38,78 +39,83 @@ fn classify(val) {
         10..=99 => "odd double digit: {val}",
         _ => "large number"
     }
-}`
+}`,
   },
   {
     id: 2,
-    name: "Code Formatter & Linter Polish",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/fmt.rs", "src/linter.rs"],
-    summary: "Canonical AST-driven source code formatter and static analysis engine detecting dead code, shadowing, and unused variables.",
+    name: 'Code Formatter & Linter Polish',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/fmt.rs', 'src/linter.rs'],
+    summary:
+      'Canonical AST-driven source code formatter and static analysis engine detecting dead code, shadowing, and unused variables.',
     highlights: [
-      "AST canonical formatter (shae fmt, shae fmt --check) with standard 4-space indentation",
-      "Static linter (shae check) detecting unused variables/parameters with _ prefix suppression",
-      "Dead code detection following unconditional return / throw statements",
-      "Variable shadowing warnings and unreachable pattern match arms"
+      'AST canonical formatter (shae fmt, shae fmt --check) with standard 4-space indentation',
+      'Static linter (shae check) detecting unused variables/parameters with _ prefix suppression',
+      'Dead code detection following unconditional return / throw statements',
+      'Variable shadowing warnings and unreachable pattern match arms',
     ],
     cliSample: `shae fmt --check src/
-shae check main.shae`
+shae check main.shae`,
   },
   {
     id: 3,
-    name: "Bytecode VM Foundation — Control Flow",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/vm.rs", "src/compiler.rs", "src/chunk.rs"],
-    summary: "High-throughput stack-based bytecode virtual machine with compile-time local slot resolution and structured jumps.",
+    name: 'Bytecode VM Foundation — Control Flow',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/vm.rs', 'src/compiler.rs', 'src/chunk.rs'],
+    summary:
+      'High-throughput stack-based bytecode virtual machine with compile-time local slot resolution and structured jumps.',
     highlights: [
-      "Compile-time local variable slot allocation (OpGetLocal, OpSetLocal)",
-      "Jump instructions: OpJump, OpJumpIfFalse, OpLoop",
-      "Low-overhead execution loops for while, for..in, and if/else branching",
-      "Constant pool indexing for strings, numbers, and boolean literals"
-    ]
+      'Compile-time local variable slot allocation (OpGetLocal, OpSetLocal)',
+      'Jump instructions: OpJump, OpJumpIfFalse, OpLoop',
+      'Low-overhead execution loops for while, for..in, and if/else branching',
+      'Constant pool indexing for strings, numbers, and boolean literals',
+    ],
   },
   {
     id: 4,
-    name: "Bytecode VM — Call Frames & Closures",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/vm.rs", "src/compiler.rs"],
-    summary: "Virtual stack CallFrame architecture with lexical upvalue capturing for first-class closures and nested functions.",
+    name: 'Bytecode VM — Call Frames & Closures',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/vm.rs', 'src/compiler.rs'],
+    summary:
+      'Virtual stack CallFrame architecture with lexical upvalue capturing for first-class closures and nested functions.',
     highlights: [
-      "Stack-based CallFrame architecture with max recursion depth protection",
-      "Lexical closure upvalue capturing: OpGetUpvalue, OpSetUpvalue, OpCloseUpvalue",
-      "First-class function values and closures passed as parameters",
-      "OpAllocArray and OpAllocMap for fast composite data construction"
-    ]
+      'Stack-based CallFrame architecture with max recursion depth protection',
+      'Lexical closure upvalue capturing: OpGetUpvalue, OpSetUpvalue, OpCloseUpvalue',
+      'First-class function values and closures passed as parameters',
+      'OpAllocArray and OpAllocMap for fast composite data construction',
+    ],
   },
   {
     id: 5,
-    name: "Memory Efficiency & Garbage Collection",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/gc.rs", "src/value.rs"],
-    summary: "Mark-and-sweep garbage collector with stack root tracing, eliminating heavy Arc/RwLock overhead for primitive values.",
+    name: 'Memory Efficiency & Garbage Collection',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/gc.rs', 'src/value.rs'],
+    summary:
+      'Mark-and-sweep garbage collector with stack root tracing, eliminating heavy Arc/RwLock overhead for primitive values.',
     highlights: [
-      "Mark-and-sweep GC engine with virtual stack and call frame root tracing",
-      "Automatic cyclic reference collection for nested closures and structures",
-      "Elimination of reference counting overhead for hot numeric and string loops",
-      "Configurable GC thresholds and explicit gc_collect() triggers"
-    ]
+      'Mark-and-sweep GC engine with virtual stack and call frame root tracing',
+      'Automatic cyclic reference collection for nested closures and structures',
+      'Elimination of reference counting overhead for hot numeric and string loops',
+      'Configurable GC thresholds and explicit gc_collect() triggers',
+    ],
   },
   {
     id: 6,
-    name: "Structured Module System",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/eval.rs", "src/stdlib.rs"],
-    summary: "Relative path module resolution with selective symbol imports and standard library system namespaces.",
+    name: 'Structured Module System',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/eval.rs', 'src/stdlib.rs'],
+    summary:
+      'Relative path module resolution with selective symbol imports and standard library system namespaces.',
     highlights: [
-      "Relative module imports: use { a, b } from \"./module.shae\"",
-      "Circular dependency detection with clear diagnostic traces",
-      "Core standard modules: std:fs (file I/O), std:path (path manipulation)",
-      "System interfaces: std:sys (arguments, exit, platform) and std:time (high-res clocks)"
+      'Relative module imports: use { a, b } from "./module.shae"',
+      'Circular dependency detection with clear diagnostic traces',
+      'Core standard modules: std:fs (file I/O), std:path (path manipulation)',
+      'System interfaces: std:sys (arguments, exit, platform) and std:time (high-res clocks)',
     ],
     codeSample: `use { read, write, exists } from "std:fs"
 use { platform, args } from "std:sys"
@@ -117,122 +123,130 @@ use { platform, args } from "std:sys"
 if exists("config.json") {
     let raw = read("config.json")
     print("Loaded config on {platform()}: {raw.len} bytes")
-}`
+}`,
   },
   {
     id: 7,
-    name: "Concurrency & Async I/O",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/channel.rs", "src/builtins.rs"],
-    summary: "Message-passing channels and built-in multi-threaded HTTP and TLS web server runtimes.",
+    name: 'Concurrency & Async I/O',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/channel.rs', 'src/builtins.rs'],
+    summary:
+      'Message-passing channels and built-in multi-threaded HTTP and TLS web server runtimes.',
     highlights: [
-      "Channel-based message passing: channel(capacity), send(), recv()",
-      "Multi-threaded non-blocking HTTP web server: serve(port, handler)",
-      "High-security TLS server runtime: serve_tls(port, cert, key, handler) via Rustls",
-      "JSON serialization built-in: json(obj) and parse_json(str)"
-    ]
+      'Channel-based message passing: channel(capacity), send(), recv()',
+      'Multi-threaded non-blocking HTTP web server: serve(port, handler)',
+      'High-security TLS server runtime: serve_tls(port, cert, key, handler) via Rustls',
+      'JSON serialization built-in: json(obj) and parse_json(str)',
+    ],
   },
   {
     id: 8,
-    name: "Expanded Standard Library",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/stdlib.rs"],
-    summary: "Cryptographic hash functions, PCRE regular expressions, and standard binary/URL encoding utilities.",
+    name: 'Expanded Standard Library',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/stdlib.rs'],
+    summary:
+      'Cryptographic hash functions, PCRE regular expressions, and standard binary/URL encoding utilities.',
     highlights: [
-      "std:crypto: SHA-256, SHA-512, HMAC-SHA256, secure CSPRNG random bytes",
-      "std:regex: PCRE regular expression matching, searching, and capture groups",
-      "std:codec: Base64 encoding/decoding and URL percent-encoding"
-    ]
+      'std:crypto: SHA-256, SHA-512, HMAC-SHA256, secure CSPRNG random bytes',
+      'std:regex: PCRE regular expression matching, searching, and capture groups',
+      'std:codec: Base64 encoding/decoding and URL percent-encoding',
+    ],
   },
   {
     id: 9,
-    name: "Package Manager & Project System",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/pkg.rs", "src/main.rs"],
-    summary: "Integrated CLI package manager with deterministic dependency resolution and project manifests.",
+    name: 'Package Manager & Project System',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/pkg.rs', 'src/main.rs'],
+    summary:
+      'Integrated CLI package manager with deterministic dependency resolution and project manifests.',
     highlights: [
-      "CLI package commands: shae pkg init, shae pkg add, shae pkg install",
-      "Declarative shae.toml project manifest and metadata specification",
-      "Deterministic dependency resolution locked via shae.lock",
-      "Semantic versioning (SemVer) dependency graph validation"
+      'CLI package commands: shae pkg init, shae pkg add, shae pkg install',
+      'Declarative shae.toml project manifest and metadata specification',
+      'Deterministic dependency resolution locked via shae.lock',
+      'Semantic versioning (SemVer) dependency graph validation',
     ],
     cliSample: `shae pkg init my-project
 shae pkg add @shae/sqlite
-shae pkg install`
+shae pkg install`,
   },
   {
     id: 10,
-    name: "LSP Daemon & Standalone Bundler",
-    category: "foundation",
-    categoryLabel: "Core Foundation",
-    files: ["src/lsp.rs", "src/bundle.rs"],
-    summary: "Language Server Protocol daemon for editor integration and single-binary application distribution.",
+    name: 'LSP Daemon & Standalone Bundler',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/lsp.rs', 'src/bundle.rs'],
+    summary:
+      'Language Server Protocol daemon for editor integration and single-binary application distribution.',
     highlights: [
-      "Language Server Protocol daemon (shae lsp) with JSON-RPC standard wire",
-      "Real-time syntax diagnostics, document symbols, and autocompletion",
-      "Single-binary application bundler (shae bundle app.shae -o app)",
-      "Self-contained executable distribution with zero runtime dependencies"
-    ]
+      'Language Server Protocol daemon (shae lsp) with JSON-RPC standard wire',
+      'Real-time syntax diagnostics, document symbols, and autocompletion',
+      'Single-binary application bundler (shae bundle app.shae -o app)',
+      'Self-contained executable distribution with zero runtime dependencies',
+    ],
   },
   {
     id: 11,
-    name: "Bytecode Compilation & Serialization",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["src/compiler.rs", "src/chunk.rs"],
-    summary: "Ahead-of-time bytecode compilation into binary .shaec containers with disassembler inspection.",
+    name: 'Bytecode Compilation & Serialization',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['src/compiler.rs', 'src/chunk.rs'],
+    summary:
+      'Ahead-of-time bytecode compilation into binary .shaec containers with disassembler inspection.',
     highlights: [
-      "AOT bytecode compilation: shae compile <file.shae> -o <out.shaec>",
-      "Compact binary bytecode container with magic header \\x7fSHAE",
-      "Interactive bytecode disassembler: shae disasm <file.shaec>",
-      "Transparent direct loading of precompiled .shaec files via standard use"
+      'AOT bytecode compilation: shae compile <file.shae> -o <out.shaec>',
+      'Compact binary bytecode container with magic header \\x7fSHAE',
+      'Interactive bytecode disassembler: shae disasm <file.shaec>',
+      'Transparent direct loading of precompiled .shaec files via standard use',
     ],
     cliSample: `shae compile server.shae -o server.shaec
-shae disasm server.shaec`
+shae disasm server.shaec`,
   },
   {
     id: 12,
-    name: "VM-Backed Interactive REPL",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["src/repl.rs"],
-    summary: "Persistent VM evaluation loop maintaining global variables across interactive lines with meta-commands.",
+    name: 'VM-Backed Interactive REPL',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['src/repl.rs'],
+    summary:
+      'Persistent VM evaluation loop maintaining global variables across interactive lines with meta-commands.',
     highlights: [
-      "Interactive VM session preserving global bindings across input prompts",
-      "Multiline balance checker for nested blocks, braces, and arrays",
-      "Meta commands: :help, :disasm, :globals, :reset, :engine [vm|ast]",
-      "Syntax highlighted token feedback and runtime error caret markers"
-    ]
+      'Interactive VM session preserving global bindings across input prompts',
+      'Multiline balance checker for nested blocks, braces, and arrays',
+      'Meta commands: :help, :disasm, :globals, :reset, :engine [vm|ast]',
+      'Syntax highlighted token feedback and runtime error caret markers',
+    ],
   },
   {
     id: 13,
-    name: "Standalone Bundler Bytecode Integration",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["src/bundle.rs"],
-    summary: "Bundling precompiled bytecode into standalone executables with zero startup parse overhead.",
+    name: 'Standalone Bundler Bytecode Integration',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['src/bundle.rs'],
+    summary:
+      'Bundling precompiled bytecode into standalone executables with zero startup parse overhead.',
     highlights: [
-      "Direct embedding of precompiled bytecode chunks into the standalone binary stub",
-      "Instant startup time (sub-3ms) with zero source parsing or AST allocation",
-      "--strip flag for stripping debug symbols and source protection",
-      "Cross-platform binary output for Linux and macOS"
-    ]
+      'Direct embedding of precompiled bytecode chunks into the standalone binary stub',
+      'Instant startup time (sub-3ms) with zero source parsing or AST allocation',
+      '--strip flag for stripping debug symbols and source protection',
+      'Cross-platform binary output for Linux and macOS',
+    ],
   },
   {
     id: 14,
-    name: "Actor Concurrency & Supervision Trees",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["src/actor.rs", "src/value.rs"],
-    summary: "Lightweight OS-thread actors with unbounded FIFO mailboxes, request-response messaging, and supervision trees.",
+    name: 'Actor Concurrency & Supervision Trees',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['src/actor.rs', 'src/value.rs'],
+    summary:
+      'Lightweight OS-thread actors with unbounded FIFO mailboxes, request-response messaging, and supervision trees.',
     highlights: [
-      "Stateful actor processes backed by OS threads and Condvar zero-idle CPU parking",
-      "Unbounded FIFO mailboxes with synchronous request-response: ask(msg, [timeout])",
-      "Global actor registry: actor.register(\"name\", handle) and actor.whereis(\"name\")",
-      "Supervision strategies: OneForOne and AllForOne with sliding restart limits"
+      'Stateful actor processes backed by OS threads and Condvar zero-idle CPU parking',
+      'Unbounded FIFO mailboxes with synchronous request-response: ask(msg, [timeout])',
+      'Global actor registry: actor.register("name", handle) and actor.whereis("name")',
+      'Supervision strategies: OneForOne and AllForOne with sliding restart limits',
     ],
     codeSample: `let actor = use "std:actor"
 
@@ -245,104 +259,111 @@ let counter = actor.spawn(0, fn(state, msg) {
 })
 
 let val = counter.ask({ "op": "inc", "by": 5 })
-print("Counter incremented: {val}")`
+print("Counter incremented: {val}")`,
   },
   {
     id: 15,
-    name: "Pure-Shae Frontend & Self-Parsing",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["lib/compiler/lexer.shae", "lib/compiler/parser.shae"],
-    summary: "Complete lexical analyzer and Pratt recursive-descent parser written entirely in pure Shae.",
+    name: 'Pure-Shae Frontend & Self-Parsing',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['lib/compiler/lexer.shae', 'lib/compiler/parser.shae'],
+    summary:
+      'Complete lexical analyzer and Pratt recursive-descent parser written entirely in pure Shae.',
     highlights: [
-      "Lexer tokenizing all Shae primitives, operators, and raw string literals in pure Shae",
-      "Recursive-descent Pratt parser handling operator precedence and expression trees",
-      "Complete AST node structure generation without Rust intermediaries",
-      "Self-parsing verified via tests/shae/self_parser_test.shae"
-    ]
+      'Lexer tokenizing all Shae primitives, operators, and raw string literals in pure Shae',
+      'Recursive-descent Pratt parser handling operator precedence and expression trees',
+      'Complete AST node structure generation without Rust intermediaries',
+      'Self-parsing verified via tests/shae/self_parser_test.shae',
+    ],
   },
   {
     id: 16,
-    name: "Pure-Shae Bytecode Compiler",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["lib/compiler/codegen.shae", "lib/compiler/chunk.shae"],
-    summary: "Pure-Shae bytecode code generator emitting .shaec bytecode chunks, constant pools, and upvalue descriptors.",
+    name: 'Pure-Shae Bytecode Compiler',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['lib/compiler/codegen.shae', 'lib/compiler/chunk.shae'],
+    summary:
+      'Pure-Shae bytecode code generator emitting .shaec bytecode chunks, constant pools, and upvalue descriptors.',
     highlights: [
-      "Pure-Shae AST traversal and bytecode instruction generation",
-      "Constant pool deduplication and back-patching for forward jumps",
-      "Upvalue descriptor emission for nested closures and lexical environments",
-      "Direct binary writing to .shaec format conforming to VM specification"
-    ]
+      'Pure-Shae AST traversal and bytecode instruction generation',
+      'Constant pool deduplication and back-patching for forward jumps',
+      'Upvalue descriptor emission for nested closures and lexical environments',
+      'Direct binary writing to .shaec format conforming to VM specification',
+    ],
   },
   {
     id: 17,
-    name: "Direct Native Linker (ELF & PE)",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["lib/compiler/linker.shae", "lib/compiler/elf.shae", "lib/compiler/pe.shae"],
-    summary: "Pure-Shae native object linker producing 64-bit ELF and PE/COFF binaries with zero external C toolchain dependencies.",
+    name: 'Direct Native Linker (ELF & PE)',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['lib/compiler/linker.shae', 'lib/compiler/elf.shae', 'lib/compiler/pe.shae'],
+    summary:
+      'Pure-Shae native object linker producing 64-bit ELF and PE/COFF binaries with zero external C toolchain dependencies.',
     highlights: [
-      "Stand-alone 64-bit ELF executable emitter for Linux x86_64",
-      "Portable Executable (PE/COFF) binary emitter for Windows x86_64",
-      "Zero dependency on gcc, clang, ld, or lld toolchains (shae link)",
-      "Direct program header, section table, and entry point layout construction"
-    ]
+      'Stand-alone 64-bit ELF executable emitter for Linux x86_64',
+      'Portable Executable (PE/COFF) binary emitter for Windows x86_64',
+      'Zero dependency on gcc, clang, ld, or lld toolchains (shae link)',
+      'Direct program header, section table, and entry point layout construction',
+    ],
   },
   {
     id: 18,
-    name: "WebAssembly & Edge Runtime Target",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["lib/compiler/wasm.shae", "src/wasm.rs"],
-    summary: "Pure-Shae WebAssembly binary emitter and built-in zero-dependency WasmRunner execution runtime.",
+    name: 'WebAssembly & Edge Runtime Target',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['lib/compiler/wasm.shae', 'src/wasm.rs'],
+    summary:
+      'Pure-Shae WebAssembly binary emitter and built-in zero-dependency WasmRunner execution runtime.',
     highlights: [
-      "Pure-Shae WebAssembly binary emitter generating valid .wasm modules",
-      "Type section, function section, export section, and code section serialization",
-      "In-process zero-dependency WasmRunner interpreter (shae wasm <file> --run)",
-      "Ready for edge deployment in Cloudflare Workers and Fastly Compute"
-    ]
+      'Pure-Shae WebAssembly binary emitter generating valid .wasm modules',
+      'Type section, function section, export section, and code section serialization',
+      'In-process zero-dependency WasmRunner interpreter (shae wasm <file> --run)',
+      'Ready for edge deployment in Cloudflare Workers and Fastly Compute',
+    ],
   },
   {
     id: 19,
-    name: "Distributed Actor Mesh (`std:actor:cluster`)",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["src/actor_cluster.rs", "lib/actor/cluster.shae"],
-    summary: "Distributed actor clustering over length-delimited TCP with secret cookie handshakes and remote messaging.",
+    name: 'Distributed Actor Mesh (`std:actor:cluster`)',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['src/actor_cluster.rs', 'lib/actor/cluster.shae'],
+    summary:
+      'Distributed actor clustering over length-delimited TCP with secret cookie handshakes and remote messaging.',
     highlights: [
-      "TCP framed wire protocol with 64MB frame overflow protection",
-      "Cluster authentication handshake via shared secret cookie verification",
-      "Remote actor handle abstraction: actor@node with transparent ask/send routing",
-      "Dynamic cluster node discovery, round-robin pools, and bully leader election"
-    ]
+      'TCP framed wire protocol with 64MB frame overflow protection',
+      'Cluster authentication handshake via shared secret cookie verification',
+      'Remote actor handle abstraction: actor@node with transparent ask/send routing',
+      'Dynamic cluster node discovery, round-robin pools, and bully leader election',
+    ],
   },
   {
     id: 20,
-    name: "Self-Hosting Bootstrap Pipeline",
-    category: "tooling",
-    categoryLabel: "Tooling & Pure-Shae Frontend",
-    files: ["lib/compiler/main.shae"],
-    summary: "Unified pure-Shae compiler driver CLI coordinating lexing, parsing, bytecode, native linking, and WASM generation.",
+    name: 'Self-Hosting Bootstrap Pipeline',
+    category: 'tooling',
+    categoryLabel: 'Tooling & Pure-Shae Frontend',
+    files: ['lib/compiler/main.shae'],
+    summary:
+      'Unified pure-Shae compiler driver CLI coordinating lexing, parsing, bytecode, native linking, and WASM generation.',
     highlights: [
-      "Central compiler driver entry point written in pure Shae",
-      "Unified interface for --compile, --disasm, --link, --wasm, and --llvm",
-      "Full command-line argument parser and pipeline coordinator",
-      "Self-compiles into standalone compiler binaries"
-    ]
+      'Central compiler driver entry point written in pure Shae',
+      'Unified interface for --compile, --disasm, --link, --wasm, and --llvm',
+      'Full command-line argument parser and pipeline coordinator',
+      'Self-compiles into standalone compiler binaries',
+    ],
   },
   {
     id: 21,
-    name: "Cluster Transport Security: TLS & mTLS",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/actor_cluster.rs"],
-    summary: "Mutual TLS (mTLS) wire transport for distributed actor clusters using Rustls 0.23 with root CA peer verification.",
+    name: 'Cluster Transport Security: TLS & mTLS',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/actor_cluster.rs'],
+    summary:
+      'Mutual TLS (mTLS) wire transport for distributed actor clusters using Rustls 0.23 with root CA peer verification.',
     highlights: [
-      "Rustls 0.23 wire encryption with ring cryptography provider",
-      "Mutual TLS (mTLS) client and server certificate verification via root CA",
-      "Rogue peer connection rejection and tamper-proof wire messaging",
-      "Runtime reflection inspection method: node.is_tls()"
+      'Rustls 0.23 wire encryption with ring cryptography provider',
+      'Mutual TLS (mTLS) client and server certificate verification via root CA',
+      'Rogue peer connection rejection and tamper-proof wire messaging',
+      'Runtime reflection inspection method: node.is_tls()',
     ],
     codeSample: `let cluster = use "std:actor:cluster"
 
@@ -355,20 +376,21 @@ let secure_node = cluster.node("vault_alpha", "0.0.0.0:9443", {
     }
 })
 
-print("Secure mTLS Cluster Node online: {secure_node.is_tls()}")`
+print("Secure mTLS Cluster Node online: {secure_node.is_tls()}")`,
   },
   {
     id: 22,
-    name: "First-Class `async` / `await` Coroutines",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/value.rs", "src/async_rt.rs", "std:async"],
-    summary: "Thread-safe coroutine tasks with idempotent awaiting and standard combinators (spawn, all, race, timeout).",
+    name: 'First-Class `async` / `await` Coroutines',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/value.rs', 'src/async_rt.rs', 'std:async'],
+    summary:
+      'Thread-safe coroutine tasks with idempotent awaiting and standard combinators (spawn, all, race, timeout).',
     highlights: [
-      "Thread-safe TaskInner coroutine primitive with idempotent await resolution",
-      "Coroutine combinators: async.spawn, async.all, async.race, async.sleep",
-      "Safe execution timeouts with async.timeout(task, ms)",
-      "Zero thread blocking for timer-based delays"
+      'Thread-safe TaskInner coroutine primitive with idempotent await resolution',
+      'Coroutine combinators: async.spawn, async.all, async.race, async.sleep',
+      'Safe execution timeouts with async.timeout(task, ms)',
+      'Zero thread blocking for timer-based delays',
     ],
     codeSample: `let async = use "std:async"
 
@@ -383,114 +405,121 @@ let task2 = async.spawn(fn() {
 })
 
 let results = await async.all([task1, task2])
-print("Async tasks resolved: {results}") // ["alpha", "beta"]`
+print("Async tasks resolved: {results}") // ["alpha", "beta"]`,
   },
   {
     id: 23,
-    name: "Standard Documentation Engine",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/doc.rs"],
-    summary: "Static HTML documentation generator parsing item (///) and module-level (!//) doc comments.",
+    name: 'Standard Documentation Engine',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/doc.rs'],
+    summary:
+      'Static HTML documentation generator parsing item (///) and module-level (!//) doc comments.',
     highlights: [
-      "Extraction of doc comments: /// for functions/types and //! for modules",
-      "Generation of static searchable HTML documentation sites (shae doc)",
-      "Markdown export and JSON AST API data model generation",
-      "Cross-linking of standard library and user modules"
+      'Extraction of doc comments: /// for functions/types and //! for modules',
+      'Generation of static searchable HTML documentation sites (shae doc)',
+      'Markdown export and JSON AST API data model generation',
+      'Cross-linking of standard library and user modules',
     ],
     cliSample: `shae doc src/ -o docs/
-shae doc --json > api.json`
+shae doc --json > api.json`,
   },
   {
     id: 24,
-    name: "Package Registry & Publishing",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/pkg.rs"],
-    summary: "Gzip tarball package archive format (.shaepkg) with cryptographic SHA-256 integrity checksums.",
+    name: 'Package Registry & Publishing',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/pkg.rs'],
+    summary:
+      'Gzip tarball package archive format (.shaepkg) with cryptographic SHA-256 integrity checksums.',
     highlights: [
-      "Standard package packaging: shae pkg pack creates .shaepkg tarballs",
-      "Cryptographic SHA-256 integrity checksum generation and verification",
-      "Registry publishing pipeline: shae pkg publish and shae pkg verify",
-      "Zero external archive utilities required"
+      'Standard package packaging: shae pkg pack creates .shaepkg tarballs',
+      'Cryptographic SHA-256 integrity checksum generation and verification',
+      'Registry publishing pipeline: shae pkg publish and shae pkg verify',
+      'Zero external archive utilities required',
     ],
     cliSample: `shae pkg pack
-shae pkg verify my-package-0.1.0.shaepkg`
+shae pkg verify my-package-0.1.0.shaepkg`,
   },
   {
     id: 25,
-    name: "Pure-Shae Test Runner & Live Doc Server",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/test_runner.rs", "src/doc.rs"],
-    summary: "Integrated unit test runner with pattern filtering, assertions, and live HTTP documentation server.",
+    name: 'Pure-Shae Test Runner & Live Doc Server',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/test_runner.rs', 'src/doc.rs'],
+    summary:
+      'Integrated unit test runner with pattern filtering, assertions, and live HTTP documentation server.',
     highlights: [
-      "Built-in test runner: shae test [dir] with regex filtering (-f, --filter)",
-      "Rich assertion suite: assert_eq, assert_ne, assert_throws",
-      "Dual-engine verification (tests execute identically on VM and AST)",
-      "Live HTTP documentation server with instant hot-reload (shae doc --serve --port 8080)"
+      'Built-in test runner: shae test [dir] with regex filtering (-f, --filter)',
+      'Rich assertion suite: assert_eq, assert_ne, assert_throws',
+      'Dual-engine verification (tests execute identically on VM and AST)',
+      'Live HTTP documentation server with instant hot-reload (shae doc --serve --port 8080)',
     ],
     cliSample: `shae test tests/ -f "buffer"
-shae doc --serve --port 8080`
+shae doc --serve --port 8080`,
   },
   {
     id: 26,
-    name: "Authenticated Symmetric Cryptography",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/stdlib.rs"],
-    summary: "Industrial-grade AEAD authenticated ciphers and standard cryptographic key derivation functions.",
+    name: 'Authenticated Symmetric Cryptography',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/stdlib.rs'],
+    summary:
+      'Industrial-grade AEAD authenticated ciphers and standard cryptographic key derivation functions.',
     highlights: [
-      "AES-256-GCM authenticated encryption and decryption with 128-bit authentication tags",
-      "ChaCha20-Poly1305 high-performance AEAD cipher",
-      "HKDF-SHA256 (HMAC-based Extract-and-Expand Key Derivation Function)",
-      "PBKDF2-HMAC-SHA256 password hashing with configurable iterations"
-    ]
+      'AES-256-GCM authenticated encryption and decryption with 128-bit authentication tags',
+      'ChaCha20-Poly1305 high-performance AEAD cipher',
+      'HKDF-SHA256 (HMAC-based Extract-and-Expand Key Derivation Function)',
+      'PBKDF2-HMAC-SHA256 password hashing with configurable iterations',
+    ],
   },
   {
     id: 27,
-    name: "Stage 2 Self-Hosting Two-Stage Bootstrap",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["tests/stage2_bootstrap_test.rs"],
-    summary: "Bit-for-bit identical two-stage compiler bootstrap verification across both Bytecode VM and AST Evaluator.",
+    name: 'Stage 2 Self-Hosting Two-Stage Bootstrap',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['tests/stage2_bootstrap_test.rs'],
+    summary:
+      'Bit-for-bit identical two-stage compiler bootstrap verification across both Bytecode VM and AST Evaluator.',
     highlights: [
-      "Stage 1 compiler compiles Stage 2 compiler source into bytecode",
-      "Stage 2 compiler compiles itself again, achieving bit-for-bit identical bytecode hashes",
-      "Full language self-hosting verification executed in automated CI test harness",
-      "Dual-engine parity verified during every stage of compilation"
-    ]
+      'Stage 1 compiler compiles Stage 2 compiler source into bytecode',
+      'Stage 2 compiler compiles itself again, achieving bit-for-bit identical bytecode hashes',
+      'Full language self-hosting verification executed in automated CI test harness',
+      'Dual-engine parity verified during every stage of compilation',
+    ],
   },
   {
     id: 28,
-    name: "Direct LLVM SSA Code Generation (`shae llvm`)",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/llvm.rs", "lib/compiler/llvm.shae"],
-    summary: "Direct emission of compliant LLVM 18 SSA IR with entry block allocas, mem2reg promotion, and Clang -O2 native compilation.",
+    name: 'Direct LLVM SSA Code Generation (`shae llvm`)',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/llvm.rs', 'lib/compiler/llvm.shae'],
+    summary:
+      'Direct emission of compliant LLVM 18 SSA IR with entry block allocas, mem2reg promotion, and Clang -O2 native compilation.',
     highlights: [
-      "Direct LLVM 18 IR SSA code generation without third-party LLVM C library bindings",
-      "Canonical entry block alloca allocation promoted to hardware registers via mem2reg",
-      "External C runtime interop bindings (printf, puts, malloc, free, exit)",
-      "Clang -O2 integration producing optimized standalone native executables (shae llvm -c)"
+      'Direct LLVM 18 IR SSA code generation without third-party LLVM C library bindings',
+      'Canonical entry block alloca allocation promoted to hardware registers via mem2reg',
+      'External C runtime interop bindings (printf, puts, malloc, free, exit)',
+      'Clang -O2 integration producing optimized standalone native executables (shae llvm -c)',
     ],
     cliSample: `shae llvm app.shae -o app.ll
 shae llvm -c app.shae -o app
-shae llvm -r app.shae`
+shae llvm -r app.shae`,
   },
   {
     id: 29,
-    name: "Zero-Copy Typed Memory Buffers (`std:buffer`)",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/buffer.rs", "examples/buffer_demo.shae"],
-    summary: "Arc/RwLock-backed ByteBuffer container with zero-copy slicing, endian binary I/O, and struct pack/unpack engine.",
+    name: 'Zero-Copy Typed Memory Buffers (`std:buffer`)',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/buffer.rs', 'examples/buffer_demo.shae'],
+    summary:
+      'Arc/RwLock-backed ByteBuffer container with zero-copy slicing, endian binary I/O, and struct pack/unpack engine.',
     highlights: [
-      "ByteBuffer container sharing Arc<RwLock<Vec<u8>>> with offset and length pointers",
-      "Sub-slice creation buf.slice(start, end) with zero heap memory allocation",
-      "Bidirectional in-place mutation reflection between slices and parent buffers",
-      "Endian-aware numeric reads/writes (u8..u64, i8..i64, f32, f64 in Little/Big-Endian)",
-      "Struct layout packing engine: pack(\"<I2h4s\", ...), unpack, pack_into, and calcsize"
+      'ByteBuffer container sharing Arc<RwLock<Vec<u8>>> with offset and length pointers',
+      'Sub-slice creation buf.slice(start, end) with zero heap memory allocation',
+      'Bidirectional in-place mutation reflection between slices and parent buffers',
+      'Endian-aware numeric reads/writes (u8..u64, i8..i64, f32, f64 in Little/Big-Endian)',
+      'Struct layout packing engine: pack("<I2h4s", ...), unpack, pack_into, and calcsize',
     ],
     codeSample: `use { alloc, pack, unpack, calcsize } from "std:buffer"
 
@@ -504,20 +533,21 @@ print("Parent at byte 8 reflects child slice mutation: {parent[8]}") // 255
 // High-speed binary struct packing
 let packed = pack("<I2h4s", 4000000000, -800, 1600, "SHAE")
 let fields = unpack("<I2h4s", packed)
-print("Unpacked struct fields: u32={fields[0]}, tag={fields[3]}")`
+print("Unpacked struct fields: u32={fields[0]}, tag={fields[3]}")`,
   },
   {
     id: 30,
-    name: "Hot-Code Reloading for Actors & Clusters",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/actor.rs", "src/actor_cluster.rs", "examples/actor_hot_reload_demo.shae"],
-    summary: "Zero-downtime actor handler swapping with continuous state preservation, schema migrations, and remote cluster reload.",
+    name: 'Hot-Code Reloading for Actors & Clusters',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/actor.rs', 'src/actor_cluster.rs', 'examples/actor_hot_reload_demo.shae'],
+    summary:
+      'Zero-downtime actor handler swapping with continuous state preservation, schema migrations, and remote cluster reload.',
     highlights: [
-      "ActorMessage::Reload hot-swaps active handler while preserving daemon state and FIFO mailboxes",
-      "Zero dropped messages or severed client connections during code reloading",
-      "State schema migration via migration_fn(&mut state) transforming in-memory models",
-      "Distributed cluster hot-reload over TCP/TLS mesh via ClusterWireMsg::Reload"
+      'ActorMessage::Reload hot-swaps active handler while preserving daemon state and FIFO mailboxes',
+      'Zero dropped messages or severed client connections during code reloading',
+      'State schema migration via migration_fn(&mut state) transforming in-memory models',
+      'Distributed cluster hot-reload over TCP/TLS mesh via ClusterWireMsg::Reload',
     ],
     codeSample: `let actor = use "std:actor"
 
@@ -538,24 +568,120 @@ let v2_handler = fn(st, msg) {
 }
 
 daemon.reload(v2_handler)
-print("Daemon successfully hot-reloaded to V2 with continuous state.")`
+print("Daemon successfully hot-reloaded to V2 with continuous state.")`,
   },
   {
     id: 31,
-    name: "Benchmark Suite & Showcase (`shae bench`)",
-    category: "enterprise",
-    categoryLabel: "Enterprise & Native SSA",
-    files: ["src/bench.rs", "benchmarks/*.shae", "tests/bench_test.rs"],
-    summary: "Automated telemetry benchmark runner reporting iterations, latency, and ops/sec throughput across real workloads.",
+    name: 'Benchmark Suite & Showcase (`shae bench`)',
+    category: 'enterprise',
+    categoryLabel: 'Enterprise & Native SSA',
+    files: ['src/bench.rs', 'benchmarks/*.shae', 'tests/bench_test.rs'],
+    summary:
+      'Automated telemetry benchmark runner reporting iterations, latency, and ops/sec throughput across real workloads.',
     highlights: [
-      "CLI benchmark command: shae bench [filter] with ASCII formatted telemetry tables",
-      "Real workloads: Fibonacci (recursive/iterative), ByteBuffer allocation, Actor throughput, collections",
-      "Reporting iterations, total duration, mean latency (µs), and throughput (ops/sec)",
-      "Showcase demo programs in examples/ verifying end-to-end language features"
+      'CLI benchmark command: shae bench [filter] with ASCII formatted telemetry tables',
+      'Real workloads: Fibonacci (recursive/iterative), ByteBuffer allocation, Actor throughput, collections',
+      'Reporting iterations, total duration, mean latency (µs), and throughput (ops/sec)',
+      'Showcase demo programs in examples/ verifying end-to-end language features',
     ],
     cliSample: `shae bench
-shae bench -f "buffer" -i 500`
-  }
+shae bench -f "buffer" -i 500`,
+  },
+  {
+    id: 32,
+    name: 'Gradual Typing & Static Type Checker (`shae check`)',
+    category: 'foundation',
+    categoryLabel: 'Core Foundation',
+    files: ['src/typecheck.rs', 'src/parser.rs', 'src/ast.rs', 'tests/typecheck_test.rs'],
+    summary:
+      'Opt-in gradual static type system supporting type annotations on functions, variables, and return bounds, with nullable union types and compile-time diagnostics.',
+    highlights: [
+      'Syntax type annotations: fn name(arg: type) -> ret_type and let var: type = val',
+      'Primitive and compound types: int, float, string, bool, list, map, any, null',
+      'Nullable union types: int | null, string | float | any with pipe syntax',
+      'Static analyzer (shae check) validating return type consistency, argument counts, and assignment types',
+      'Full backward compatibility: dynamically typed untyped code remains first-class',
+      'Editor integration via Language Server Protocol (LSP) diagnostics and squiggles',
+    ],
+    codeSample: `// Gradual static type annotations with nullable union types
+fn fetch_record(id: int, fallback: string | null) -> string | null {
+    if id <= 0 {
+        return fallback
+    }
+    return "record_#" + id
+}
+
+let name: string | null = fetch_record(42, null)
+print("Fetched: {name}")
+
+// Static checker detects mismatches at compile time:
+// $ shae check api.shae
+// [OK] Type checking passed with 0 errors`,
+    cliSample: `shae check src/main.shae`,
+  },
+  {
+    id: 33,
+    name: 'Remote Package Registry & Manager Subsystem (`shae pkg`)',
+    category: 'tooling',
+    categoryLabel: 'Developer Tooling',
+    files: ['src/pkg.rs', 'src/main.rs', 'tests/pkg_registry_test.rs', 'tests/pkg_publish_test.rs'],
+    summary:
+      'Production package manager with remote registry HTTP synchronization, .shaepkg archive distribution, SHA-256 integrity verification, and lockfile resolution.',
+    highlights: [
+      'Subcommands: shae pkg init, shae pkg add <pkg>@<ver>, shae pkg install, shae pkg pack, shae pkg publish, shae pkg verify',
+      'Remote package index resolution over HTTP/HTTPS with automatic tarball download',
+      'Shaepkg archive format (.shaepkg) with gzip compression and embedded metadata manifest',
+      'Cryptographic integrity: SHA-256 checksum verification and zip-slip path traversal attack prevention',
+      'Deterministic dependency resolution with shae.toml and shae.lock synchronization',
+    ],
+    cliSample: `shae pkg init my_crate
+shae pkg add calc@2.0.0 --registry https://registry.shae-lang.org
+shae pkg pack
+shae pkg publish --registry https://registry.shae-lang.org --token $SHAE_TOKEN`,
+  },
+  {
+    id: 34,
+    name: 'Creative Engine & Space Invaders 2D Showcase (`std:gui`, `std:audio`, `std:ui`)',
+    category: 'enterprise',
+    categoryLabel: 'Creative & Multimedia Suite',
+    files: [
+      'src/gui.rs',
+      'src/audio.rs',
+      'src/ui.rs',
+      'src/ui_mod.rs',
+      'examples/space_invaders.shae',
+    ],
+    summary:
+      'Integrated multimedia engine with TrueColor ANSI / desktop windowing, real-time waveform audio synthesis, arcade UI widgets, and a complete Space Invaders 2D game.',
+    highlights: [
+      'std:gui: Multi-mode 24-bit TrueColor ANSI half-block terminal canvas, minifb desktop windowing, sprite blitting, and keyboard polling',
+      'std:audio: Real-time Rodio waveform audio synthesis (sine, square, triangle, sawtooth, white noise) and retro sound triggers (shoot, invader_killed, explosion, step)',
+      'std:ui: Retro arcade HUD rendering, panel containers, score displays, health/lives icons, and immediate-mode UI widgets',
+      'examples/space_invaders.shae: Full 2D arcade game featuring animated alien fleets, bunker degradation, player cannon, and game states',
+      'Shae Studio Web IDE (shae ide): Browser-based graphical IDE with live code editing and preview',
+    ],
+    codeSample: `use { init, clear, draw_sprite, render, is_key_down } from "std:gui"
+use { play_sound } from "std:audio"
+use { draw_hud } from "std:ui"
+
+let screen = init(60, 30, "Space Invaders 2D")
+let player_x = 28
+let score = 0
+
+// Game loop executing at 60 frames per second
+while true {
+    clear(screen, 0x000000)
+    if is_key_down("Left")  { player_x = player_x - 1 }
+    if is_key_down("Right") { player_x = player_x + 1 }
+    if is_key_down("Space") { play_sound("shoot") }
+
+    draw_hud(screen, score, 3, 1)
+    draw_sprite(screen, player_x, 26, "player_cannon", 0x33FF33)
+    render(screen)
+}`,
+    cliSample: `shae run examples/space_invaders.shae
+shae ide --port 8080`,
+  },
 ];
 
 const llvmIrCode = `; ModuleID = 'fibonacci.shae'
@@ -710,12 +836,11 @@ fn main() {
         return compile_to_llvm(args[2], args[3])
     }
 }`;
-
 ---
 
 <Layout
-  title="Shae — Features & Systems Architecture (Chunks 1–31)"
-  description="Comprehensive systems breakdown of Shae Chunks 1–31: LLVM 18 SSA compiler, Cranelift JIT engine, zero-copy buffers, TLS/mTLS cluster mesh, actor hot-reloading, and pure-Shae self-hosting."
+  title="Shae — Features & Systems Architecture (Chunks 1–34)"
+  description="Comprehensive systems breakdown of Shae Chunks 1–34: LLVM 18 SSA compiler, Cranelift JIT engine, zero-copy buffers, TLS/mTLS cluster mesh, actor hot-reloading, and pure-Shae self-hosting."
 >
   <!-- Hero Section -->
   <header class="features-hero">
@@ -725,28 +850,45 @@ fn main() {
           <span class="dot"></span> Milestone 3 Systems Architecture
         </span>
         <span class="badge">Shae v0.4.0 Engine</span>
-        <span class="badge">31 Evolution Chunks</span>
+        <span class="badge">34 Evolution Chunks</span>
       </div>
 
-      <h1 class="hero-title">
-        Features &amp; Systems Architecture
-      </h1>
+      <h1 class="hero-title">Features &amp; Systems Architecture</h1>
 
       <p class="hero-subtitle">
-        An engineering deep-dive across all 31 language evolution chunks. Explore Shae's native LLVM 18 SSA generator, Cranelift JIT tiered compilation, zero-copy typed memory buffers, fault-tolerant TLS/mTLS actor cluster mesh, live hot-code reloading, and pure-Shae self-hosting bootstrap pipeline.
+        An engineering deep-dive across all 34 language evolution chunks. Explore Shae's native LLVM
+        18 SSA generator, Cranelift JIT tiered compilation, zero-copy typed memory buffers,
+        fault-tolerant TLS/mTLS actor cluster mesh, live hot-code reloading, and pure-Shae
+        self-hosting bootstrap pipeline.
       </p>
 
       <!-- Quick Jump Navigation -->
       <nav class="anchor-jump-bar" aria-label="Section Quick Navigation">
         <span class="jump-label">Jump to:</span>
-        <a href="#topology" class="jump-pill">System Topology</a>
-        <a href="#llvm-ssa" class="jump-pill">LLVM 18 SSA</a>
-        <a href="#cranelift-jit" class="jump-pill">Cranelift JIT</a>
-        <a href="#zero-copy-buffer" class="jump-pill">Zero-Copy Buffers</a>
-        <a href="#cluster-mesh" class="jump-pill">TLS Mesh &amp; Hot Reload</a>
-        <a href="#self-hosting" class="jump-pill">Self-Hosting Compiler</a>
-        <a href="#dual-engine" class="jump-pill">Dual-Engine Parity</a>
-        <a href="#chunks-matrix" class="jump-pill highlight-pill">Chunks 1–31 Matrix</a>
+        <a href="#topology" class="jump-pill">
+          System Topology
+        </a>
+        <a href="#llvm-ssa" class="jump-pill">
+          LLVM 18 SSA
+        </a>
+        <a href="#cranelift-jit" class="jump-pill">
+          Cranelift JIT
+        </a>
+        <a href="#zero-copy-buffer" class="jump-pill">
+          Zero-Copy Buffers
+        </a>
+        <a href="#cluster-mesh" class="jump-pill">
+          TLS Mesh &amp; Hot Reload
+        </a>
+        <a href="#self-hosting" class="jump-pill">
+          Self-Hosting Compiler
+        </a>
+        <a href="#dual-engine" class="jump-pill">
+          Dual-Engine Parity
+        </a>
+        <a href="#chunks-matrix" class="jump-pill highlight-pill">
+          Chunks 1–34 Matrix
+        </a>
       </nav>
     </div>
   </header>
@@ -757,7 +899,10 @@ fn main() {
       <div class="section-head animate-fade-up">
         <span class="badge badge-red">Pipeline Topology</span>
         <h2>Unified Execution &amp; Lowering Topology</h2>
-        <p>From source tokens to SSA register allocation, in-memory JIT machine code, and standalone native object linking.</p>
+        <p>
+          From source tokens to SSA register allocation, in-memory JIT machine code, and standalone
+          native object linking.
+        </p>
       </div>
 
       <div class="terminal-window topology-terminal animate-fade-up delay-100">
@@ -768,10 +913,12 @@ fn main() {
             <span class="terminal-dot dot-green"></span>
           </div>
           <span class="terminal-title">architecture_topology_v0.4.0.txt — System Flow</span>
-          <span class="badge" style="font-size: 0.68rem; padding: 0.1rem 0.4rem;">SSA Tiering</span>
+          <span class="badge" style="font-size: 0.68rem; padding: 0.1rem 0.4rem;">
+            SSA Tiering
+          </span>
         </div>
         <div class="terminal-body font-mono">
-<pre class="topology-art"><code>+---------------------------------------------------------------------------------------------------------+
+          <pre class="topology-art"><code>+---------------------------------------------------------------------------------------------------------+
 |                                    SHAE SOURCE CODE (*.shae)                                            |
 +---------------------------------------------------------------------------------------------------------+
                                                      |
@@ -836,9 +983,13 @@ fn main() {
             <span class="badge">Chunk 28</span>
             <span class="badge font-mono">src/llvm.rs &bull; lib/compiler/llvm.shae</span>
           </div>
-          <h2>LLVM 18 SSA Compiler (<code>shae llvm</code>)</h2>
+          <h2>
+            LLVM 18 SSA Compiler (<code>shae llvm</code>)
+          </h2>
           <p class="deep-dive-lead">
-            Shae implements direct code generation targeting compliant LLVM 18 Single Static Assignment (SSA) intermediate representation without requiring bulky C library wrapper dependencies.
+            Shae implements direct code generation targeting compliant LLVM 18 Single Static
+            Assignment (SSA) intermediate representation without requiring bulky C library wrapper
+            dependencies.
           </p>
         </div>
 
@@ -846,22 +997,40 @@ fn main() {
           <div class="deep-dive-text">
             <h3>Entry Block Alloca &amp; Register Promotion</h3>
             <p>
-              Rather than generating complex &phi; (phi) nodes directly during AST traversal, Shae's LLVM frontend emits local variables into the function's <code>%entry</code> basic block using typed <code>alloca</code> instructions. LLVM's canonical <code>mem2reg</code> optimization pass automatically lifts these stack variables into hardware SSA virtual registers, ensuring maximum optimization without frontend bloat.
+              Rather than generating complex &phi; (phi) nodes directly during AST traversal, Shae's
+              LLVM frontend emits local variables into the function's <code>%entry</code> basic
+              block using typed <code>alloca</code> instructions. LLVM's canonical{' '}
+              <code>mem2reg</code> optimization pass automatically lifts these stack variables into
+              hardware SSA virtual registers, ensuring maximum optimization without frontend bloat.
             </p>
             <h3>External C ABI Interoperability</h3>
             <p>
-              The LLVM backend declares standard C ABI runtime symbols (<code>printf</code>, <code>puts</code>, <code>malloc</code>, <code>free</code>, <code>exit</code>), maps Shae functions to native calling conventions, and generates a standard <code>@main</code> entry point that initializes globals and runs top-level statements.
+              The LLVM backend declares standard C ABI runtime symbols (<code>printf</code>,{' '}
+              <code>puts</code>, <code>malloc</code>, <code>free</code>, <code>exit</code>), maps
+              Shae functions to native calling conventions, and generates a standard{' '}
+              <code>@main</code> entry point that initializes globals and runs top-level statements.
             </p>
             <h3>Clang -O2 Pipeline Integration</h3>
             <p>
-              Using the <code>-c</code> flag, Shae automatically invokes the system Clang compiler with <code>-O2</code> optimization, producing standalone, stripped native executables ready for deployment.
+              Using the <code>-c</code> flag, Shae automatically invokes the system Clang compiler
+              with <code>-O2</code> optimization, producing standalone, stripped native executables
+              ready for deployment.
             </p>
 
             <div class="cli-box">
               <span class="cli-title">CLI Commands</span>
-              <div class="cli-cmd"><code>shae llvm file.shae -o file.ll</code> <span class="cli-desc">&mdash; Emit raw LLVM 18 IR</span></div>
-              <div class="cli-cmd"><code>shae llvm -c file.shae -o binary</code> <span class="cli-desc">&mdash; Compile native binary via Clang -O2</span></div>
-              <div class="cli-cmd"><code>shae llvm -r file.shae</code> <span class="cli-desc">&mdash; Compile and run immediately</span></div>
+              <div class="cli-cmd">
+                <code>shae llvm file.shae -o file.ll</code>{' '}
+                <span class="cli-desc">&mdash; Emit raw LLVM 18 IR</span>
+              </div>
+              <div class="cli-cmd">
+                <code>shae llvm -c file.shae -o binary</code>{' '}
+                <span class="cli-desc">&mdash; Compile native binary via Clang -O2</span>
+              </div>
+              <div class="cli-cmd">
+                <code>shae llvm -r file.shae</code>{' '}
+                <span class="cli-desc">&mdash; Compile and run immediately</span>
+              </div>
             </div>
           </div>
 
@@ -876,7 +1045,7 @@ fn main() {
                 <span class="terminal-title">llvm_ir_codegen_sample.ll</span>
               </div>
               <div class="terminal-body">
-<pre><code>{llvmIrCode}</code></pre>
+                <pre><code>{llvmIrCode}</code></pre>
               </div>
             </div>
           </div>
@@ -897,7 +1066,8 @@ fn main() {
           </div>
           <h2>Cranelift 0.136.2 JIT SSA Engine</h2>
           <p class="deep-dive-lead">
-            High-speed in-memory Just-In-Time machine code generation targeting x86_64 and AArch64 with automatic call-frequency tiering and deoptimization fallbacks.
+            High-speed in-memory Just-In-Time machine code generation targeting x86_64 and AArch64
+            with automatic call-frequency tiering and deoptimization fallbacks.
           </p>
         </div>
 
@@ -905,17 +1075,25 @@ fn main() {
           <div class="deep-dive-text">
             <h3>Tiering Threshold: JIT_THRESHOLD = 20</h3>
             <p>
-              Shae employs an adaptive tiering strategy. During initial script execution, functions run on the lightweight Bytecode VM with zero compilation latency. Once any compiled function reaches <code>JIT_THRESHOLD = 20</code> invocations, the VM background-compiles its bytecode into Cranelift SSA IR.
+              Shae employs an adaptive tiering strategy. During initial script execution, functions
+              run on the lightweight Bytecode VM with zero compilation latency. Once any compiled
+              function reaches <code>JIT_THRESHOLD = 20</code> invocations, the VM
+              background-compiles its bytecode into Cranelift SSA IR.
             </p>
             <h3>Direct C Function Pointer Execution</h3>
             <p>
-              Compiled native code is emitted directly into executable memory pages and invoked via the standard C calling convention:
-              <code>unsafe extern "C" fn(*const i64, usize, *mut i64) -&gt; i32</code>.
-              This completely bypasses virtual stack dispatch, opcode fetch-decode loops, and interpreter call overhead.
+              Compiled native code is emitted directly into executable memory pages and invoked via
+              the standard C calling convention:
+              <code>unsafe extern "C" fn(*const i64, usize, *mut i64) -&gt; i32</code>. This
+              completely bypasses virtual stack dispatch, opcode fetch-decode loops, and interpreter
+              call overhead.
             </p>
             <h3>Native Float SSA &amp; Deoptimization Fallback</h3>
             <p>
-              Numerical operations use Cranelift's native 64-bit float registers (<code>types::F64</code>) and integer registers (<code>types::I64</code>). If dynamic types diverge at runtime or an unsupported opcode is encountered, execution seamlessly falls back to the Bytecode VM interpreter.
+              Numerical operations use Cranelift's native 64-bit float registers (
+              <code>types::F64</code>) and integer registers (<code>types::I64</code>). If dynamic
+              types diverge at runtime or an unsupported opcode is encountered, execution seamlessly
+              falls back to the Bytecode VM interpreter.
             </p>
 
             <div class="spec-table-card">
@@ -927,11 +1105,15 @@ fn main() {
                   </tr>
                   <tr>
                     <th>Tiering Threshold</th>
-                    <td>20 calls (<code>JIT_THRESHOLD = 20</code>)</td>
+                    <td>
+                      20 calls (<code>JIT_THRESHOLD = 20</code>)
+                    </td>
                   </tr>
                   <tr>
                     <th>Memory Access</th>
-                    <td><code>MachMemFlags::trusted()</code></td>
+                    <td>
+                      <code>MachMemFlags::trusted()</code>
+                    </td>
                   </tr>
                   <tr>
                     <th>Target Architectures</th>
@@ -953,7 +1135,7 @@ fn main() {
                 <span class="terminal-title">jit_execution_trace.shae</span>
               </div>
               <div class="terminal-body">
-<pre><code>{craneliftJitCode}</code></pre>
+                <pre><code>{craneliftJitCode}</code></pre>
               </div>
             </div>
           </div>
@@ -972,9 +1154,12 @@ fn main() {
             <span class="badge">Chunk 29</span>
             <span class="badge font-mono">src/buffer.rs &bull; examples/buffer_demo.shae</span>
           </div>
-          <h2>Zero-Copy Typed Memory Buffers (<code>std:buffer</code>)</h2>
+          <h2>
+            Zero-Copy Typed Memory Buffers (<code>std:buffer</code>)
+          </h2>
           <p class="deep-dive-lead">
-            Engineered for high-volume network packet parsing, file formats, and IPC. A thread-safe container sharing underlying storage without heap copies.
+            Engineered for high-volume network packet parsing, file formats, and IPC. A thread-safe
+            container sharing underlying storage without heap copies.
           </p>
         </div>
 
@@ -982,16 +1167,26 @@ fn main() {
           <div class="deep-dive-text">
             <h3>Shared Arc Storage &amp; Zero-Allocation Slices</h3>
             <p>
-              The <code>ByteBuffer</code> struct wraps <code>storage: Arc&lt;RwLock&lt;Vec&lt;u8&gt;&gt;&gt;</code> with local <code>offset</code> and <code>length</code> tracking. Calling <code>buf.slice(start, end)</code> creates a lightweight window pointing to the exact same storage without copying bytes. Mutating a byte in the child slice updates the parent buffer immediately.
+              The <code>ByteBuffer</code> struct wraps{' '}
+              <code>storage: Arc&lt;RwLock&lt;Vec&lt;u8&gt;&gt;&gt;</code> with local{' '}
+              <code>offset</code> and <code>length</code> tracking. Calling{' '}
+              <code>buf.slice(start, end)</code> creates a lightweight window pointing to the exact
+              same storage without copying bytes. Mutating a byte in the child slice updates the
+              parent buffer immediately.
             </p>
             <h3>Endian-Aware Multi-Byte Reads &amp; Writes</h3>
             <p>
-              Read and write 16-bit, 32-bit, and 64-bit integers and floating-point values with explicit byte order:
-              <code>read_u16_le</code>, <code>write_u16_be</code>, <code>read_u32_le</code>, <code>write_i64_be</code>, <code>read_f64_be</code>.
+              Read and write 16-bit, 32-bit, and 64-bit integers and floating-point values with
+              explicit byte order:
+              <code>read_u16_le</code>, <code>write_u16_be</code>, <code>read_u32_le</code>,{' '}
+              <code>write_i64_be</code>, <code>read_f64_be</code>.
             </p>
             <h3>High-Performance Struct Packing Engine</h3>
             <p>
-              Python-compatible format strings (e.g., <code>&lt;I2h4s</code> for Little-Endian u32, two i16s, and a 4-byte ASCII string) provide single-step packing and unpacking via <code>pack</code>, <code>unpack</code>, <code>pack_into</code>, and <code>calcsize</code>.
+              Python-compatible format strings (e.g., <code>&lt;I2h4s</code> for Little-Endian u32,
+              two i16s, and a 4-byte ASCII string) provide single-step packing and unpacking via{' '}
+              <code>pack</code>, <code>unpack</code>, <code>pack_into</code>, and{' '}
+              <code>calcsize</code>.
             </p>
 
             <div class="terminal-window" style="margin-top: 1.25rem;">
@@ -999,7 +1194,7 @@ fn main() {
                 <span class="terminal-title">Zero-Copy Memory Layout Diagram</span>
               </div>
               <div class="terminal-body font-mono" style="font-size: 0.78rem;">
-<pre><code>{bufferDiagram}</code></pre>
+                <pre><code>{bufferDiagram}</code></pre>
               </div>
             </div>
           </div>
@@ -1015,7 +1210,7 @@ fn main() {
                 <span class="terminal-title">buffer_demo.shae</span>
               </div>
               <div class="terminal-body">
-<pre><code>{bufferDemoCode}</code></pre>
+                <pre><code>{bufferDemoCode}</code></pre>
               </div>
             </div>
           </div>
@@ -1035,9 +1230,12 @@ fn main() {
             <span class="badge">Chunks 19, 21, 30</span>
             <span class="badge font-mono">src/actor_cluster.rs &bull; src/actor.rs</span>
           </div>
-          <h2>TLS/mTLS Cluster Mesh &amp; Hot-Code Reloading (<code>std:actor:cluster</code>)</h2>
+          <h2>
+            TLS/mTLS Cluster Mesh &amp; Hot-Code Reloading (<code>std:actor:cluster</code>)
+          </h2>
           <p class="deep-dive-lead">
-            Zero-downtime actor logic swapping, schema migrations, and mutual TLS encryption across distributed clusters.
+            Zero-downtime actor logic swapping, schema migrations, and mutual TLS encryption across
+            distributed clusters.
           </p>
         </div>
 
@@ -1045,15 +1243,25 @@ fn main() {
           <div class="deep-dive-text">
             <h3>Zero-Downtime Hot-Code Reloading</h3>
             <p>
-              In production services, stopping an actor drops active state and pending mailbox requests. Shae introduces <code>ActorMessage::Reload</code>: an actor handler function is swapped atomically in place. The actor thread continues executing without dropping queued FIFO messages.
+              In production services, stopping an actor drops active state and pending mailbox
+              requests. Shae introduces <code>ActorMessage::Reload</code>: an actor handler function
+              is swapped atomically in place. The actor thread continues executing without dropping
+              queued FIFO messages.
             </p>
             <h3>Live State Schema Migrations</h3>
             <p>
-              When new code requires a different state schema, pass an optional migration closure: <code>actor.reload(new_handler, migration_fn)</code>. The migration function transforms the active state (e.g., from V2 plain map to V3 versioned schema) before the new handler processes the next message.
+              When new code requires a different state schema, pass an optional migration closure:{' '}
+              <code>actor.reload(new_handler, migration_fn)</code>. The migration function
+              transforms the active state (e.g., from V2 plain map to V3 versioned schema) before
+              the new handler processes the next message.
             </p>
             <h3>Distributed Cluster Mesh Reload &amp; mTLS Security</h3>
             <p>
-              Hot reloads propagate across the cluster over encrypted TCP framing using <code>ClusterWireMsg::Reload</code>. The cluster mesh uses <strong>Rustls 0.23</strong> for mutual TLS (mTLS): both client and server authenticate using trusted root CAs (<code>ClusterTlsConfig</code>), completely isolating rogue nodes.
+              Hot reloads propagate across the cluster over encrypted TCP framing using{' '}
+              <code>ClusterWireMsg::Reload</code>. The cluster mesh uses{' '}
+              <strong>Rustls 0.23</strong> for mutual TLS (mTLS): both client and server
+              authenticate using trusted root CAs (<code>ClusterTlsConfig</code>), completely
+              isolating rogue nodes.
             </p>
 
             <div class="terminal-window" style="margin-top: 1.25rem;">
@@ -1061,7 +1269,7 @@ fn main() {
                 <span class="terminal-title">Distributed Hot-Reload Sequence</span>
               </div>
               <div class="terminal-body font-mono" style="font-size: 0.78rem;">
-<pre><code>{hotReloadDiagram}</code></pre>
+                <pre><code>{hotReloadDiagram}</code></pre>
               </div>
             </div>
           </div>
@@ -1077,7 +1285,7 @@ fn main() {
                 <span class="terminal-title">actor_hot_reload_demo.shae</span>
               </div>
               <div class="terminal-body">
-<pre><code>{actorHotReloadCode}</code></pre>
+                <pre><code>{actorHotReloadCode}</code></pre>
               </div>
             </div>
           </div>
@@ -1096,9 +1304,13 @@ fn main() {
             <span class="badge">Chunks 15–18, 20, 27</span>
             <span class="badge font-mono">lib/compiler/ (14 modules)</span>
           </div>
-          <h2>Pure-Shae Self-Hosting Bootstrap Pipeline (<code>lib/compiler/</code>)</h2>
+          <h2>
+            Pure-Shae Self-Hosting Bootstrap Pipeline (<code>lib/compiler/</code>)
+          </h2>
           <p class="deep-dive-lead">
-            The complete Shae toolchain&mdash;lexer, Pratt parser, bytecode compiler, disassembler, native ELF/PE linker, WebAssembly emitter, and LLVM IR generator&mdash;is implemented entirely in pure Shae.
+            The complete Shae toolchain&mdash;lexer, Pratt parser, bytecode compiler, disassembler,
+            native ELF/PE linker, WebAssembly emitter, and LLVM IR generator&mdash;is implemented
+            entirely in pure Shae.
           </p>
         </div>
 
@@ -1106,21 +1318,44 @@ fn main() {
           <div class="deep-dive-text">
             <h3>14 Modular Pure-Shae Compiler Units</h3>
             <p>
-              Divided cleanly across 14 modules in <code>lib/compiler/</code>, the compiler compiles Shae code from source text into multiple deployment targets without needing the Rust source compiler:
+              Divided cleanly across 14 modules in <code>lib/compiler/</code>, the compiler compiles
+              Shae code from source text into multiple deployment targets without needing the Rust
+              source compiler:
             </p>
             <ul class="module-bullet-list">
-              <li><code>lexer.shae</code> &bull; <code>parser.shae</code> &bull; <code>token.shae</code> &bull; <code>ast.shae</code>: Tokenization &amp; Pratt precedence parsing</li>
-              <li><code>codegen.shae</code> &bull; <code>chunk.shae</code> &bull; <code>opcode.shae</code>: Bytecode compilation &amp; binary serialization</li>
-              <li><code>disasm.shae</code>: Interactive bytecode disassembler</li>
-              <li><code>linker.shae</code> &bull; <code>elf.shae</code> &bull; <code>pe.shae</code>: Direct native 64-bit ELF and PE executable generation</li>
-              <li><code>wasm.shae</code>: Binary WebAssembly module generation</li>
-              <li><code>llvm.shae</code>: Direct LLVM 18 SSA intermediate representation emission</li>
-              <li><code>main.shae</code>: Unified compiler CLI driver</li>
+              <li>
+                <code>lexer.shae</code> &bull; <code>parser.shae</code> &bull;{' '}
+                <code>token.shae</code> &bull; <code>ast.shae</code>: Tokenization &amp; Pratt
+                precedence parsing
+              </li>
+              <li>
+                <code>codegen.shae</code> &bull; <code>chunk.shae</code> &bull;{' '}
+                <code>opcode.shae</code>: Bytecode compilation &amp; binary serialization
+              </li>
+              <li>
+                <code>disasm.shae</code>: Interactive bytecode disassembler
+              </li>
+              <li>
+                <code>linker.shae</code> &bull; <code>elf.shae</code> &bull; <code>pe.shae</code>:
+                Direct native 64-bit ELF and PE executable generation
+              </li>
+              <li>
+                <code>wasm.shae</code>: Binary WebAssembly module generation
+              </li>
+              <li>
+                <code>llvm.shae</code>: Direct LLVM 18 SSA intermediate representation emission
+              </li>
+              <li>
+                <code>main.shae</code>: Unified compiler CLI driver
+              </li>
             </ul>
 
             <h3>Two-Stage Bit-for-Bit Verified Bootstrap</h3>
             <p>
-              Verified via <code>tests/stage2_bootstrap_test.rs</code>: Stage 1 compiler compiles Stage 2 compiler source into bytecode. Stage 2 compiler then compiles itself again. The resulting bytecode hashes match bit-for-bit, proving deterministic self-hosting maturity.
+              Verified via <code>tests/stage2_bootstrap_test.rs</code>: Stage 1 compiler compiles
+              Stage 2 compiler source into bytecode. Stage 2 compiler then compiles itself again.
+              The resulting bytecode hashes match bit-for-bit, proving deterministic self-hosting
+              maturity.
             </p>
           </div>
 
@@ -1135,7 +1370,7 @@ fn main() {
                 <span class="terminal-title">lib/compiler/main.shae &mdash; Pure-Shae Driver</span>
               </div>
               <div class="terminal-body">
-<pre><code>{selfHostingMainCode}</code></pre>
+                <pre><code>{selfHostingMainCode}</code></pre>
               </div>
             </div>
           </div>
@@ -1156,7 +1391,8 @@ fn main() {
           </div>
           <h2>Dual-Engine Parity Model (Stack Bytecode VM + AST Evaluator)</h2>
           <p class="deep-dive-lead">
-            Every feature, primitive, and standard library module in Shae is verified to run identically on both execution backends.
+            Every feature, primitive, and standard library module in Shae is verified to run
+            identically on both execution backends.
           </p>
         </div>
 
@@ -1164,32 +1400,55 @@ fn main() {
           <div class="parity-card card">
             <div class="parity-title-row">
               <h3>Stack Bytecode VM</h3>
-              <span class="badge">Default Engine (<code>--vm</code>)</span>
+              <span class="badge">
+                Default Engine (<code>--vm</code>)
+              </span>
             </div>
             <p>
-              Precompiles AST into compact bytecode chunks (<code>.shaec</code>). Evaluates instructions on a fast virtual operand stack with indexed local slots, upvalue capture, and direct jumps.
+              Precompiles AST into compact bytecode chunks (<code>.shaec</code>). Evaluates
+              instructions on a fast virtual operand stack with indexed local slots, upvalue
+              capture, and direct jumps.
             </p>
             <ul class="parity-feature-list">
-              <li><strong>Startup Latency:</strong> ~3 ms cold start</li>
-              <li><strong>Loop Throughput:</strong> ~80,000+ ops/sec</li>
-              <li><strong>AOT Ready:</strong> Direct bytecode serialization</li>
-              <li><strong>JIT Integration:</strong> Seamless Cranelift tiering</li>
+              <li>
+                <strong>Startup Latency:</strong> ~3 ms cold start
+              </li>
+              <li>
+                <strong>Loop Throughput:</strong> ~80,000+ ops/sec
+              </li>
+              <li>
+                <strong>AOT Ready:</strong> Direct bytecode serialization
+              </li>
+              <li>
+                <strong>JIT Integration:</strong> Seamless Cranelift tiering
+              </li>
             </ul>
           </div>
 
           <div class="parity-card card">
             <div class="parity-title-row">
               <h3>Tree-Walking AST Evaluator</h3>
-              <span class="badge">Instant Scripting (<code>--ast</code>)</span>
+              <span class="badge">
+                Instant Scripting (<code>--ast</code>)
+              </span>
             </div>
             <p>
-              Traverses the Abstract Syntax Tree directly without bytecode compilation passes. Ideal for rapid one-off scripting, macro transformations, and developer debugging.
+              Traverses the Abstract Syntax Tree directly without bytecode compilation passes. Ideal
+              for rapid one-off scripting, macro transformations, and developer debugging.
             </p>
             <ul class="parity-feature-list">
-              <li><strong>Compilation Delay:</strong> 0 ms (Zero compile phase)</li>
-              <li><strong>Debug Introspection:</strong> Exact source AST spans</li>
-              <li><strong>Memory Footprint:</strong> Low overhead for single runs</li>
-              <li><strong>Engine Parity:</strong> 290+ tests pass identically</li>
+              <li>
+                <strong>Compilation Delay:</strong> 0 ms (Zero compile phase)
+              </li>
+              <li>
+                <strong>Debug Introspection:</strong> Exact source AST spans
+              </li>
+              <li>
+                <strong>Memory Footprint:</strong> Low overhead for single runs
+              </li>
+              <li>
+                <strong>Engine Parity:</strong> 320+ tests pass identically
+              </li>
             </ul>
           </div>
         </div>
@@ -1197,22 +1456,33 @@ fn main() {
     </div>
   </section>
 
-  <!-- Interactive Chunks 1-31 Matrix & Accordion -->
+  <!-- Interactive Chunks 1-34 Matrix & Accordion -->
   <section id="chunks-matrix" class="section-block">
     <div class="container">
       <div class="section-head animate-fade-up">
         <span class="badge badge-red">Comprehensive Catalog</span>
-        <h2>Evolution Chunks 1–31 Interactive Matrix</h2>
-        <p>Explore all 31 milestones that built the Shae language, from ergonomic primitives to LLVM SSA and distributed actor clustering.</p>
+        <h2>Evolution Chunks 1–34 Interactive Matrix</h2>
+        <p>
+          Explore all 34 milestones that built the Shae language, from ergonomic primitives to LLVM
+          SSA and distributed actor clustering.
+        </p>
       </div>
 
       <!-- Filter & Search Controls -->
       <div class="matrix-controls-bar animate-fade-up delay-100">
         <div class="category-tabs" role="group" aria-label="Filter chunks by category">
-          <button class="cat-tab-btn active" data-filter="all" aria-pressed="true">All Chunks (31)</button>
-          <button class="cat-tab-btn" data-filter="foundation" aria-pressed="false">Core Foundation (1–10)</button>
-          <button class="cat-tab-btn" data-filter="tooling" aria-pressed="false">Tooling &amp; Frontend (11–20)</button>
-          <button class="cat-tab-btn" data-filter="enterprise" aria-pressed="false">Enterprise &amp; Native SSA (21–31)</button>
+          <button class="cat-tab-btn active" data-filter="all" aria-pressed="true">
+            All Chunks (34)
+          </button>
+          <button class="cat-tab-btn" data-filter="foundation" aria-pressed="false">
+            Core Foundation (1–10)
+          </button>
+          <button class="cat-tab-btn" data-filter="tooling" aria-pressed="false">
+            Tooling &amp; Frontend (11–20)
+          </button>
+          <button class="cat-tab-btn" data-filter="enterprise" aria-pressed="false">
+            Enterprise &amp; Creative (21–34)
+          </button>
         </div>
 
         <div class="search-box-wrapper">
@@ -1223,7 +1493,9 @@ fn main() {
             placeholder="Search by keyword, module, or chunk # (e.g. LLVM, buffer, actor, jit)..."
             aria-label="Search Chunks"
           />
-          <span class="search-counter" id="chunk-count-display">Showing 31 of 31</span>
+          <span class="search-counter" id="chunk-count-display">
+            Showing 34 of 34
+          </span>
         </div>
       </div>
 
@@ -1291,11 +1563,20 @@ fn main() {
     <div class="container text-center animate-fade-up">
       <div class="card glass-card cta-card">
         <h2>Explore More of the Shae Toolchain</h2>
-        <p>Read the complete 42-page architectural PDF book, view real-time benchmark telemetry, or install the compiler.</p>
+        <p>
+          Read the complete 42-page architectural PDF book, view real-time benchmark telemetry, or
+          install the compiler.
+        </p>
         <div class="cta-actions">
-          <a href="/docs" class="btn btn-primary">Read Documentation &amp; PDF Book</a>
-          <a href="/benchmarks" class="btn btn-secondary">View Benchmarks &amp; Roadmap</a>
-          <a href="/download" class="btn btn-secondary">Download Toolchain</a>
+          <a href="/docs" class="btn btn-primary">
+            Read Documentation &amp; PDF Book
+          </a>
+          <a href="/benchmarks" class="btn btn-secondary">
+            View Benchmarks &amp; Roadmap
+          </a>
+          <a href="/download" class="btn btn-secondary">
+            Download Toolchain
+          </a>
         </div>
       </div>
     </div>
@@ -2019,7 +2300,7 @@ fn main() {
   }
 
   .section-head::before {
-    content: "0" counter(feature) " / Specification";
+    content: '0' counter(feature) ' / Specification';
     display: block;
     font-family: var(--font-mono);
     font-size: 0.62rem;
@@ -2340,7 +2621,6 @@ fn main() {
       padding: 1.75rem;
     }
   }
-
 </style>
 
 <script>

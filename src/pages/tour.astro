@@ -16,7 +16,7 @@ fn describe(name, yr) {
     return "{name} lives in the modern era."
 }
 
-print(describe(author, year))`
+print(describe(author, year))`,
   },
   {
     title: '2. Formalized Numbers & Truthiness',
@@ -31,7 +31,7 @@ if [] {
     print("Never reaches here")
 } else {
     print("Empty array is falsy!") // Prints this
-}`
+}`,
   },
   {
     title: '3. Strict vs Safe Property Access',
@@ -46,7 +46,7 @@ let city = user?.address?.city // null (safe!)
 
 // 3. Null coalescing provides instant fallback:
 let nickname = user.nick ?? "Anon"
-print("Welcome, {nickname}!")`
+print("Welcome, {nickname}!")`,
   },
   {
     title: '4. Elixir-Style Pipelines',
@@ -57,7 +57,7 @@ fn inspect(val) { print("Result: {val}") }
 
 // Feeds the left expression as the first argument to the right:
 5 |> double |> square |> inspect
-// Output: Result: 100`
+// Output: Result: 100`,
   },
   {
     title: '5. Pattern Matching & Enums',
@@ -77,7 +77,7 @@ fn handle(res) {
     }
 }
 
-print(handle(WebResponse.Unauthorized("Expired JWT")))`
+print(handle(WebResponse.Unauthorized("Expired JWT")))`,
   },
   {
     title: '6. Thread Tasks with Handles',
@@ -89,7 +89,7 @@ print(handle(WebResponse.Unauthorized("Expired JWT")))`
 
 // Do other work while thread runs...
 let val = bg_task.join()
-print("Joined task result: {val}") // 1337`
+print("Joined task result: {val}") // 1337`,
   },
   {
     title: '7. Crash Prevention & Try/Catch',
@@ -101,8 +101,36 @@ print("Joined task result: {val}") // 1337`
     print("Caught safely: {err}")
 }
 
-print("Service continues running without interruption.")`
-  }
+print("Service continues running without interruption.")`,
+  },
+  {
+    title: '8. Opt-In Gradual Typing',
+    desc: 'Annotate function arguments, return bounds, and variables with static types and nullable unions without losing dynamic flexibility.',
+    code: `fn calculate_tax(subtotal: float, rate: float | null) -> float {
+    let effective_rate: float = rate ?? 0.08
+    return subtotal * effective_rate
+}
+
+let total: float = calculate_tax(120.0, 0.05)
+print("Tax: {total}")
+
+// Run static type analysis:
+// $ shae check main.shae`,
+  },
+  {
+    title: '9. Creative Engine: 2D Graphics & Audio',
+    desc: 'Build games and visual tools natively with ANSI TrueColor rendering, waveform audio synthesis, and immediate arcade widgets.',
+    code: `use { init, clear, draw_sprite, render } from "std:gui"
+use { play_sound } from "std:audio"
+use { draw_hud } from "std:ui"
+
+let win = init(60, 30, "Arcade")
+clear(win, 0x000000)
+draw_hud(win, 1420, 3, 1)
+draw_sprite(win, 28, 26, "player_cannon", 0x33FF33)
+render(win)
+play_sound("shoot")`,
+  },
 ];
 ---
 
@@ -134,7 +162,9 @@ print("Service continues running without interruption.")`
           <div class="sidebar-card">
             <h4>Ready to experiment?</h4>
             <p>Run these examples directly in your terminal or in the browser.</p>
-            <a href="/repl" class="btn btn-primary btn-sm">Launch Web REPL</a>
+            <a href="/repl" class="btn btn-primary btn-sm">
+              Launch Web REPL
+            </a>
           </div>
         </div>
       </div>
@@ -166,7 +196,9 @@ print("Service continues running without interruption.")`
         <div class="tour-next card">
           <h3>Next: Explore the Standard Library</h3>
           <p>Read about HTTP server routing, file I/O, assertions, and command execution.</p>
-          <a href="/docs" class="btn btn-secondary">Go to Docs & Builtins →</a>
+          <a href="/docs" class="btn btn-secondary">
+            Go to Docs & Builtins →
+          </a>
         </div>
       </div>
     </div>
@@ -471,5 +503,4 @@ print("Service continues running without interruption.")`
       padding-top: 3rem;
     }
   }
-
 </style>

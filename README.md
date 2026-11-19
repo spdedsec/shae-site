@@ -19,15 +19,15 @@ The site covers the Shae language, its architecture, benchmark methodology, inst
 
 ### Routes
 
-| Route | Purpose |
-| --- | --- |
-| `/` | Overview, capabilities, telemetry, positioning, quickstart |
-| `/docs` | Complete guide, standard library reference, module map |
-| `/features` | Architecture, chunks 1–31, parity matrix, CLI |
-| `/benchmarks` | Cold start, throughput, memory, roadmap |
-| `/download` | Install paths, platform matrix, verification, editor setup |
-| `/tour` | Guided language walkthrough |
-| `/repl` | Interactive browser REPL |
+| Route         | Purpose                                                    |
+| ------------- | ---------------------------------------------------------- |
+| `/`           | Overview, capabilities, telemetry, positioning, quickstart |
+| `/docs`       | Complete guide, standard library reference, module map     |
+| `/features`   | Architecture, chunks 1–34, parity matrix, CLI              |
+| `/benchmarks` | Cold start, throughput, memory, roadmap                    |
+| `/download`   | Install paths, platform matrix, verification, editor setup |
+| `/tour`       | Guided language walkthrough                                |
+| `/repl`       | Interactive browser REPL                                   |
 
 ---
 
@@ -54,18 +54,18 @@ Read the system before changing the interface:
 
 ## Stack
 
-| Layer | Choice |
-| --- | --- |
-| Framework | Astro 5.18, static output |
-| Language | TypeScript, strict |
-| Package manager | npm with lockfile |
-| Styling | Scoped Astro CSS + global token layer |
-| Fonts | Self-hosted Fontsource variable fonts (OFL-1.1) |
-| Client JS | Minimal inline scripts only; no framework |
-| Navigation | Native cross-document View Transitions |
-| Animation | CSS, View Transitions, `animation-timeline` |
-| Testing | Playwright, axe-core, Lighthouse CI |
-| Deployment | Vercel static build (`dist/`) |
+| Layer           | Choice                                          |
+| --------------- | ----------------------------------------------- |
+| Framework       | Astro 5.18, static output                       |
+| Language        | TypeScript, strict                              |
+| Package manager | npm with lockfile                               |
+| Styling         | Scoped Astro CSS + global token layer           |
+| Fonts           | Self-hosted Fontsource variable fonts (OFL-1.1) |
+| Client JS       | Minimal inline scripts only; no framework       |
+| Navigation      | Native cross-document View Transitions          |
+| Animation       | CSS, View Transitions, `animation-timeline`     |
+| Testing         | Playwright, axe-core, Lighthouse CI             |
+| Deployment      | Vercel static build (`dist/`)                   |
 
 **Deliberate omissions:** React, GSAP, Motion, Lenis, Three.js, React Three Fiber, Anime.js, React Spring, ClientRouter. The site has no React or 3D surface, and native CSS covers the motion at 0 kB runtime.
 
@@ -82,36 +82,36 @@ The dev server runs at <http://localhost:4321>.
 
 ### Commands
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the local dev server |
-| `npm run build` | Build the static site into `dist/` |
-| `npm run preview` | Preview the production build |
-| `npm run check` | Astro + TypeScript diagnostics |
-| `npm run lint` | ESLint for Astro and TypeScript |
-| `npm run format` | Format with Prettier |
-| `npm run test` | Full Playwright suite |
-| `npm run test:a11y` | axe accessibility scans |
-| `npm run test:ui` | Playwright interactive UI |
+| Command              | Purpose                                 |
+| -------------------- | --------------------------------------- |
+| `npm run dev`        | Start the local dev server              |
+| `npm run build`      | Build the static site into `dist/`      |
+| `npm run preview`    | Preview the production build            |
+| `npm run check`      | Astro + TypeScript diagnostics          |
+| `npm run lint`       | ESLint for Astro and TypeScript         |
+| `npm run format`     | Format with Prettier                    |
+| `npm run test`       | Full Playwright suite                   |
+| `npm run test:a11y`  | axe accessibility scans                 |
+| `npm run test:ui`    | Playwright interactive UI               |
 | `npm run lighthouse` | Lighthouse CI budgets on the built site |
-| `npm run analyze` | Bundle treemap at `dist/stats.html` |
-| `npm run ship-check` | Typecheck, lint, build, and test |
+| `npm run analyze`    | Bundle treemap at `dist/stats.html`     |
+| `npm run ship-check` | Typecheck, lint, build, and test        |
 
 ---
 
 ## Quality gates
 
-| Gate | Current result |
-| --- | --- |
-| `astro check` | 0 errors, 0 warnings, 0 hints |
-| ESLint | clean |
-| Production build | 7 static pages, ~1.7 MB `dist/` |
-| Playwright | 67 passed, 3 skipped (visual tests for the other project) |
-| axe / WCAG 2.1 A/AA | 0 violations across all routes at 1440 and 390 |
-| Lighthouse `/` | 100 performance, 100 accessibility, 100 best practices, 100 SEO |
-| Lighthouse `/docs` | 100 / 100 / 100 / 100 |
-| Lighthouse `/download` | 100 / 100 / 100 / 100 |
-| Core Web Vitals | LCP 1.7 s, TBT 0–20 ms, CLS 0 |
+| Gate                   | Current result                                                  |
+| ---------------------- | --------------------------------------------------------------- |
+| `astro check`          | 0 errors, 0 warnings, 0 hints                                   |
+| ESLint                 | clean                                                           |
+| Production build       | 7 static pages, ~1.7 MB `dist/`                                 |
+| Playwright             | 67 passed, 3 skipped (visual tests for the other project)       |
+| axe / WCAG 2.1 A/AA    | 0 violations across all routes at 1440 and 390                  |
+| Lighthouse `/`         | 100 performance, 100 accessibility, 100 best practices, 100 SEO |
+| Lighthouse `/docs`     | 100 / 100 / 100 / 100                                           |
+| Lighthouse `/download` | 100 / 100 / 100 / 100                                           |
+| Core Web Vitals        | LCP 1.7 s, TBT 0–20 ms, CLS 0                                   |
 
 Visual regression baselines live in `tests/visual.spec.ts-snapshots/`. They are Linux-specific; regenerate them on another OS with `npx playwright test --update-snapshots`.
 
