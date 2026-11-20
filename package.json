@@ -16,7 +16,10 @@
     "lighthouse": "CHROME_PATH=/usr/bin/chromium lhci autorun",
     "analyze": "ANALYZE=true npm run build",
     "format": "prettier --write .",
-    "ship-check": "npm run check && npm run lint && npm run build && npm run test"
+    "ship-check": "npm run verify:all && npm run build && npm run test",
+    "verify:wasm": "node scripts/verify-wasm-contract.mjs",
+    "verify:registry": "node scripts/verify-registry-schema.mjs",
+    "verify:all": "npm run check && npm run lint && npm run verify:wasm && npm run verify:registry"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
