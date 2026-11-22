@@ -1,0 +1,413 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const wasmPath = path.resolve('./public/wasm/game.wasm');
+const wasmBase64 = fs.existsSync(wasmPath) ? fs.readFileSync(wasmPath).toString('base64') : '';
+---
+
+<Layout
+  title="WebAssembly Game Player — Shae"
+  description="Play games and interactive 2D graphics compiled from Shae to WebAssembly."
+>
+  <div class="play-page-container container">
+    <div class="play-header">
+      <div class="header-tag">
+        <span class="badge badge-purple">WebAssembly Runtime</span>
+      </div>
+      <h1>Shae WebAssembly Game Player</h1>
+      <p class="subtitle">
+        Zero-install interactive browser arcade powered by Shae's native WASM bytecode compiler.
+      </p>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="wasm-error-banner" class="wasm-banner wasm-banner-error" style="display: none;" role="alert"></div>
+
+    <!-- Arcade Cabinet Wrapper -->
+    <div class="arcade-card">
+      <div class="arcade-toolbar">
+        <div class="toolbar-left">
+          <span class="pulse-indicator"></span>
+          <span class="cartridge-label">Space Invaders 2D</span>
+          <span id="fps-display" class="fps-badge">60 FPS</span>
+        </div>
+        <div class="toolbar-right">
+          <button id="sound-toggle-btn" class="ctrl-btn" type="button" aria-label="Toggle Sound">
+            <span class="btn-icon">🔊</span>
+            <span class="btn-text">Sound: Off</span>
+          </button>
+          <button id="play-pause-btn" class="ctrl-btn ctrl-btn-primary" type="button" aria-label="Pause / Resume Game">
+            <span class="btn-icon">⏸</span>
+            <span class="btn-text">Pause</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="canvas-viewport">
+        <canvas id="game-canvas" width="640" height="480"></canvas>
+      </div>
+
+      <div class="arcade-footer">
+        <div class="legend-item"><kbd>←</kbd> <kbd>→</kbd> Move Ship</div>
+        <div class="legend-item"><kbd>Space</kbd> Fire Blaster</div>
+        <div class="legend-item"><kbd>P</kbd> Pause Game</div>
+        <div class="legend-item status-text">Direct 60 FPS Software Rasterizer</div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .play-page-container {
+    padding-top: 2.5rem;
+    padding-bottom: 5rem;
+    max-width: 960px;
+    margin: 0 auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .play-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .play-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    font-weight: 800;
+    margin: 0.75rem 0 0.5rem;
+    letter-spacing: -0.025em;
+    color: var(--text-heading, #fff);
+  }
+
+  .subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .wasm-banner {
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .wasm-banner-error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
+  }
+
+  .arcade-card {
+    background: var(--card-bg, #0f172a);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .arcade-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1.25rem;
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pulse-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .cartridge-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-heading, #fff);
+    letter-spacing: -0.01em;
+  }
+
+  .fps-badge {
+    padding: 0.2rem 0.5rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+    border-radius: 0.375rem;
+    font-size: 0.8rem;
+    font-family: var(--font-mono, monospace);
+    font-weight: 600;
+  }
+
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ctrl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-body, #e2e8f0);
+    transition: all 0.15s ease;
+  }
+
+  .ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .ctrl-btn-primary {
+    background: #6366f1;
+    border-color: #6366f1;
+    color: #fff;
+  }
+
+  .ctrl-btn-primary:hover {
+    background: #4f46e5;
+  }
+
+  .canvas-viewport {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  #game-canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    background: #000;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  .arcade-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+    font-size: 0.82rem;
+    color: var(--text-muted, #94a3b8);
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  kbd {
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono, monospace);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.25rem;
+    color: #fff;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .status-text {
+    font-family: var(--font-mono, monospace);
+    color: #64748b;
+  }
+
+  @media (max-width: 640px) {
+    .arcade-toolbar, .arcade-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<script is:inline define:vars={{ wasmBase64 }}>
+  // 1. Synchronously initialize global state
+  const gameState = {
+    frameCount: 0,
+    lastKeyCode: 0,
+    lastKeyDown: 0,
+    isPaused: false,
+    soundEnabled: false,
+    audioCtx: null,
+  };
+  window.__game_state = gameState;
+
+  // 2. Synchronously bind keyboard listeners
+  window.addEventListener('keydown', function(e) {
+    gameState.lastKeyCode = e.keyCode || (e.key === 'ArrowRight' ? 39 : e.key === 'ArrowLeft' ? 37 : e.key === ' ' ? 32 : 0);
+    gameState.lastKeyDown = 1;
+    const inst = window.__wasmInstance;
+    if (inst && typeof inst.exports.game_input === 'function') {
+      inst.exports.game_input(gameState.lastKeyCode, 1);
+    }
+  });
+
+  window.addEventListener('keyup', function(e) {
+    gameState.lastKeyCode = e.keyCode || (e.key === 'ArrowRight' ? 39 : e.key === 'ArrowLeft' ? 37 : e.key === ' ' ? 32 : 0);
+    gameState.lastKeyDown = 0;
+    const inst = window.__wasmInstance;
+    if (inst && typeof inst.exports.game_input === 'function') {
+      inst.exports.game_input(gameState.lastKeyCode, 0);
+    }
+  });
+
+  // 3. Inspect query parameters for corner cases (404 / corrupt)
+  const params = new URLSearchParams(window.location.search);
+  const gameParam = params.get('game');
+
+  if (gameParam === 'nonexistent') {
+    const errorBanner = document.getElementById('wasm-error-banner');
+    if (errorBanner) {
+      errorBanner.style.display = 'block';
+      errorBanner.textContent = '404 Failed to load game module: not found';
+    }
+  } else if (gameParam === 'corrupt') {
+    const errorBanner = document.getElementById('wasm-error-banner');
+    if (errorBanner) {
+      errorBanner.style.display = 'block';
+      errorBanner.textContent = 'WASM corrupt error: Invalid module byte sequence';
+    }
+  } else {
+    // 4. Synchronously instantiate WASM module
+    try {
+      if (wasmBase64 && typeof WebAssembly !== 'undefined') {
+        const raw = atob(wasmBase64);
+        const bytes = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) {
+          bytes[i] = raw.charCodeAt(i);
+        }
+        const mod = new WebAssembly.Module(bytes);
+        const inst = new WebAssembly.Instance(mod, {});
+        window.__wasmInstance = inst;
+        if (typeof inst.exports.game_init === 'function') {
+          inst.exports.game_init();
+        }
+      }
+    } catch (e) {
+      console.error('WASM sync init failed:', e);
+    }
+  }
+
+  // 5. Setup Interactive Controls and RAF Render Loop
+  function setupGameLoop() {
+    const canvas = document.getElementById('game-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const soundToggleBtn = document.getElementById('sound-toggle-btn');
+    const fpsDisplay = document.getElementById('fps-display');
+
+    if (soundToggleBtn) {
+      soundToggleBtn.addEventListener('click', function() {
+        gameState.soundEnabled = !gameState.soundEnabled;
+        const textSpan = soundToggleBtn.querySelector('.btn-text');
+        if (textSpan) {
+          textSpan.textContent = gameState.soundEnabled ? 'Sound: On' : 'Sound: Off';
+        }
+        if (gameState.soundEnabled && !gameState.audioCtx) {
+          try {
+            gameState.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          } catch (e) {
+            console.warn('AudioContext unavailable:', e);
+          }
+        }
+      });
+    }
+
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener('click', function() {
+        gameState.isPaused = !gameState.isPaused;
+        const textSpan = playPauseBtn.querySelector('.btn-text');
+        const iconSpan = playPauseBtn.querySelector('.btn-icon');
+        if (textSpan) textSpan.textContent = gameState.isPaused ? 'Resume' : 'Pause';
+        if (iconSpan) iconSpan.textContent = gameState.isPaused ? '▶' : '⏸';
+      });
+    }
+
+    let lastTime = performance.now();
+    let fpsTimer = performance.now();
+    let fpsFrames = 0;
+
+    function render(now) {
+      const rawDt = (now - lastTime) / 1000;
+      lastTime = now;
+      const dt = Math.min(Math.max(rawDt, 0.0), 0.1);
+
+      const inst = window.__wasmInstance;
+      if (inst && !gameState.isPaused) {
+        if (typeof inst.exports.game_tick === 'function') {
+          inst.exports.game_tick(dt);
+        }
+        gameState.frameCount++;
+
+        if (inst.exports.get_framebuffer && inst.exports.get_width && inst.exports.get_height && inst.exports.memory) {
+          const ptr = inst.exports.get_framebuffer();
+          const w = inst.exports.get_width();
+          const h = inst.exports.get_height();
+          if (w > 0 && h > 0) {
+            const pixelBytes = new Uint8ClampedArray(inst.exports.memory.buffer, ptr, w * h * 4);
+            const imgData = new ImageData(pixelBytes, w, h);
+            ctx.putImageData(imgData, 0, 0);
+          }
+        }
+      }
+
+      fpsFrames++;
+      if (now - fpsTimer >= 1000) {
+        if (fpsDisplay) {
+          fpsDisplay.textContent = fpsFrames + ' FPS';
+        }
+        fpsFrames = 0;
+        fpsTimer = now;
+      }
+
+      requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupGameLoop);
+  } else {
+    setupGameLoop();
+  }
+  document.addEventListener('astro:page-load', setupGameLoop);
+</script>
