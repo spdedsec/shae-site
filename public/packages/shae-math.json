@@ -1,0 +1,25 @@
+{
+  "name": "shae-math",
+  "description": "Linear algebra, matrix operations, and high-performance numerical routines for Shae.",
+  "latest": "1.0.0",
+  "versions": {
+    "1.0.0": {
+      "version": "1.0.0",
+      "download_url": "/downloads/shae-math-1.0.0.shaepkg",
+      "checksum": "99e02a68f322cf99ab77737d91b28eda917bc485ec2491b8e8b5b26936d2708a",
+      "dependencies": {}
+    },
+    "1.0.0-rc.1": {
+      "version": "1.0.0-rc.1",
+      "download_url": "/downloads/shae-math-1.0.0.shaepkg",
+      "checksum": "99e02a68f322cf99ab77737d91b28eda917bc485ec2491b8e8b5b26936d2708a",
+      "dependencies": {}
+    },
+    "0.2.0": {
+      "version": "0.2.0",
+      "download_url": "/downloads/shae-math-0.2.0.shaepkg",
+      "checksum": "5cc45332f4a8422a853bc7891e999d1267f654ec887bd61f9f937f9696d60cf8",
+      "dependencies": {}
+    }
+  }
+}

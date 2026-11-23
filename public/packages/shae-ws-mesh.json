@@ -1,0 +1,13 @@
+{
+  "name": "shae-ws-mesh",
+  "description": "RFC 6455 full-duplex WebSocket mesh clustering and pub/sub routing.",
+  "latest": "0.8.0",
+  "versions": {
+    "0.8.0": {
+      "version": "0.8.0",
+      "download_url": "/downloads/shae-ws-mesh-0.8.0.shaepkg",
+      "checksum": "a6cfc96cbc52053eec4e68dbb526d0b74f083a813c5562986a2dd10f562598e5",
+      "dependencies": {}
+    }
+  }
+}
