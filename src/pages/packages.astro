@@ -1,0 +1,814 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+interface PackageItem {
+  name: string;
+  version: string;
+  author: string;
+  license: string;
+  category: string;
+  description: string;
+  versions: string[];
+  readme: string;
+  dependencies: string;
+  installCmd: string;
+}
+
+const packages: PackageItem[] = [
+  {
+    name: "shae-math",
+    version: "1.0.0",
+    author: "Shae Core Team",
+    license: "MIT",
+    category: "math",
+    description: "Linear algebra, matrix operations, and high-performance numerical routines for Shae.",
+    versions: ["1.0.0", "0.2.0", "1.0.0-rc.1"],
+    readme: "High-performance numerical computing and linear algebra library for Shae.\n\nFeatures:\n- Fast matrix multiplication & SIMD vector operations\n- Linear solvers, determinants, dot/cross products\n- Direct interop with Cranelift JIT engine",
+    dependencies: "None (Pure Shae)",
+    installCmd: "shae pkg add shae-math",
+  },
+  {
+    name: "shae-ws-mesh",
+    version: "0.8.0",
+    author: "Shae Core Team",
+    license: "Apache-2.0",
+    category: "network",
+    description: "RFC 6455 full-duplex WebSocket mesh clustering and pub/sub routing.",
+    versions: ["0.8.0"],
+    readme: "Clustering, message broker, and pub/sub over pure RFC 6455 full-duplex WebSocket sockets.\n\nFeatures:\n- Zero external native dependencies\n- Automatic reconnection, framing, ping/pong healthchecks\n- Distributed mesh node discovery and gossip protocols",
+    dependencies: "std:ws (native standard library)",
+    installCmd: "shae pkg add shae-ws-mesh",
+  },
+  {
+    name: "shae-canvas-2d",
+    version: "0.5.0",
+    author: "Shae Core Team",
+    license: "MIT",
+    category: "graphics",
+    description: "Immediate-mode software framebuffer rendering and bitmap sprite operations.",
+    versions: ["0.5.0"],
+    readme: "Software rasterizer and 2D sprite blitting engine.\n\nFeatures:\n- 32-bit ARGB software rendering pipeline\n- 60 FPS double-buffered blitting to ANSI terminal or HTML5 Canvas\n- Sound synthesis hook and keyboard event dispatcher",
+    dependencies: "std:gui (native standard library)",
+    installCmd: "shae pkg add shae-canvas-2d",
+  },
+];
+---
+
+<Layout
+  title="Package Registry Explorer — Shae"
+  description="Discover, inspect, and install high-performance packages for the Shae programming language."
+>
+  <div class="packages-page container">
+    <header class="packages-header">
+      <div class="badge-pill">Package Ecosystem</div>
+      <h1>Shae Central Package Registry</h1>
+      <p class="lead-text">
+        Search, inspect, and install verified libraries and runtime modules with reproducible lockfiles and SHA-256 integrity verification.
+      </p>
+    </header>
+
+    <!-- Explorer Controls -->
+    <div class="registry-controls">
+      <div class="search-bar-wrapper">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input
+          type="text"
+          id="pkg-search-input"
+          class="search-input"
+          placeholder="Search packages by name, keyword, or category..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search packages"
+        />
+        <button id="pkg-search-clear" class="search-clear-btn" type="button" style="display: none;" aria-label="Clear search">×</button>
+      </div>
+
+      <div class="category-filters" role="toolbar" aria-label="Filter by category">
+        <span class="filter-label">Filter:</span>
+        <button class="filter-tag active" data-category="all" type="button">All</button>
+        <button class="filter-tag" data-category="math" type="button">Math</button>
+        <button class="filter-tag" data-category="network" type="button">Network</button>
+        <button class="filter-tag" data-category="graphics" type="button">Graphics</button>
+      </div>
+    </div>
+
+    <!-- Package Grid -->
+    <div class="package-grid" id="package-grid">
+      {packages.map((pkg) => (
+        <article
+          class="package-card"
+          data-name={pkg.name}
+          data-category={pkg.category}
+          data-author={pkg.author}
+          data-license={pkg.license}
+          data-description={pkg.description}
+          data-versions={JSON.stringify(pkg.versions)}
+          data-readme={pkg.readme}
+          data-dependencies={pkg.dependencies}
+          data-install={pkg.installCmd}
+        >
+          <div class="card-top">
+            <div class="name-row">
+              <h2 class="package-name">{pkg.name}</h2>
+              <span class="package-version">{pkg.version}</span>
+            </div>
+            <span class="category-badge">{pkg.category}</span>
+          </div>
+
+          <p class="package-description">{pkg.description}</p>
+
+          <div class="card-meta">
+            <span class="meta-item"><span class="meta-label">Author:</span> {pkg.author}</span>
+            <span class="meta-item"><span class="meta-label">License:</span> {pkg.license}</span>
+          </div>
+
+          <div class="card-actions">
+            <button
+              class="copy-install-btn"
+              type="button"
+              data-cmd={pkg.installCmd}
+              title="Copy install command"
+              aria-label={"Copy install command for " + pkg.name}
+            >
+              <span class="copy-icon" aria-hidden="true">📋</span>
+              <span class="copy-text">Copy Install</span>
+            </button>
+            <button
+              class="view-details-btn"
+              type="button"
+              title="View package dossier and documentation"
+              aria-label={"View details for " + pkg.name}
+            >
+              <span>View Dossier</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Empty State -->
+    <div id="no-packages-found" class="empty-state" style="display: none;">
+      <div class="empty-icon">📦</div>
+      <h3>No packages found</h3>
+      <p>No published libraries match your search criteria. Try a different query or publish one using <code>shae pkg publish</code>.</p>
+    </div>
+
+    <!-- Package Dossier Drawer / Modal -->
+    <div id="package-dossier" class="dossier-overlay" aria-hidden="true">
+      <div class="dossier-container" role="dialog" aria-modal="true" aria-labelledby="dossier-pkg-title">
+        <div class="dossier-header">
+          <div class="dossier-titles">
+            <h2 id="dossier-pkg-title">Package Dossier</h2>
+            <span id="dossier-pkg-version" class="dossier-version-tag"></span>
+          </div>
+          <button class="dossier-close" type="button" aria-label="Close dossier">✕</button>
+        </div>
+
+        <div class="dossier-body">
+          <div class="dossier-install-box">
+            <span class="box-label">Quick Install:</span>
+            <code id="dossier-install-cmd">shae pkg add</code>
+            <button id="dossier-copy-btn" class="copy-install-btn" type="button">Copy</button>
+          </div>
+
+          <div class="dossier-section">
+            <h3>Documentation & README</h3>
+            <div id="dossier-readme" class="readme-box"></div>
+          </div>
+
+          <div class="dossier-section">
+            <h3>Dependencies</h3>
+            <div id="dossier-dependencies" class="dependencies-box"></div>
+          </div>
+
+          <div class="dossier-section">
+            <h3>Published Versions</h3>
+            <div id="dossier-versions-list" class="versions-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .packages-page {
+    padding-top: 2.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .packages-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 3rem auto;
+  }
+
+  .badge-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-primary);
+    background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid color-mix(in srgb, var(--accent-primary) 25%, transparent);
+  }
+
+  .packages-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.04em;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .lead-text {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .registry-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+  .search-bar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1.1rem;
+    font-size: 1rem;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.95rem 2.8rem 0.95rem 2.8rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-main);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+  }
+
+  .search-clear-btn {
+    position: absolute;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .category-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 0.25rem;
+  }
+
+  .filter-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .filter-tag:hover {
+    color: var(--text-main);
+    border-color: var(--text-muted);
+  }
+
+  .filter-tag.active {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border-color: var(--accent-primary);
+  }
+
+  /* Grid of Cards */
+  .package-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .package-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .package-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .package-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .package-version {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .category-badge {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .package-description {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .meta-label {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.65rem;
+  }
+
+  .copy-install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px;
+    background: var(--bg-base);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .copy-install-btn:hover {
+    background: var(--bg-surface);
+    border-color: var(--text-muted);
+  }
+
+  .copy-install-btn.copied {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  .view-details-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px;
+    background: var(--accent-primary);
+    color: #ffffff;
+    border: 1px solid var(--accent-primary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    justify-content: center;
+  }
+
+  .view-details-btn:hover {
+    filter: brightness(1.1);
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 1.5rem;
+    max-width: 500px;
+    margin: 2rem auto;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-color);
+    border-radius: 12px;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .empty-state h3 {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .empty-state p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* Dossier Drawer / Overlay */
+  :global(#main:has(#package-dossier.open)) {
+    z-index: 1001 !important;
+  }
+
+  .dossier-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .dossier-overlay.open {
+    display: flex !important;
+  }
+
+  .dossier-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .dossier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .dossier-titles {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .dossier-titles h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+  }
+
+  .dossier-version-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .dossier-close {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .dossier-close:hover {
+    color: var(--text-main);
+    background: var(--bg-base);
+  }
+
+  .dossier-body {
+    padding: 1.75rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .dossier-install-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--bg-base);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+  }
+
+  .dossier-install-box code {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--text-main);
+  }
+
+  .dossier-section h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-main);
+  }
+
+  .readme-box, .dependencies-box {
+    background: var(--bg-base);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: var(--text-muted);
+  }
+
+  .versions-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .version-badge {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    background: var(--bg-base);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    let currentCategory = "all";
+
+    function applyFilters() {
+      const searchInput = document.getElementById("pkg-search-input");
+      const searchClear = document.getElementById("pkg-search-clear");
+      const cards = document.querySelectorAll(".package-card");
+      const emptyState = document.getElementById("no-packages-found");
+
+      const query = (searchInput && searchInput.value ? searchInput.value : "").toLowerCase().trim();
+      let visibleCount = 0;
+
+      cards.forEach(function(card) {
+        const name = (card.getAttribute("data-name") || "").toLowerCase();
+        const cat = (card.getAttribute("data-category") || "").toLowerCase();
+        const desc = (card.getAttribute("data-description") || "").toLowerCase();
+        const author = (card.getAttribute("data-author") || "").toLowerCase();
+
+        const matchesCat = currentCategory === "all" || cat === currentCategory;
+        const matchesQuery = query === "" || name.indexOf(query) !== -1 || cat.indexOf(query) !== -1 || desc.indexOf(query) !== -1 || author.indexOf(query) !== -1;
+
+        if (matchesCat && matchesQuery) {
+          card.style.display = "";
+          visibleCount++;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      if (emptyState) {
+        emptyState.style.display = visibleCount === 0 ? "block" : "none";
+      }
+
+      if (searchClear) {
+        searchClear.style.display = query.length > 0 ? "block" : "none";
+      }
+    }
+
+    document.addEventListener("click", function(e) {
+      const target = e.target;
+      if (!target || !(target instanceof Element)) return;
+
+      const copyBtn = target.closest(".copy-install-btn");
+      if (copyBtn) {
+        let installCmd = copyBtn.getAttribute("data-cmd");
+        if (!installCmd) {
+          const card = copyBtn.closest(".package-card");
+          if (card) {
+            installCmd = card.getAttribute("data-install") || ("shae pkg add " + card.getAttribute("data-name"));
+          }
+        }
+        if (installCmd && navigator.clipboard) {
+          navigator.clipboard.writeText(installCmd).then(function() {
+            copyBtn.classList.add("copied");
+            const orig = copyBtn.innerText;
+            copyBtn.innerText = "Copied!";
+            setTimeout(function() {
+              copyBtn.classList.remove("copied");
+              copyBtn.innerText = orig;
+            }, 1500);
+          }).catch(function() {});
+        }
+        return;
+      }
+
+      const detailsBtn = target.closest(".view-details-btn");
+      if (detailsBtn) {
+        const c = detailsBtn.closest(".package-card");
+        const dossier = document.getElementById("package-dossier");
+        if (!c || !dossier) return;
+
+        const name = c.getAttribute("data-name") || "";
+        const readme = c.getAttribute("data-readme") || "";
+        const deps = c.getAttribute("data-dependencies") || "";
+        const versionsJson = c.getAttribute("data-versions") || "[]";
+        const versions = JSON.parse(versionsJson);
+        const installCmd = c.getAttribute("data-install") || ("shae pkg add " + name);
+
+        const dossierTitle = document.getElementById("dossier-pkg-title");
+        const dossierVer = document.getElementById("dossier-pkg-version");
+        const dossierCmd = document.getElementById("dossier-install-cmd");
+        const dossierCopy = document.getElementById("dossier-copy-btn");
+        const dossierReadme = document.getElementById("dossier-readme");
+        const dossierDeps = document.getElementById("dossier-dependencies");
+        const dossierVersions = document.getElementById("dossier-versions-list");
+
+        if (dossierTitle) dossierTitle.textContent = name;
+        if (dossierVer) dossierVer.textContent = versions[0] ? versions[0] : "";
+        if (dossierCmd) dossierCmd.textContent = installCmd;
+        if (dossierCopy) dossierCopy.setAttribute("data-cmd", installCmd);
+        if (dossierReadme) dossierReadme.textContent = readme;
+        if (dossierDeps) dossierDeps.textContent = deps;
+
+        if (dossierVersions) {
+          dossierVersions.innerHTML = "";
+          versions.forEach(function(v) {
+            const span = document.createElement("span");
+            span.className = "version-badge";
+            span.textContent = v;
+            dossierVersions.appendChild(span);
+          });
+        }
+
+        dossier.classList.add("open");
+        dossier.setAttribute("aria-hidden", "false");
+        const m = document.getElementById("main");
+        if (m) m.style.zIndex = "1001";
+        return;
+      }
+
+      const closeBtn = target.closest(".dossier-close");
+      if (closeBtn) {
+        const d = document.getElementById("package-dossier");
+        if (d) {
+          d.classList.remove("open");
+          d.setAttribute("aria-hidden", "true");
+          const m = document.getElementById("main");
+          if (m) m.style.zIndex = "";
+        }
+        return;
+      }
+
+      const dOverlay = document.getElementById("package-dossier");
+      if (dOverlay && target === dOverlay) {
+        dOverlay.classList.remove("open");
+        dOverlay.setAttribute("aria-hidden", "true");
+        const m = document.getElementById("main");
+        if (m) m.style.zIndex = "";
+        return;
+      }
+
+      const filterTag = target.closest("button.filter-tag");
+      if (filterTag) {
+        document.querySelectorAll("button.filter-tag").forEach(function(t) {
+          t.classList.remove("active");
+        });
+        filterTag.classList.add("active");
+        currentCategory = (filterTag.getAttribute("data-category") || "all").toLowerCase();
+        applyFilters();
+        return;
+      }
+
+      if (target.id === "pkg-search-clear") {
+        const input = document.getElementById("pkg-search-input");
+        if (input) {
+          input.value = "";
+          applyFilters();
+          input.focus();
+        }
+        return;
+      }
+    });
+
+    document.addEventListener("input", function(e) {
+      if (e.target && e.target.id === "pkg-search-input") {
+        applyFilters();
+      }
+    });
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", applyFilters);
+    } else {
+      applyFilters();
+    }
+    document.addEventListener("astro:page-load", applyFilters);
+  })();
+</script>

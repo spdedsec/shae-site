@@ -1,0 +1,276 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Shae — Programmiersprache (Deutsch)"
+  description="Shae ist eine schnelle, pragmatische Programmiersprache mit integriertem JIT-Compiler, WebSocket-Engine, WebAssembly-Unterstützung und modernem Paketmanager."
+>
+  <div class="de-page container">
+    <header class="hero-section">
+      <div class="badge-pill">Deutschsprachige Einführung</div>
+      <h1>Shae — Schnell, Einfach, Real.</h1>
+      <p class="lead-text">
+        Eine moderne Programmiersprache für Entwickler, die maximale Leistung ohne unnötige Komplexität suchen.
+        Keine schweren Konfigurationen, keine externen Abhängigkeiten — einfach Shae.
+      </p>
+
+      <div class="cta-group">
+        <a href="/download" class="btn btn-primary">Herunterladen v0.8.0</a>
+        <a href="/docs" class="btn btn-secondary">Dokumentation lesen</a>
+        <a href="/packages" class="btn btn-secondary">Paket-Registry</a>
+      </div>
+    </header>
+
+    <section class="features-grid">
+      <div class="feature-card">
+        <div class="card-icon">⚡</div>
+        <h2>Tiered JIT & OSR Compiler</h2>
+        <p>
+          Ausgestattet mit Cranelift-JIT und On-Stack-Replacement (OSR). Heiße Schleifen werden zur Laufzeit nahtlos in Maschinencode kompiliert, wodurch Shae native Ausführungsgeschwindigkeiten erreicht.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-icon">🌐</div>
+        <h2>std:ws RFC 6455 WebSocket-Engine</h2>
+        <p>
+          Eine vollständige, reine WebSocket-Engine direkt in der Standardbibliothek. Unterstützt Client- und Server-Sockets, automatische Maskierung, Ping/Pong-Heartbeats und asynchrone Frame-Verarbeitung.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-icon">🎮</div>
+        <h2>WebAssembly & 2D-Grafik</h2>
+        <p>
+          Kompilieren Sie Shae-Programme direkt nach WebAssembly (WASM). Führen Sie 2D-Spiele und Grafiken mit 60 FPS direkt im Browser oder Terminal mit TrueColor-Rasterung aus.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-icon">🛠️</div>
+        <h2>Shae Studio & Visueller Debugger</h2>
+        <p>
+          Integrierte Entwicklungsumgebung mit DAP-Debugger (Debug Adapter Protocol), Einzelschritt-Ausführung (Step In, Step Over, Step Out), Variableninspektion und Framebuffer-Live-Streaming.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-icon">📦</div>
+        <h2>Zentraler Paketmanager</h2>
+        <p>
+          Installieren und verwalten Sie Bibliotheken mit <code>shae pkg add &lt;paket&gt;</code>. Vollständige Integritätsprüfung mit SHA-256 und reproduzierbare <code>shae.lock</code>-Dateien.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-icon">🔒</div>
+        <h2>Graduelle Typisierung</h2>
+        <p>
+          Nutzen Sie dynamische Flexibilität beim Prototyping oder optionale statische Typannotationen mit Union-Typen für robuste Produktionssysteme.
+        </p>
+      </div>
+    </section>
+
+    <section class="code-preview-section">
+      <h2>Ein kurzer Einblick in Shae</h2>
+      <div class="code-block-wrapper">
+        <div class="code-header">
+          <span class="code-filename">beispiel.shae</span>
+          <span class="code-badge">Shae v0.8.0</span>
+        </div>
+        <pre class="code-content"><code>{`// HTTP- und WebSocket-Server in Shae
+import std:ws
+import std:http
+
+// Graduell typisierte Funktion
+fn berechne_summe(a: int, b: int) -> int {
+    return a + b
+}
+
+print("Ergebnis: {berechne_summe(10, 20)}")
+
+// WebSocket-Server starten
+let server = ws:listen("127.0.0.1", 8080)
+print("Shae-Server laeuft auf Port 8080...")
+`}</code></pre>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .de-page {
+    padding-top: 3.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .hero-section {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 4rem auto;
+  }
+
+  .badge-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-primary);
+    background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    margin-bottom: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--accent-primary) 25%, transparent);
+  }
+
+  .hero-section h1 {
+    font-size: clamp(2.4rem, 5vw, 3.5rem);
+    letter-spacing: -0.04em;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .lead-text {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .cta-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.65rem 1.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border: 1px solid var(--accent-primary);
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--text-muted);
+    transform: translateY(-1px);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.75rem;
+    margin-bottom: 4.5rem;
+  }
+
+  .feature-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+  }
+
+  .card-icon {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .code-preview-section {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .code-preview-section h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  .code-block-wrapper {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: left;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    background: var(--bg-base);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .code-filename {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .code-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent-primary);
+  }
+
+  .code-content {
+    margin: 0;
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-main);
+  }
+</style>
